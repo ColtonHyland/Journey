@@ -1,7 +1,7 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
-export default async function createUsersTable(request) {
+export async function GET(request) {
   try {
     const result = await sql`
       CREATE TABLE users (

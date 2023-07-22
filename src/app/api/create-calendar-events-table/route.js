@@ -1,7 +1,7 @@
 import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 
-export default async function createCalendarEventsTable(request) {
+export async function GET(request) {
   try {
     const result = await sql`
       CREATE TABLE calendar_events (
