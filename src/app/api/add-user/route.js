@@ -25,3 +25,5 @@ export async function GET(request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
+//http://localhost:3001/api/add-user?username=coltonhyland&email=colthyand@gmail.com&password=123
