@@ -1,67 +1,70 @@
-// schema.prisma
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider          = "postgresql"
+  url               = env("POSTGRES_PRISMA_URL")
+  directUrl         = env("POSTGRES_URL_NON_POOLING")
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-// schema.prisma
-
-// User table
-model User {
-  user_id       Int             @id @default(autoincrement())
-  username      String          @unique
-  email         String          @unique
-  password      String
-  created_at    DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
-  tasks         Task[]
-  Note          Note[]
-  CalendarEvent CalendarEvent[]
+model calendar_events {
+  event_id       Int       @id @default(autoincrement())
+  user_id        Int
+  title          String    @db.VarChar(100)
+  description    String?
+  event_datetime DateTime? @db.Timestamp(6)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  users          users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-// Task table
-model Task {
-  task_id     Int      @id @default(autoincrement())
-  user_id     Int
-  title       String
-  description String?
-  status      String // You can use an enum for status (e.g., "todo", "in_progress", "completed")
-  deadline    DateTime
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  notes       Note[]
-  user        User     @relation(fields: [user_id], references: [user_id])
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model pets {
+  name  String? @db.VarChar(255)
+  owner String? @db.VarChar(255)
+
+  @@ignore
 }
 
-// Note table
-model Note {
-  note_id     Int      @id @default(autoincrement())
-  user_id     Int
-  content     String
-  timeframe   String // You can use an enum for timeframe (e.g., "daily", "weekly", "quarterly")
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  user        User     @relation(fields: [user_id], references: [user_id])
-  Task        Task?    @relation(fields: [taskTask_id], references: [task_id])
-  taskTask_id Int?
+model tasks {
+  task_id       Int         @id @default(autoincrement())
+  user_id       Int
+  task_type     String      @db.VarChar(20)
+  title         String      @db.VarChar(100)
+  description   String?
+  due_date      DateTime?   @db.Date
+  status        String?     @db.VarChar(20)
+  created_at    DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?   @default(now()) @db.Timestamp(6)
+  timeframe_id  Int?
+  journal_entry String?
+  timeframes    timeframes? @relation(fields: [timeframe_id], references: [timeframe_id], onDelete: NoAction, onUpdate: NoAction)
+  users         users       @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-// CalendarEvent table
-model CalendarEvent {
-  event_id    Int      @id @default(autoincrement())
-  user_id     Int
-  title       String
-  description String?
-  start_date  DateTime
-  end_date    DateTime
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  user        User     @relation(fields: [user_id], references: [user_id])
+model timeframes {
+  timeframe_id   Int       @id @default(autoincrement())
+  user_id        Int
+  timeframe_type String    @db.VarChar(10)
+  start_date     DateTime? @db.Date
+  end_date       DateTime? @db.Date
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  tasks          tasks[]
+  users          users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  user_id         Int               @id @default(autoincrement())
+  username        String            @db.VarChar(100)
+  email           String            @db.VarChar(100)
+  password        String            @db.VarChar(100)
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  updated_at      DateTime?         @default(now()) @db.Timestamp(6)
+  calendar_events calendar_events[]
+  tasks           tasks[]
+  timeframes      timeframes[]
 }
