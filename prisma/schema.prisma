@@ -21,14 +21,6 @@ model calendar_events {
   users          users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model pets {
-  name  String? @db.VarChar(255)
-  owner String? @db.VarChar(255)
-
-  @@ignore
-}
-
 model tasks {
   task_id       Int         @id @default(autoincrement())
   user_id       Int
