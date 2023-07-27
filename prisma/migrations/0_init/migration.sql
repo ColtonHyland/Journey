@@ -12,12 +12,6 @@ CREATE TABLE "calendar_events" (
 );
 
 -- CreateTable
-CREATE TABLE "pets" (
-    "name" VARCHAR(255),
-    "owner" VARCHAR(255)
-);
-
--- CreateTable
 CREATE TABLE "tasks" (
     "task_id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
