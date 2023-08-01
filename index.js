@@ -1,13 +1,19 @@
 const { PrismaClient } = require('@prisma/client')
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({ log: ['query']})
 
 async function main() {
+  
   await prisma.users.deleteMany();
-  await prisma.calendar_events.deleteMany();
-  await prisma.tasks.deleteMany();
-  await prisma.timeframes.deleteMany();
-}
+  const user = await prisma.users.create({
+    data: {
+      username: 'Colton Hyland',
+      email: 'colthyland@gmail.com',
+      password: 'password123',
+    },
+  })
+  console.log(user)
+};
 
 main()
   .then(async () => {
