@@ -8,4 +8,4 @@ const Providers = (props) => {
   )
 }
 
-export default Providers;
+export default Providers
