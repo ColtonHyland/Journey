@@ -15,10 +15,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-<<<<<<< HEAD
-=======
-          
->>>>>>> 1e10a0cb6505f64a9423c7954ff72e03718175bc
           <Appbar />
           {children}
         </Providers>
