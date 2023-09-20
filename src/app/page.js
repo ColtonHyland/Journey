@@ -11,6 +11,11 @@ const LandingPage = () => {
         Seamlessly manage your goals, tasks, and reflections in one place,
         empowering you to make the most of each step in your personal and professional journey.
       </p>
+      <Link href="/dashboard" passHref>
+      <button className="text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded">
+          Get Started
+        </button>
+      </Link>
     </div>
   );
 };
