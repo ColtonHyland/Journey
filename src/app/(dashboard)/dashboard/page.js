@@ -1,9 +1,20 @@
-import React from 'react'
+import React from 'react';
+import Link from 'next/link';
 
-const DashboardPage = () => {
+const Dashboard = () => {
   return (
-    <div>DashboardPage</div>
-  )
-}
+    <div>
+      {/* Your dashboard content */}
+      <h1>Dashboard</h1>
 
-export default DashboardPage
+      {/* Link to the Calendar Page */}
+      <Link href="/calendar">
+      <button className="text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded">
+          Go to Calendar
+        </button>
+      </Link>
+    </div>
+  );
+};
+
+export default Dashboard;
