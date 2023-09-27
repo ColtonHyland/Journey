@@ -6,16 +6,19 @@ import QuarterlyGoals from '../../components/QuarterlyGoals'; // Import your Qua
 
 const Dashboard = () => {
   return (
-    <div className="grid grid-cols-3 gap-4">
-      <div className="col-span-1">
-        <DailyTasks />
-      </div>
-      <div className="col-span-1">
-        <WeeklyGoals />
-      </div>
-      <div className="col-span-1">
-        <QuarterlyGoals />
-      </div>
+    
+  <div className="grid grid-cols-3 gap-4">
+  {
+  //     <div className="col-span-1">
+  //       <DailyTasks />
+  //     </div>
+  //     <div className="col-span-1">
+  //       <WeeklyGoals />
+  //     </div>
+  //     <div className="col-span-1">
+  //       <QuarterlyGoals />
+  //     </div>
+    }
 
       {/* Your other dashboard content */}
       <h1>Dashboard</h1>
