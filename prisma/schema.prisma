@@ -21,32 +21,18 @@ model calendar_events {
   users          users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model tasks {
+model tasks_and_goals {
   task_id       Int         @id @default(autoincrement())
   user_id       Int
-  task_type     String      @db.VarChar(20)
   title         String      @db.VarChar(100)
   description   String?
+  type          String      // "task", "weekly_goal", or "quarterly_goal"
   due_date      DateTime?   @db.Date
   status        String?     @db.VarChar(20)
   created_at    DateTime?   @default(now()) @db.Timestamp(6)
   updated_at    DateTime?   @default(now()) @db.Timestamp(6)
-  timeframe_id  Int?
   journal_entry String?
-  timeframes    timeframes? @relation(fields: [timeframe_id], references: [timeframe_id], onDelete: NoAction, onUpdate: NoAction)
   users         users       @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model timeframes {
-  timeframe_id   Int       @id @default(autoincrement())
-  user_id        Int
-  timeframe_type String    @db.VarChar(10)
-  start_date     DateTime? @db.Date
-  end_date       DateTime? @db.Date
-  created_at     DateTime? @default(now()) @db.Timestamp(6)
-  updated_at     DateTime? @default(now()) @db.Timestamp(6)
-  tasks          tasks[]
-  users          users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model users {
@@ -57,6 +43,5 @@ model users {
   created_at      DateTime?         @default(now()) @db.Timestamp(6)
   updated_at      DateTime?         @default(now()) @db.Timestamp(6)
   calendar_events calendar_events[]
-  tasks           tasks[]
-  timeframes      timeframes[]
+  tasks_and_goals tasks_and_goals[]
 }

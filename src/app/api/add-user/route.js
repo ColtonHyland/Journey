@@ -12,14 +12,44 @@ export async function GET(request) {
       throw new Error('Username, email, and password are required');
     }
 
-    // Insert a new user into the "users" table
-    await sql`
-      INSERT INTO users (username, email, password)
-      VALUES (${username}, ${email}, ${password});
-    `;
+    // Import Prisma Client
+const { PrismaClient } = require('@prisma/client');
 
-    // Fetch all users from the "users" table after insertion
-    const users = await sql`SELECT * FROM users;`;
+// Create an instance of Prisma Client
+const prisma = new PrismaClient();
+
+// Function to create a user
+async function createUser(username, email, password) {
+  try {
+    const user = await prisma.users.create({
+      data: {
+        username,
+        email,
+        password,
+      },
+    });
+
+    console.log('User created:', user);
+    return user;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
+  } finally {
+    // Disconnect Prisma Client
+    await prisma.$disconnect();
+  }
+}
+
+// Example usage
+async function main() {
+  const newUser = await createUser('john_doe', 'john@example.com', 'password123');
+}
+
+// Call the main function to create the user
+main().catch((e) => {
+  throw e;
+});
+
     return NextResponse.json({ users }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
