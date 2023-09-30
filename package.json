@@ -7,7 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "devStart": "node index.js"
+    "devStart": "node index.js",
+    "migrate:dev": "npx dotenv -e .env.local -- prisma migrate dev",
+    "db:push": "npx dotenv -e .env.local -- prisma db push",
+    "migrate:reset": "npx dotenv -e .env.local -- prisma migrate reset",
+    "db:seed": "npx dotenv -e .env.local -- prisma db seed",
+    "prisma:generate": "npx dotenv -e .env.local -- prisma generate",
+    "prisma:studio": "npx dotenv -e .env.local -- prisma studio",
+    "production:build": "npx prisma generate && npx prisma migrate deploy && next build"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
@@ -15,6 +22,7 @@
     "autoprefixer": "10.4.14",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
+    "dotenv-cli": "^7.3.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "jsonwebtoken": "^9.0.1",
