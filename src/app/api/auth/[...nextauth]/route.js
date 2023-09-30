@@ -1,5 +1,6 @@
 import NextAuth from "next-auth/next"
 import GoogleProvider from 'next-auth/providers/google'
+import saveUserToDatabase from "../../saveUserToDatabase/route.js";
 
 const handler = NextAuth({
   providers: [
@@ -9,7 +10,29 @@ const handler = NextAuth({
     }),
   ],  
   callbacks: {
+    async signIn(user, account, profile) {
+      // This callback is triggered when a user signs in with their Google account.
+      // You can access user information here and save it to your database.
+      
+      // Example: Save user information to the database using Prisma
+      const { email, name } = user;
+      const userData = {
+        username: name || "DefaultUsername",
+        email: email || "",
+        // Other user data you want to save
+      };
+
+      // Save user data to your database using Prisma or your preferred database library
+      try {
+        const savedUser = await saveUserToDatabase(userData);
+        console.log("User data saved:", savedUser);
+      } catch (error) {
+        console.error("Error saving user data:", error);
+      }
+
+      return true; // Continue with the sign-in process
   },
+},
   secret: process.env.NEXTAUTH_SECRET
 });
 
