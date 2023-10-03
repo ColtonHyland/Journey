@@ -16,11 +16,13 @@ const handler = NextAuth({
       
       // Example: Save user information to the database using Prisma
       const { email, name } = user;
+      console.log(`Login details: ${user}`)
       const userData = {
         username: name || "DefaultUsername",
         email: email || "",
         // Other user data you want to save
       };
+      //console.log(userData)
 
       // Save user data to your database using Prisma or your preferred database library
       try {
