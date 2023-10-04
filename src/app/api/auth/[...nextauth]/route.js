@@ -11,30 +11,28 @@ const handler = NextAuth({
   ],  
   callbacks: {
     async signIn(user, account, profile) {
-      // This callback is triggered when a user signs in with their Google account.
-      // You can access user information here and save it to your database.
-      
-      // Example: Save user information to the database using Prisma
-      const { email, name } = user;
-      console.log(`Login details: ${user}`)
-      const userData = {
-        username: name || "DefaultUsername",
-        email: email || "",
-        // Other user data you want to save
-      };
-      //console.log(userData)
-
-      // Save user data to your database using Prisma or your preferred database library
-      try {
-        const savedUser = await saveUserToDatabase(userData);
-        console.log("User data saved:", savedUser);
-      } catch (error) {
-        console.error("Error saving user data:", error);
+      // Check if the user already exists in the database based on their email
+      const existingUser = await getUserByEmail(user.email);
+  
+      if (!existingUser) {
+        // The user doesn't exist in the database, so we can create a new entry.
+        const { email } = user;
+        console.log(`New user's email: ${email}`);
+  
+        // Save user data to your database using Prisma or your preferred database library
+        try {
+          const savedUser = await saveUserToDatabase({ email });
+          console.log("New user saved:", savedUser);
+        } catch (error) {
+          console.error("Error saving new user:", error);
+        }
+      } else {
+        console.log(`User with email ${user.email} already exists.`);
       }
-
+  
       return true; // Continue with the sign-in process
+    },
   },
-},
   secret: process.env.NEXTAUTH_SECRET
 });
 
