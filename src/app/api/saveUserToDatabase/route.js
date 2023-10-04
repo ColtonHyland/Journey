@@ -10,6 +10,8 @@ async function saveUserToDatabase(userData) {
     return user;
   } catch (error) {
     throw error;
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
