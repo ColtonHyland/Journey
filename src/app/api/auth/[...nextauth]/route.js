@@ -1,6 +1,7 @@
 import NextAuth from "next-auth/next"
 import GoogleProvider from 'next-auth/providers/google'
 import saveUserToDatabase from "../../saveUserToDatabase/route.js";
+import getUserByEmail from "../../getUserByEmail/route.js";
 
 const handler = NextAuth({
   providers: [
@@ -12,7 +13,7 @@ const handler = NextAuth({
   callbacks: {
     async signIn(user, account, profile) {
       // Check if the user already exists in the database based on their email
-      console.log("user", user)
+      console.log("signIn Callback")
       const email = user.user.email;
       console.log(`User's email: ${email}`);
       
