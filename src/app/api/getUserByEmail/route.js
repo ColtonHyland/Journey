@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function getUserByEmail(email) {
+  console.log("getUserByEmail: ", email)
   try {
     const user = await prisma.users.findUnique({
       where: {

@@ -12,11 +12,15 @@ const handler = NextAuth({
   callbacks: {
     async signIn(user, account, profile) {
       // Check if the user already exists in the database based on their email
-      const existingUser = await getUserByEmail(user.email);
+      console.log("user", user)
+      const email = user.user.email;
+      console.log(`User's email: ${email}`);
+      
+      const existingUser = await getUserByEmail(email);
   
       if (!existingUser) {
         // The user doesn't exist in the database, so we can create a new entry.
-        const { email } = user;
+        
         console.log(`New user's email: ${email}`);
   
         // Save user data to your database using Prisma or your preferred database library
@@ -27,7 +31,7 @@ const handler = NextAuth({
           console.error("Error saving new user:", error);
         }
       } else {
-        console.log(`User with email ${user.email} already exists.`);
+        console.log(`User with email ${email} already exists.`);
       }
   
       return true; // Continue with the sign-in process
