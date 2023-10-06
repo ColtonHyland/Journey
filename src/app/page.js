@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
 
 const LandingPage = () => {
+  const { data: session } = useSession(); // Get the user's session data
+
   return (
     <div className="bg-gradient-to-b from-blue-200 to-blue-400 h-screen flex flex-col justify-center items-center">
       <h1 className="text-4xl font-bold text-white mb-4">
