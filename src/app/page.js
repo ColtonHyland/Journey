@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
-import { useRouter } from 'next/navigation'; // Import the useRouter hook
+import { useRouter, redirect } from 'next/navigation'; // Import the useRouter hook
 
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -15,7 +15,7 @@ const LandingPage = () => {
 
   React.useEffect(() => {
     if (session) {
-      router.push('/dashboard');
+      redirect('/dashboard');
     }
   }, [session]);
 
