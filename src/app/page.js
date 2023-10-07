@@ -3,12 +3,21 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
+import { useRouter } from 'next/navigation'; // Import the useRouter hook
+
 import LoadingSpinner from './components/LoadingSpinner';
 
 const LandingPage = () => {
 
   const { data: session, status } = useSession();
+  const router = useRouter(); // Initialize the useRouter hook
   const isLoading = status === 'loading';
+
+  React.useEffect(() => {
+    if (session) {
+      router.push('/dashboard');
+    }
+  }, [session]);
 
   return (
     <div className="bg-gradient-to-b from-blue-200 to-blue-400 h-screen flex flex-col justify-center items-center">
