@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
@@ -8,16 +10,23 @@ const LandingPage = () => {
   return (
     <div className="bg-gradient-to-b from-blue-200 to-blue-400 h-screen flex flex-col justify-center items-center">
       <h1 className="text-4xl font-bold text-white mb-4">
-        Embark on a transformative experience with Journey.
+        {session ? `Welcome, ${session.user.name}!` : 'Embark on a transformative experience with Journey.'}
       </h1>
       <p className="text-lg text-white text-center mb-6">
-        Seamlessly manage your goals, tasks, and reflections in one place,
-        empowering you to make the most of each step in your personal and professional journey.
+        {session
+          ? 'You are now logged in. Start managing your goals, tasks, and reflections.'
+          : 'Seamlessly manage your goals, tasks, and reflections in one place, empowering you to make the most of each step in your personal and professional journey.'}
       </p>
       <Link href="/dashboard" passHref>
-      <button className="text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded">
-          Get Started
-        </button>
+        {session ? (
+          <button className="text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded">
+            Go to Dashboard
+          </button>
+        ) : (
+          <button className="text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded">
+            Get Started
+          </button>
+        )}
       </Link>
     </div>
   );
