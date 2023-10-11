@@ -1,36 +1,36 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export default async function handler(req, res) {
+async function getDailyTasks(user_id) {
+  console.log('getDailyTasks for user_id:', user_id);
   try {
-    const { email } = req.query; // Assuming you pass the email as a query parameter
-
-    // Fetch the user by email
-    const user = await prisma.users.findUnique({
+    const tasks = await prisma.tasks_and_goals.findMany({
       where: {
-        email: email,
-      },
-      include: {
-        // You can include the daily tasks relationship here
-        dailyTasks: true,
+        user_id: user_id,
+        type: 'task', // Assuming daily tasks have the type 'task'
+        // You can add more conditions or filters here if needed
       },
     });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Return the user's daily tasks
-    return res.status(200).json(user.dailyTasks);
+    return tasks;
   } catch (error) {
-    return res.status(500).json({ error: "Internal server error" });
+    throw new Error(`Error fetching daily tasks: ${error.message}`);
   } finally {
     await prisma.$disconnect();
   }
 }
 
-// const response = await fetch(`/api/getDailyTasks?email=${userEmail}`);
-// const data = await response.json();
+export default getDailyTasks;
 
-// console.log(data); // This will contain the user's daily tasks
+// const { data: session } = useSession();
+//   const router = useRouter();
+
+//   // Check if the user is logged in and retrieve the user_id
+//   const user_id = session?.user?.id; // Update 'user_id' according to your NextAuth session data
+
+//   React.useEffect(() => {
+//     if (!user_id) {
+//       // Redirect to the landing page or login page if the user is not logged in
+//       router.push('/');
+//     }
+//   }, [user_id]);
