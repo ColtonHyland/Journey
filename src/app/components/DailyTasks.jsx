@@ -1,13 +1,14 @@
 "use client";
 import getDailyTasks from '../api/getDailyTasks/route';
-
+import getUserByEmail from '../api/getUserByEmail/route';
+import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
 import React, { useEffect, useState } from 'react';
 
 const DailyTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect((user_id) => {
     // Fetch daily tasks when the component mounts
     getDailyTasks() // Call the getDailyTasks route
       .then((data) => {
