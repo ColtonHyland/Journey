@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import getDailyTasks from '../api/getDailyTasks/route';
 
 import React, { useEffect, useState } from 'react';
 
@@ -8,8 +9,7 @@ const DailyTasks = () => {
 
   useEffect(() => {
     // Fetch daily tasks when the component mounts
-    fetch('/api/get-daily-tasks') // Replace with the actual API route
-      .then((response) => response.json())
+    getDailyTasks() // Call the getDailyTasks route
       .then((data) => {
         setTasks(data);
         setLoading(false);
