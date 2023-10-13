@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
-
 export default async function handler(req, res) {
+  const prisma = new PrismaClient();
   if (req.method === 'POST') {
     try {
       const { email } = req.body; // Assuming you send the email in the request body
