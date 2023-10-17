@@ -1,31 +1,53 @@
-import { PrismaClient } from '@prisma/client';
 
-export default async function handler(req, res) {
-  const prisma = new PrismaClient();
-  if (req.method === 'POST') {
-    try {
-      const { email } = req.body; // Assuming you send the email in the request body
-      const user = await prisma.users.findUnique({
-        where: {
-          email: email,
-        },
-      });
+export async function getUserByEmail(email) {
+  try {
+    const response = await fetch('/api/getUserByEmail', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }), // Send the email in the request body
+    });
 
-      if (!user) {
-        res.status(404).json({ error: 'User not found' });
-      } else {
-        res.status(200).json(user);
-      }
-    } catch (error) {
-      console.error('Error fetching user by email:', error);
-      res.status(500).json({ error: 'Error fetching user' });
-    } finally {
-      await prisma.$disconnect();
+    if (response.ok) {
+      const user = await response.json();
+      return user;
+    } else {
+      throw new Error('Error fetching user by email');
     }
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    throw new Error(`Error fetching user by email: ${error.message}`);
   }
 }
+
+// import { PrismaClient } from '@prisma/client';
+
+// export default async function handler(req, res) {
+//   const prisma = new PrismaClient();
+//   if (req.method === 'POST') {
+//     try {
+//       const { email } = req.body; // Assuming you send the email in the request body
+//       const user = await prisma.users.findUnique({
+//         where: {
+//           email: email,
+//         },
+//       });
+
+//       if (!user) {
+//         res.status(404).json({ error: 'User not found' });
+//       } else {
+//         res.status(200).json(user);
+//       }
+//     } catch (error) {
+//       console.error('Error fetching user by email:', error);
+//       res.status(500).json({ error: 'Error fetching user' });
+//     } finally {
+//       await prisma.$disconnect();
+//     }
+//   } else {
+//     res.status(405).json({ error: 'Method not allowed' });
+//   }
+// }
 
 // import { PrismaClient } from "@prisma/client";
 
