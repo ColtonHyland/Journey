@@ -14,29 +14,75 @@ const handler = NextAuth({
   callbacks: {
     async signIn(user, account, profile) {
       // Check if the user already exists in the database based on their email
-      console.log("signIn Callback")
+      console.log("signIn Callback");
       const email = user.user.email;
       console.log(`User's email: ${email}`);
-      
-      const existingUser = await getUserByEmail(email);
-  
-      if (!existingUser) {
-        // The user doesn't exist in the database, so we can create a new entry.
-        
-        console.log(`New user's email: ${email}`);
-  
-        // Save user data to your database using Prisma or your preferred database library
-        try {
-          const savedUser = await saveUserToDatabase({ email });
-          console.log("New user saved:", savedUser);
-        } catch (error) {
-          console.error("Error saving new user:", error);
+
+      try {
+        // Fetch the user using your API route
+        const response = await fetch('/api/getUserByEmail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }), // Send the email in the request body
+        });
+
+        if (response.ok) {
+          const existingUser = await response.json();
+          if (!existingUser) {
+            // The user doesn't exist in the database, so we can create a new entry.
+            console.log(`New user's email: ${email}`);
+
+            // Save user data to your database using another API route
+            const saveResponse = await fetch('/api/saveUserToDatabase', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email }),
+            });
+
+            if (saveResponse.ok) {
+              console.log('New user saved successfully.');
+            } else {
+              console.error('Error saving new user:', saveResponse.status);
+            }
+          } else {
+            console.log(`User with email ${email} already exists.`);
+          }
+        } else {
+          console.error('Error fetching user by email:', response.status);
         }
-      } else {
-        console.log(`User with email ${email} already exists.`);
+      } catch (error) {
+        console.error('Error fetching or saving user:', error);
       }
 
       return true; // Continue with the sign-in process
+      // Check if the user already exists in the database based on their email
+      // console.log("signIn Callback")
+      // const email = user.user.email;
+      // console.log(`User's email: ${email}`);
+      
+      // const existingUser = await getUserByEmail(email);
+  
+      // if (!existingUser) {
+      //   // The user doesn't exist in the database, so we can create a new entry.
+        
+      //   console.log(`New user's email: ${email}`);
+  
+      //   // Save user data to your database using Prisma or your preferred database library
+      //   try {
+      //     const savedUser = await saveUserToDatabase({ email });
+      //     console.log("New user saved:", savedUser);
+      //   } catch (error) {
+      //     console.error("Error saving new user:", error);
+      //   }
+      // } else {
+      //   console.log(`User with email ${email} already exists.`);
+      // }
+
+      // return true; // Continue with the sign-in process
     },
     async redirect({ url, baseUrl }) {
       return baseUrl

@@ -1,29 +1,59 @@
 import { PrismaClient } from '@prisma/client';
 
-export default async function handle(req, res) {
+export default async function handler(req, res) {
   const prisma = new PrismaClient();
-  console.log("request: ", req);
-  
-  try {
-    const { email } = req.body; // Assuming you send the email in the request body
-    const user = await prisma.users.findUnique({
-      where: {
-        email: email,
-      },
-    });
 
-    if (!user) {
-      res.status(404).json({ error: 'User not found' });
-    } else {
-      res.status(200).json(user); // Move the response here
+  if (req.method === 'POST') {
+    try {
+      const { email } = req.body; // Assuming you send the email in the request body
+      const user = await prisma.users.findUnique({
+        where: {
+          email: email,
+        },
+      });
+
+      if (!user) {
+        res.status(404).json({ error: 'User not found' });
+      } else {
+        res.status(200).json(user); // Move the response here
+      }
+    } catch (error) {
+      console.error('Error fetching user by email:', error);
+      res.status(500).json({ error: 'Error fetching user' });
+    } finally {
+      await prisma.$disconnect();
     }
-  } catch (error) {
-    console.error('Error fetching user by email:', error);
-    res.status(500).json({ error: 'Error fetching user' });
-  } finally {
-    await prisma.$disconnect();
+  } else {
+    res.status(405).json({ error: 'Method not allowed' });
   }
 }
+
+// import { PrismaClient } from '@prisma/client';
+
+// export default async function handle(req, res) {
+//   const prisma = new PrismaClient();
+//   console.log("request: ", req);
+  
+//   try {
+//     const { email } = req.body; // Assuming you send the email in the request body
+//     const user = await prisma.users.findUnique({
+//       where: {
+//         email: email,
+//       },
+//     });
+
+//     if (!user) {
+//       res.status(404).json({ error: 'User not found' });
+//     } else {
+//       res.status(200).json(user); // Move the response here
+//     }
+//   } catch (error) {
+//     console.error('Error fetching user by email:', error);
+//     res.status(500).json({ error: 'Error fetching user' });
+//   } finally {
+//     await prisma.$disconnect();
+//   }
+// }
 
 // export async function POST() {
 //   const res = await fetch('https://data.mongodb-api.com/...', {
