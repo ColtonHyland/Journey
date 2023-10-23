@@ -20,7 +20,7 @@ const handler = NextAuth({
 
       try {
         // Fetch the user using your API route
-        const response = await fetch('/api/getUserByEmail', {
+        const response = await fetch(process.env.NEXTAUTH_URL + '/api/getUserByEmail', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const handler = NextAuth({
             console.log(`New user's email: ${email}`);
 
             // Save user data to your database using another API route
-            const saveResponse = await fetch('/api/saveUserToDatabase', {
+            const saveResponse = await fetch(process.env.NEXTAUTH_URL + '/api/saveUserToDatabase', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
