@@ -1,4 +1,4 @@
-import NextAuth, { useSession } from "next-auth/next"
+import NextAuth from "next-auth/next"
 import GoogleProvider from 'next-auth/providers/google'
 import saveUserToDatabase from "../../saveUserToDatabase/route.js";
 import getUserByEmail from "../../getUserByEmail/route.js";
@@ -42,6 +42,8 @@ const handler = NextAuth({
       return baseUrl
     },
     async session({ session, user, token }) {
+      // Include the user's email in the session
+      session.user.email = user.email;
       return session
     },
     async jwt({ token, user, account, profile, isNewUser }) {
