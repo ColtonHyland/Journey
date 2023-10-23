@@ -1,6 +1,9 @@
-import prisma from "@/utils/prisma";
+import { PrismaClient } from "@prisma/client";
 
 export default async function handler(req, res) {
+  
+  const prisma = new PrismaClient();
+  
   if (req.method === "POST") {
     try {
       const userData = req.body; // Assuming you send the user data in the request body
