@@ -38,6 +38,9 @@ model tasks_and_goals {
 model users {
   user_id         Int               @id @default(autoincrement())
   email           String            @db.VarChar(100) @unique
+  emailVerified DateTime?
+  image         String?
+  role          String?  @default("admin")
   created_at      DateTime?         @default(now()) @db.Timestamp(6)
   updated_at      DateTime?         @default(now()) @db.Timestamp(6)
   calendar_events calendar_events[]

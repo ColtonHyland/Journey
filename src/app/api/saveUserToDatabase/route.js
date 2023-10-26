@@ -6,7 +6,7 @@ export async function POST(request) {
 
   if (request.method === "POST") {
     try {
-      const userData = await request.json(); // Assuming you send the user data in the request body
+      const userData = await request.json();
 
       const user = await prisma.users.create({
         data: userData,
@@ -16,7 +16,7 @@ export async function POST(request) {
         message: 'User created',
         user,
       }, {
-        status: 201, // Use a 201 status code for successful creation
+        status: 201,
       });
     } catch (error) {
       console.error("Error creating a new user:", error);
