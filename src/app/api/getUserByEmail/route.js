@@ -1,13 +1,13 @@
+import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
-export async function POST(req, res) {
+export async function POST(request) {
   const prisma = new PrismaClient();
 
-  console.log("req.body: ", req.body);
-
-  if (req.method === 'POST') {
+  if (request.method === 'POST') {
     try {
-      const { email } = req.body; // Assuming you send the email in the request body
+      const email = await request.json(); // Assuming you send the email in the request body
+      console.log("Parsed email: ", email);
       const user = await prisma.users.findUnique({
         where: {
           email: email,
@@ -15,18 +15,44 @@ export async function POST(req, res) {
       });
 
       if (!user) {
-        res.status(404).json({ error: 'User not found' });
+        NextResponse.json({
+          message: 'User not found',
+        }, {
+          status: 404,
+          // headers: {
+          //   'Content-Type': 'application/json',
+          // },
+        })
+        //request.status(404).json({ error: 'User not found' });
       } else {
-        res.status(200).json(user);
+        NextResponse.json({
+          message: 'User found',
+        }, {
+          status: 200,
+        })
+        // request.status(200).json(user);
       }
     } catch (error) {
+
       console.error('Error fetching user by email:', error);
-      res.status(500).json({ error: 'Error fetching user by email' });
+      NextResponse.json({
+        message: 'Error fetching user by email',
+      }, { 
+        status: 500,
+      })
+      //request.status(500).json({ error: 'Error fetching user by email' });
+    
     } finally {
       await prisma.$disconnect();
     }
+  
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    NextResponse.json({
+      message: 'Method not allowed',
+    }, {
+      status: 405,
+    })
+    //request.status(405).json({ error: 'Method not allowed' });
   }
 }
 
