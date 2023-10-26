@@ -1,7 +1,6 @@
 import NextAuth from "next-auth/next"
 import GoogleProvider from 'next-auth/providers/google'
-import saveUserToDatabase from "../../saveUserToDatabase/route.js";
-import getUserByEmail from "../../getUserByEmail/route.js";
+
 // import { setCookie, parseCookies } from 'cookies';
 
 const handler = NextAuth({
@@ -87,14 +86,14 @@ const handler = NextAuth({
     async redirect({ url, baseUrl }) {
       return baseUrl
     },
-    async session({ session, user, token }) {
-      // Include the user's email in the session
-      session.user.email = user.email;
-      return session
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      return token
-    }
+    // async session({ session, user, token }) {
+    //   // Include the user's email in the session
+    //   session.user.email = user.email;
+    //   return session
+    // },
+    // async jwt({ token, user, account, profile, isNewUser }) {
+    //   return token
+    // }
   },
   secret: process.env.NEXTAUTH_SECRET
 });

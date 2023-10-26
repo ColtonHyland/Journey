@@ -6,8 +6,8 @@ export async function POST(request) {
 
   if (request.method === 'POST') {
     try {
-      const email = await request.json(); // Assuming you send the email in the request body
-      console.log("Parsed email: ", email);
+      const { email } = await request.json(); // Assuming you send the email in the request body
+      console.log("Parsed email: ", email );
       const user = await prisma.users.findUnique({
         where: {
           email: email,
@@ -15,7 +15,7 @@ export async function POST(request) {
       });
 
       if (!user) {
-        NextResponse.json({
+        return NextResponse.json({
           message: 'User not found',
         }, {
           status: 404,
@@ -25,7 +25,7 @@ export async function POST(request) {
         })
         //request.status(404).json({ error: 'User not found' });
       } else {
-        NextResponse.json({
+        return NextResponse.json({
           message: 'User found',
         }, {
           status: 200,
@@ -35,7 +35,7 @@ export async function POST(request) {
     } catch (error) {
 
       console.error('Error fetching user by email:', error);
-      NextResponse.json({
+      return NextResponse.json({
         message: 'Error fetching user by email',
       }, { 
         status: 500,
