@@ -12,7 +12,7 @@ export const RegisterForm = () => {
   });
   const [error, setError] = useState("");
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setFormValues({ name: "", email: "", password: "" });
@@ -33,13 +33,13 @@ export const RegisterForm = () => {
       }
 
       signIn(undefined, { callbackUrl: "/" });
-    } catch (error: any) {
+    } catch (error) {
       setLoading(false);
       setError(error);
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
@@ -95,3 +95,4 @@ export const RegisterForm = () => {
       </button>
     </form>
   );
+};
