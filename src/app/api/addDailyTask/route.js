@@ -1,4 +1,3 @@
-// pages/api/addTask.js
 import { prisma } from "../../lib/prisma"; // Adjust the import path based on your project structure
 
 export default async function handler(req, res) {

@@ -4,7 +4,12 @@ import getUserByEmail from '../api/getUserByEmail/route';
 import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
 import React, { useEffect, useState } from 'react';
 
+
+
 const DailyTasks = () => {
+  const { data: session, status } = useSession();
+  const userId = session?.user?.id;
+  const isSessionLoading = status === "loading";
   const [tasks, setTasks] = useState([]);
   const [newTaskTitle, setNewTaskTitle] = useState(''); // State to track input field value
   const [loading, setLoading] = useState(true);
@@ -22,18 +27,25 @@ const DailyTasks = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (!isSessionLoading && session) {
+      // Now you have access to the session object
+      // You can fetch the user's tasks or anything related to the user
+    }
+  }, [session, isSessionLoading]);
+
   const addTask = async () => {
     if (!newTaskTitle.trim()) return; // Prevent adding empty tasks
   
     try {
-      const response = await fetch('/api/addTask', {
+      const response = await fetch('/api/addDailyTask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           title: newTaskTitle,
-          userId: /* the logged-in user's ID */, // You need to obtain this from the session or context
+          userId: session.user.id,
         }),
       });
   
@@ -49,8 +61,6 @@ const DailyTasks = () => {
       console.error("Failed to add task:", error);
     }
   };
-
-  
 
   return (
     <div>
