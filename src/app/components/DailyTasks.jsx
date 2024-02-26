@@ -22,16 +22,35 @@ const DailyTasks = () => {
       });
   }, []);
 
-  const addTask = () => {
+  const addTask = async () => {
     if (!newTaskTitle.trim()) return; // Prevent adding empty tasks
-    const newTask = {
-      task_id: Math.random().toString(36).substr(2, 9), // Generate a pseudo-random ID for the example
-      title: newTaskTitle,
-      // Include any other task properties here
-    };
-    setTasks([...tasks, newTask]); // Add the new task to the existing tasks
-    setNewTaskTitle(''); // Reset input field
+  
+    try {
+      const response = await fetch('/api/addTask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: newTaskTitle,
+          userId: /* the logged-in user's ID */, // You need to obtain this from the session or context
+        }),
+      });
+  
+      if (response.ok) {
+        const newTask = await response.json();
+        setTasks([...tasks, newTask]); // Update the local state with the new task
+        setNewTaskTitle(''); // Reset input field
+      } else {
+        // Handle server errors or invalid responses
+        console.error("Failed to add task");
+      }
+    } catch (error) {
+      console.error("Failed to add task:", error);
+    }
   };
+
+  
 
   return (
     <div>
