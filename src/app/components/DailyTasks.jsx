@@ -1,6 +1,6 @@
 "use client";
-import getDailyTasks from '../api/getDailyTasks/route';
-import getUserByEmail from '../api/getUserByEmail/route';
+// import getDailyTasks from '../api/getDailyTasks/route';
+// import getUserByEmail from '../api/getUserByEmail/route';
 import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
 import React, { useEffect, useState } from 'react';
 
@@ -16,16 +16,17 @@ const DailyTasks = () => {
 
   useEffect(() => {
     // Assume getDailyTasks is an async function that fetches tasks
+    console.log("session: ", session);
     getDailyTasks() // Call the getDailyTasks route
-      .then((data) => {
-        setTasks(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching daily tasks:', error);
-        setLoading(false);
-      });
-  }, []);
+    //   .then((data) => {
+    //     setTasks(data);
+    //     setLoading(false);
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error fetching daily tasks:', error);
+    //     setLoading(false);
+    //   });
+  }, [session]);
 
   useEffect(() => {
     if (!isSessionLoading && session) {
@@ -33,6 +34,31 @@ const DailyTasks = () => {
       // You can fetch the user's tasks or anything related to the user
     }
   }, [session, isSessionLoading]);
+
+  const getDailyTasks = async () => {
+    try {
+      const response = await fetch('/api/getDailyTasks', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // body: JSON.stringify({
+        //   user_id: userId,
+        //   type: "task", // Assuming type is required and set to "task" for daily tasks
+        // }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        return data.result; // Return the tasks
+      } else {
+        // Handle server errors or invalid responses
+        console.error("Failed to fetch daily tasks");
+      }
+    } catch (error) {
+      console.error("Failed to fetch daily tasks:", error);
+    }
+  };
 
   const addTask = async () => {
     if (!newTaskTitle.trim()) return; // Prevent adding empty tasks
@@ -84,12 +110,12 @@ const DailyTasks = () => {
         <p>Loading tasks...</p>
       ) : (
         <ul>
-          {tasks.map((task) => (
+          {/* {tasks.map((task) => (
             <li key={task.task_id} className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" />
               {task.title}
             </li>
-          ))}
+          ))} */}
         </ul>
       )}
     </div>
