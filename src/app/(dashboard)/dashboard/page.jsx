@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import DailyTasks from '../../components/DailyTasks'; // Import your DailyTasks component
-import WeeklyGoals from '../../components/WeeklyGoals'; // Import your WeeklyGoals component
-import QuarterlyGoals from '../../components/QuarterlyGoals'; // Import your QuarterlyGoals component
+import DailyTasks from '../../../components/DailyTasks'; // Import your DailyTasks component
+import WeeklyGoals from '../../../components/WeeklyGoals'; // Import your WeeklyGoals component
+import QuarterlyGoals from '../../../components/QuarterlyGoals'; // Import your QuarterlyGoals component
 
 const Dashboard = () => {
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../lib/prisma"; // Adjust the import path based on your project structure
+import { prisma } from "../../../lib/prisma"; // Adjust the import path based on your project structure
 
 export default async function POST(request) {
   const res = await request.json();

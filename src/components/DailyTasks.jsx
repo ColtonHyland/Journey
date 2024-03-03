@@ -16,8 +16,10 @@ const DailyTasks = () => {
 
   useEffect(() => {
     // Assume getDailyTasks is an async function that fetches tasks
-    console.log("session: ", session);
-    getDailyTasks() // Call the getDailyTasks route
+    if (status !== "loading" && session) {
+      console.log("Session is loaded, now fetching tasks...");
+      getDailyTasks();
+    } // Call the getDailyTasks route
     //   .then((data) => {
     //     setTasks(data);
     //     setLoading(false);
@@ -26,7 +28,7 @@ const DailyTasks = () => {
     //     console.error('Error fetching daily tasks:', error);
     //     setLoading(false);
     //   });
-  }, [session]);
+  }, [session, status]);
 
   useEffect(() => {
     if (!isSessionLoading && session) {
@@ -37,26 +39,24 @@ const DailyTasks = () => {
 
   const getDailyTasks = async () => {
     try {
-      const response = await fetch('/api/getDailyTasks', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // body: JSON.stringify({
-        //   user_id: userId,
-        //   type: "task", // Assuming type is required and set to "task" for daily tasks
-        // }),
+      const response = await fetch(`/api/getDailyTasks`, {
+        method: 'GET', // No need for headers or body for a simple GET request in this context
+        credentials: 'include',
       });
-  
-      if (response.ok) {
-        const data = await response.json();
-        return data.result; // Return the tasks
+    
+      if (!response.ok) {
+        throw new Error("Failed to fetch daily tasks");
       } else {
-        // Handle server errors or invalid responses
-        console.error("Failed to fetch daily tasks");
+        console.log("Response is OK");
+        console.log(response);
       }
+  
+      const { result } = await response.json();
+      setTasks(result);
+      setLoading(false);
     } catch (error) {
-      console.error("Failed to fetch daily tasks:", error);
+      console.error(error.message);
+      setLoading(false);
     }
   };
 
