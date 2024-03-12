@@ -7,43 +7,32 @@ import React, { useEffect, useState } from 'react';
 const DailyTasks = () => {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
-  const isSessionLoading = status === "loading";
   const [tasks, setTasks] = useState([]);
-  const [newTaskTitle, setNewTaskTitle] = useState(''); // State to track input field value
+  const [selectedTasks, setSelectedTasks] = useState(new Set());
+  const [newTaskTitle, setNewTaskTitle] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch tasks when session is loaded and not in a loading state
     if (status === 'authenticated') {
       getDailyTasks();
     }
     console.log("Tasks:", tasks);
   }, [status]);
 
-  useEffect(() => {
-    if (!isSessionLoading && session) {
-      // Now you have access to the session object
-      // You can fetch the user's tasks or anything related to the user
-    }
-  }, [session, isSessionLoading]);
-
   const getDailyTasks = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`/api/getDailyTasks`, {
-        method: 'GET', // No need for headers or body for a simple GET request in this context
+        method: 'GET',
         credentials: 'include',
       });
     
       if (!response.ok) {
         throw new Error("Failed to fetch daily tasks");
-      } else {
-        console.log("Response is OK");
-        console.log(response);
       }
   
       const data = await response.json();
       setTasks(data.tasks || []);
-      
     } catch (error) {
       console.error(error.message);
       setLoading(false);
@@ -53,8 +42,8 @@ const DailyTasks = () => {
   };
 
   const addTask = async () => {
-    if (!newTaskTitle.trim()) return; // Prevent adding empty tasks
-  
+    if (!newTaskTitle.trim()) return;
+
     try {
       const response = await fetch('/api/addDailyTask', {
         method: 'POST',
@@ -66,18 +55,46 @@ const DailyTasks = () => {
           userId: session.user.id,
         }),
       });
-  
-      if (response.ok) {
-        const newTask = await response.json();
-        setTasks([...tasks, newTask]); // Update the local state with the new task
-        setNewTaskTitle(''); // Reset input field
-      } else {
-        // Handle server errors or invalid responses
-        console.error("Failed to add task");
-      }
+
+      if (!response.ok) throw new Error("Failed to add task");
+
+      const newTask = await response.json();
+      setTasks([...tasks, newTask]);
+      setNewTaskTitle('');
+
     } catch (error) {
-      console.error("Failed to add task:", error);
+      console.error(error.message);
     }
+  };
+
+  const deleteSelectedTasks = async () => {
+    // Assuming the tasks have an 'id' property
+    try {
+      for (const taskId of selectedTasks) {
+        const response = await fetch(`/api/tasks/${taskId}`, { 
+          method: 'DELETE',
+          credentials: 'include' });
+        if (!response.ok) throw new Error("Failed to delete task");
+        // Assuming you get the deleted task as response for confirmation
+        const deletedTask = await response.json();
+        console.log(`Deleted task: ${deletedTask.id}`);
+      }
+      // Refresh the tasks list after deletion
+      getDailyTasks();
+      setSelectedTasks(new Set()); // Clear selection
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const handleTaskSelection = (taskId) => {
+    const newSelectedTasks = new Set(selectedTasks);
+    if (selectedTasks.has(taskId)) {
+      newSelectedTasks.delete(taskId);
+    } else {
+      newSelectedTasks.add(taskId);
+    }
+    setSelectedTasks(newSelectedTasks);
   };
 
   return (
@@ -101,14 +118,29 @@ const DailyTasks = () => {
       {loading ? (
         <p>Loading tasks...</p>
       ) : (
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.task_id} className="mb-2 flex items-center">
-              <input type="checkbox" className="mr-2" />
-              {task.title}
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul>
+            {tasks.map((task) => (
+              <li key={task.id} className="mb-2 flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectedTasks.has(task.id)}
+                  onChange={() => handleTaskSelection(task.id)}
+                />
+                {task.title}
+              </li>
+            ))}
+          </ul>
+          {selectedTasks.size > 0 && (
+            <button
+              onClick={deleteSelectedTasks}
+              className="mt-2 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Delete Selected Tasks
+            </button>
+          )}
+        </>
       )}
     </div>
   );
