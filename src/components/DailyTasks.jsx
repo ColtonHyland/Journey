@@ -13,20 +13,12 @@ const DailyTasks = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Assume getDailyTasks is an async function that fetches tasks
-    if (status !== "loading" && session) {
-      //console.log(`${JSON.stringify(session.user) }`);
+    // Fetch tasks when session is loaded and not in a loading state
+    if (status === 'authenticated') {
       getDailyTasks();
-    } // Call the getDailyTasks route
-    //   .then((data) => {
-    //     setTasks(data);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error fetching daily tasks:', error);
-    //     setLoading(false);
-    //   });
-  }, [session, status]);
+    }
+    console.log("Tasks:", tasks);
+  }, [status]);
 
   useEffect(() => {
     if (!isSessionLoading && session) {
@@ -49,11 +41,13 @@ const DailyTasks = () => {
         console.log(response);
       }
   
-      const { result } = await response.json();
-      setTasks(result);
-      setLoading(false);
+      const data = await response.json();
+      setTasks(data.tasks || []);
+      
     } catch (error) {
       console.error(error.message);
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   };
@@ -108,12 +102,12 @@ const DailyTasks = () => {
         <p>Loading tasks...</p>
       ) : (
         <ul>
-          {/* {tasks.map((task) => (
+          {tasks.map((task) => (
             <li key={task.task_id} className="mb-2 flex items-center">
               <input type="checkbox" className="mr-2" />
               {task.title}
             </li>
-          ))} */}
+          ))}
         </ul>
       )}
     </div>
