@@ -15,8 +15,9 @@ const DailyTasks = () => {
   useEffect(() => {
     if (status === 'authenticated') {
       getDailyTasks();
+      console.log("Tasks:", tasks);
     }
-    console.log("Tasks:", tasks);
+    
   }, [status]);
 
   const getDailyTasks = async () => {
@@ -121,12 +122,12 @@ const DailyTasks = () => {
         <>
           <ul>
             {tasks.map((task) => (
-              <li key={task.id} className="mb-2 flex items-center">
+              <li key={task.task_id} className="mb-2 flex items-center">
                 <input
                   type="checkbox"
                   className="mr-2"
-                  checked={selectedTasks.has(task.id)}
-                  onChange={() => handleTaskSelection(task.id)}
+                  checked={selectedTasks.has(task.task_id)}
+                  onChange={() => handleTaskSelection(task.task_id)}
                 />
                 {task.title}
               </li>

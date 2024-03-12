@@ -1,11 +1,14 @@
 import { prisma } from "../../../../lib/prisma";
 
+
+
 export async function DELETE(request) {
+  const url = new URL(request.url);
+  const taskId = url.pathname.split('/').pop();
+  console.log("taskId:", taskId);
   try {
-    const { id } = await request.json();
-    
-    if (!id) {
-      return new Response(JSON.stringify({ error: "Id is required." }), {
+    if (!taskId) {
+      return new Response(JSON.stringify({ error: "Task ID is required." }), {
         status: 400,
         headers: {
           'Content-Type': 'application/json',
@@ -15,25 +18,23 @@ export async function DELETE(request) {
 
     const result = await prisma.tasks_and_goals.delete({
       where: {
-        id,
+        task_id: taskId, // Ensure this matches the ID field in your database
       },
     });
 
-    return new Response(JSON.stringify(result), {
-      status: 200, // Successfully deleted
-      message: "Task deleted successfully",
+    return new Response(JSON.stringify({ message: "Task deleted successfully", result }), {
+      status: 200,
       headers: {
         'Content-Type': 'application/json',
       },
     });
   } catch (error) {
     console.error("Error deleting task:", error);
-    console.error("Prisma error details:", error.message);
     return new Response(JSON.stringify({ error: "Failed to delete the task." }), {
         status: 500,
         headers: {
             'Content-Type': 'application/json',
         },
     });
-}
+  }
 }
