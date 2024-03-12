@@ -4,8 +4,6 @@
 import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
 import React, { useEffect, useState } from 'react';
 
-
-
 const DailyTasks = () => {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
@@ -17,7 +15,7 @@ const DailyTasks = () => {
   useEffect(() => {
     // Assume getDailyTasks is an async function that fetches tasks
     if (status !== "loading" && session) {
-      console.log("Session is loaded, now fetching tasks...");
+      //console.log(`${JSON.stringify(session.user) }`);
       getDailyTasks();
     } // Call the getDailyTasks route
     //   .then((data) => {
