@@ -77,8 +77,8 @@ const DailyTasks = () => {
           credentials: 'include' });
         if (!response.ok) throw new Error("Failed to delete task");
         // Assuming you get the deleted task as response for confirmation
-        const deletedTask = await response.json();
-        console.log(`Deleted task: ${deletedTask.id}`);
+        // const deletedTask = await response.json();
+        // console.log(`Deleted task: ${JSON.stringify(deletedTask)}`);
       }
       // Refresh the tasks list after deletion
       getDailyTasks();
@@ -106,6 +106,11 @@ const DailyTasks = () => {
           type="text"
           value={newTaskTitle}
           onChange={(e) => setNewTaskTitle(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter' && newTaskTitle.trim() !== '') {
+              addTask();
+            }
+          }}
           placeholder="Add a new task"
           className="mr-2 p-2 border border-gray-300 rounded"
         />

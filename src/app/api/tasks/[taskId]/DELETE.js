@@ -18,7 +18,7 @@ export async function DELETE(request) {
 
     const result = await prisma.tasks_and_goals.delete({
       where: {
-        task_id: taskId, // Ensure this matches the ID field in your database
+        task_id: taskId,
       },
     });
 
