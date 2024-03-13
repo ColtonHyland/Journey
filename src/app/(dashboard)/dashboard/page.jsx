@@ -1,8 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import DailyTasks from '../../../components/DailyTasks'; // Import your DailyTasks component
-import WeeklyGoals from '../../../components/WeeklyGoals'; // Import your WeeklyGoals component
-import QuarterlyGoals from '../../../components/QuarterlyGoals'; // Import your QuarterlyGoals component
+import DailyTasks from '../../../components/DailyTasksContainer'; // Import your DailyTasks component
+import DailyGoalsContainer from '@/components/DailyGoalsContainer';
 
 const Dashboard = () => {
 
@@ -12,12 +11,9 @@ const Dashboard = () => {
         <div className="col-span-1">
           <DailyTasks />
         </div>
-        {/* <div className="col-span-1">
-          <WeeklyGoals />
+        <div className="col-span-2">
+          <DailyGoalsContainer />
         </div>
-        <div className="col-span-1">
-          <QuarterlyGoals />
-        </div> */}
       </div>
 
       <div className="mt-8">
