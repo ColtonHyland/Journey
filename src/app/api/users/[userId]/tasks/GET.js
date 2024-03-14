@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../lib/prisma";
-import { getServerUser } from "../../../lib/getServerUser";
+import { prisma } from "../../../../../lib/prisma";
+import { getServerUser } from "../../../../../lib/getServerUser";
 
 export async function GET(request) {
     // JSON Web Token {
@@ -15,9 +15,9 @@ export async function GET(request) {
     //   }
     const user = await getServerUser(request);
     const userId= user.id;
-    
+    console.log("Debug: userId:", userId)
     try {
-        const tasks = await prisma.tasks_and_goals.findMany({
+        const tasks = await prisma.task.findMany({
             where: {
                 user_id: userId,
                 type: "task",

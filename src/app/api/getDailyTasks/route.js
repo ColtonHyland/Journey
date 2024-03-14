@@ -23,4 +23,4 @@
 //   return NextResponse.json({result});
 // }
 
-export { GET } from './GET';
+export { GET } from '../users/[userId]/tasks/GET';

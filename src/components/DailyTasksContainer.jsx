@@ -23,7 +23,11 @@ const DailyTasks = () => {
   const getDailyTasks = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/getDailyTasks`, {
+      // Adjusted to fetch tasks for the logged-in user
+      if (!userId) {
+        throw new Error("User ID is not available");
+      }
+      const response = await fetch(`/api/users/${userId}/tasks`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -36,7 +40,6 @@ const DailyTasks = () => {
       setTasks(data.tasks || []);
     } catch (error) {
       console.error(error.message);
-      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -44,27 +47,28 @@ const DailyTasks = () => {
 
   const addTask = async () => {
     if (!newTaskTitle.trim()) return;
-
+  
     try {
-      const response = await fetch('/api/addDailyTask', {
+      // Ensure you're getting the userId from the session correctly
+      const userId = session?.user?.id;
+      const response = await fetch(`/api/users/${userId}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           title: newTaskTitle,
-          userId: session.user.id,
+          userId, // This is redundant if your API route extracts userId from the URL
         }),
       });
-
+  
       if (!response.ok) throw new Error("Failed to add task");
-
+  
       const newTask = await response.json();
       setTasks([...tasks, newTask]);
       setNewTaskTitle('');
-
     } catch (error) {
-      console.error(error.message);
+      console.error("Error adding new task:", error.message);
     }
   };
 

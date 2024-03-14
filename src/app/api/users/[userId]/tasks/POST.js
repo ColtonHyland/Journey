@@ -1,4 +1,4 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../../../lib/prisma";
 
 export async function POST(request) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request) {
       });
     }
 
-    const result = await prisma.tasks_and_goals.create({
+    const result = await prisma.task.create({
       data: {
         title,
         userId,
