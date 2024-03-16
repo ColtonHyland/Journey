@@ -4,20 +4,22 @@ import { useSession } from 'next-auth/react';
 
 const DailyGoalsContainer = () => {
   const { data: session, status } = useSession();
+  const userId = session?.user?.id;
   const [goals, setGoals] = useState([]);
   const [newGoalTitle, setNewGoalTitle] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (status === 'authenticated') {
+    if (status === 'authenticated' && userId) {
       fetchGoals();
     }
-  }, [status]);
+  }, [status, userId]);
 
   const fetchGoals = async () => {
     setLoading(true);
+    console.log("Debug: userId:", userId)
     try {
-      const response = await fetch(`/api/goals`, {
+      const response = await fetch(`/api/users/${userId}/goals`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${session.accessToken}`
@@ -39,7 +41,7 @@ const DailyGoalsContainer = () => {
     if (!newGoalTitle.trim()) return;
 
     try {
-      const response = await fetch('/api/goals/addGoal', {
+      const response = await fetch(`/api/users/${userId}/goals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +49,6 @@ const DailyGoalsContainer = () => {
         },
         body: JSON.stringify({
           title: newGoalTitle,
-          type: 'weekly_goal', // or 'quarterly_goal'
           userId: session.user.id,
         }),
       });

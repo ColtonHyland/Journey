@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import DailyTasks from '../../../components/DailyTasksContainer'; // Import your DailyTasks component
+import DailyTasksContainer from '../../../components/DailyTasksContainer'; // Import your DailyTasks component
 import DailyGoalsContainer from '@/components/DailyGoalsContainer';
 
 const Dashboard = () => {
@@ -8,9 +8,9 @@ const Dashboard = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="col-span-1">
-          <DailyTasks />
-        </div>
+        {/* <div className="col-span-1">
+          <DailyTasksContainer />
+        </div> */}
         <div className="col-span-2">
           <DailyGoalsContainer />
         </div>

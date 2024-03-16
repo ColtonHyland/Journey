@@ -1,18 +1,24 @@
 // src\app\api\users\[userId]\goals\[goalId]\GET.js
 
-import { prisma } from '../../../../../lib/prisma';
+import { prisma } from "../../../../../lib/prisma";
+import { getServerUser } from "../../../../../lib/getServerUser";
 
 export async function GET(request, { params }) {
-  const { userId, goalId } = params;
-
+  // const { userId } = params;
+  const user = await getServerUser(request);
+  const userId= user.id;
+  console.log("GET route userId:", userId)
+  console.log("prisma: ", prisma)
+  console.log("prisma.goal: ", prisma.goal)
   try {
-    const goal = await prisma.goal.findUnique({
+    const goals = await prisma.goal.findMany({
       where: {
-        id: goalId,
+        //goal_id: goalId,
+        userId: userId,
       },
     });
 
-    if (!goal) {
+    if (!goals) {
       return new Response(JSON.stringify({ error: 'Goal not found' }), {
         status: 404,
         headers: {
@@ -21,7 +27,7 @@ export async function GET(request, { params }) {
       });
     }
 
-    return new Response(JSON.stringify(goal), {
+    return new Response(JSON.stringify({ goals }), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
