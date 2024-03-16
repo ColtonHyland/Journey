@@ -5,7 +5,7 @@ import { getServerUser } from "../../../../../lib/getServerUser";
 
 export async function GET(request, { params }) {
   // const { userId } = params;
-  const user = await getServerUser(request);
+  //const user = await getServerUser(request);
   const userId= user.id;
   console.log("GET route userId:", userId)
   console.log("prisma: ", prisma)
