@@ -1,4 +1,3 @@
-'use client';
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -10,10 +9,11 @@ const DailyGoalsContainer = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (status === 'authenticated' && userId) {
+    if (status === 'authenticated') {
       fetchGoals();
     }
-  }, [status, userId]);
+  console.log("Goals:", goals);
+  }, [status]);
 
   const fetchGoals = async () => {
     setLoading(true);

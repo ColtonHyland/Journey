@@ -4,10 +4,10 @@ import { prisma } from "../../../../../lib/prisma";
 import { getServerUser } from "../../../../../lib/getServerUser";
 
 export async function GET(request, { params }) {
-  // const { userId } = params;
-  //const user = await getServerUser(request);
-  const userId= user.id;
-  console.log("GET route userId:", userId)
+  const { userId } = params;
+  // const user = await getServerUser(request);
+  // const userId= user.id;
+  console.log("goals GET route userId:", userId)
   console.log("prisma: ", prisma)
   console.log("prisma.goal: ", prisma.goal)
   try {

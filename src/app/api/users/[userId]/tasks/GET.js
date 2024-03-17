@@ -15,7 +15,7 @@ export async function GET(request) {
     //   }
     const user = await getServerUser(request);
     const userId= user.id;
-    console.log("Debug: userId:", userId)
+    //console.log("Debug: userId:", userId)
     try {
         const tasks = await prisma.task.findMany({
             where: {
