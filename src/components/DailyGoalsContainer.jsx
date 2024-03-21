@@ -14,6 +14,7 @@ const DailyGoalsContainer = () => {
 
   useEffect(() => {
     if (status === 'authenticated') {
+      console.log(process.env.NODE_ENV);
       fetchGoals();
     }
     console.log("Goals:", goals);
