@@ -1,29 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { getServerUser } from '@/lib/getServerUser';
 
 const DailyGoalsContainer = () => {
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
+  // const { data: session, status } = useSession();
+  // const userId = session?.user?.id;
   const [goals, setGoals] = useState([]);
   const [newGoalTitle, setNewGoalTitle] = useState('');
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [status, setStatus] = useState('loading');  
 
   useEffect(() => {
     if (status === 'authenticated') {
       fetchGoals();
     }
-  console.log("Goals:", goals);
+    console.log("Goals:", goals);
   }, [status]);
 
   const fetchGoals = async () => {
     setLoading(true);
     console.log("Debug: userId:", userId)
     try {
-      const response = await fetch(`/api/users/${userId}/goals`, {
+      if (!userId) {
+        throw new Error("User ID is not available");
+      }
+      const response = await fetch(`/api/goals`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${session.accessToken}`
-        },
+        credentials: 'include',
+        // headers: {
+        //   'Authorization': `Bearer ${session.accessToken}`
+        // },
       });
 
       if (!response.ok) throw new Error('Failed to fetch goals');
@@ -41,7 +48,7 @@ const DailyGoalsContainer = () => {
     if (!newGoalTitle.trim()) return;
 
     try {
-      const response = await fetch(`/api/users/${userId}/goals`, {
+      const response = await fetch(`/api/goals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

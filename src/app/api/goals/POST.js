@@ -1,9 +1,11 @@
 // src\app\api\users\[userId]\goals\POST.js
 
-import { prisma } from '../../../../../lib/prisma';
+import { prisma } from '../../../lib/prisma';
 
 export async function POST(request, { params }) {
-  const { userId } = params;
+  // const { userId } = params;
+  const user = await getServerUser(request);
+  const userId= user.id;
   const goalData = await request.json();
 
   try {

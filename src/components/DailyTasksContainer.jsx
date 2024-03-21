@@ -5,12 +5,14 @@ import { useSession } from 'next-auth/react'; // Import useSession from NextAuth
 import React, { useEffect, useState } from 'react';
 
 const DailyTasks = () => {
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
+  // const { data: session, status } = useSession();
+  // const userId = session?.user?.id;
   const [tasks, setTasks] = useState([]);
   const [selectedTasks, setSelectedTasks] = useState(new Set());
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [status, setStatus] = useState('loading');  
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -27,7 +29,7 @@ const DailyTasks = () => {
       if (!userId) {
         throw new Error("User ID is not available");
       }
-      const response = await fetch(`/api/users/${userId}/tasks`, {
+      const response = await fetch(`/api/tasks`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -51,7 +53,7 @@ const DailyTasks = () => {
     try {
       // Ensure you're getting the userId from the session correctly
       const userId = session?.user?.id;
-      const response = await fetch(`/api/users/${userId}/tasks`, {
+      const response = await fetch(`/api/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +78,7 @@ const DailyTasks = () => {
     // Assuming the tasks have an 'id' property
     try {
       for (const taskId of selectedTasks) {
-        const response = await fetch(`/api/tasks/${taskId}`, { 
+        const response = await fetch(`/api/tasks`, { 
           method: 'DELETE',
           credentials: 'include' });
         if (!response.ok) throw new Error("Failed to delete task");

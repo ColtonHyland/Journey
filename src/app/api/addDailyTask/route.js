@@ -1,1 +1,1 @@
-export { POST } from '../users/[userId]/tasks/POST';
+export { POST } from '../tasks/POST';

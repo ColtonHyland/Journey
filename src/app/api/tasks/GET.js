@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../../../lib/prisma";
-import { getServerUser } from "../../../../../lib/getServerUser";
+import { prisma } from "../../../lib/prisma";
+import { getServerUser } from "../../../lib/getServerUser";
 
 export async function GET(request) {
     // JSON Web Token {

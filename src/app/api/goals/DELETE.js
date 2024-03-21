@@ -1,6 +1,6 @@
 // src\app\api\users\[userId]\goals\[goalId]\DELETE.js
 
-import { prisma } from '../../../../../lib/prisma';
+import { prisma } from '../../../lib/prisma';
 
 export async function DELETE(request, { params }) {
   const { goalId } = params;
