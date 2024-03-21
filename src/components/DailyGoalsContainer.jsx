@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { getServerUser } from '@/lib/getServerUser';
+// import { useSession } from 'next-auth/react';
+// import { getServerUser } from '@/lib/getServerUser';
 
 const DailyGoalsContainer = () => {
   // const { data: session, status } = useSession();
@@ -53,11 +53,11 @@ const DailyGoalsContainer = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.accessToken}`
+          // 'Authorization': `Bearer ${session.accessToken}`
         },
         body: JSON.stringify({
           title: newGoalTitle,
-          userId: session.user.id,
+          // userId: session.user.id,
         }),
       });
 

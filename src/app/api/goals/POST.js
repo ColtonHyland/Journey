@@ -1,11 +1,11 @@
 // src\app\api\users\[userId]\goals\POST.js
-import { prisma } from '../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
-export async function POST(request, response) {
+export async function POST(request, params) {
   // const { userId } = params;
-  const session = await getServerSession(request, response, authOptions);
+  const session = await getServerSession(authOptions);
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   // const user = await getServerUser(request);
   // const userId= user.id;
@@ -28,7 +28,7 @@ export async function POST(request, response) {
     });
   } catch (error) {
     console.error('Error creating goal:', error);
-    return new Response(JSON.stringify({ error: 'Failed to create goal' }), {
+    return new Response(JSON.stringify({ error: 'Failed to create goal'}), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
