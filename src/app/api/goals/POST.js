@@ -1,11 +1,15 @@
 // src\app\api\users\[userId]\goals\POST.js
-
 import { prisma } from '../../../lib/prisma';
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../auth/[...nextauth]/route";
 
-export async function POST(request, { params }) {
+export async function POST(request, response) {
   // const { userId } = params;
-  const user = await getServerUser(request);
-  const userId= user.id;
+  const session = await getServerSession(request, response, authOptions);
+  if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  // const user = await getServerUser(request);
+  // const userId= user.id;
+  const userId = session.user.id;
   const goalData = await request.json();
 
   try {
