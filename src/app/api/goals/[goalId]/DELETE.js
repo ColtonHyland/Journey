@@ -25,9 +25,8 @@ export async function DELETE(request, { params}) {
       },
     });
   } catch (error) {
-    // console.error('Error deleting goal:', error);
-    console.log("DELETE.js: ", goal_Id)
-    return new Response(JSON.stringify({ error: `DELETE.js: ${goal_Id}` }), {
+    console.error('Error deleting goal:', error);
+    return new Response(JSON.stringify({ error }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
