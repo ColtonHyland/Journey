@@ -7,13 +7,14 @@ export async function POST(request, params) {
   const session = await getServerSession(authOptions);
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   const userId = session.user.id;
-  const { title } = await request.json();
+  const { title, status } = await request.json();
 
   try {
     const goal = await prisma.goal.create({
       data: {
         title,
         userId,
+        status,
       },
     });
     

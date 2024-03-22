@@ -16,7 +16,7 @@ export async function GET(request) {
   try {
 
     const goals = await prisma.goal.findMany({
-      where: { userId },
+      where: { userId, status: 'active'},
     });
 
     if (!goals) {

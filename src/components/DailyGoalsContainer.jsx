@@ -10,14 +10,11 @@ const DailyGoalsContainer = () => {
   const [newGoalTitle, setNewGoalTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [status, setStatus] = useState('loading');  
+  const [status, setStatus] = useState('loading'); 
 
   useEffect(() => {
-    if (status === 'authenticated') {
       console.log(process.env.NODE_ENV);
       fetchGoals();
-    }
-    console.log("Goals:", goals);
   }, [status]);
 
   const fetchGoals = async () => {
@@ -51,6 +48,7 @@ const DailyGoalsContainer = () => {
         },
         body: JSON.stringify({
           title: newGoalTitle,
+          status: 'active'
           // userId: session.user.id,
         }),
       });
