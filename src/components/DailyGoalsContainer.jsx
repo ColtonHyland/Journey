@@ -1,70 +1,25 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-// import { useSession } from 'next-auth/react';
-// import { getServerUser } from '@/lib/getServerUser';
+import fetchGoals from '../app/utils/fetchGoals';
+import addGoal from '../app/utils/addGoals';
 
 const DailyGoalsContainer = () => {
-  // const { data: session, status } = useSession();
-  // const userId = session?.user?.id;
   const [goals, setGoals] = useState([]);
   const [newGoalTitle, setNewGoalTitle] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
-  const [status, setStatus] = useState('loading'); 
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
-      console.log(process.env.NODE_ENV);
-      fetchGoals();
-  }, [status]);
+    fetchGoals(setGoals, setLoading);
+  }, []);
 
-  const fetchGoals = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/goals`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (!response.ok) throw new Error('Failed to fetch goals');
-
-      const data = await response.json();
-      setGoals(data.goals || []);
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addGoal = async () => {
-    if (!newGoalTitle.trim()) return;
-
-    try {
-      const response = await fetch(`/api/goals`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${session.accessToken}`
-        },
-        body: JSON.stringify({
-          title: newGoalTitle,
-          status: 'active'
-          // userId: session.user.id,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to add goal');
-
-      setNewGoalTitle('');
-      fetchGoals();
-    } catch (error) {
-      console.error(error.message);
-    }
+  const handleAddGoal = async () => {
+    await addGoal(newGoalTitle, () => fetchGoals(setGoals, setLoading));
+    setNewGoalTitle(''); // Clear the input field after adding a goal
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">Daily Goals</h2>
+      <h2 className="text-2xl font-semibold mb-4">Today's Goals</h2>
       <div className="mb-4">
         <input
           type="text"
@@ -79,7 +34,7 @@ const DailyGoalsContainer = () => {
           }}
         />
         <button
-          onClick={addGoal}
+          onClick={handleAddGoal}
           className="btn btn-primary ml-2"
         >
           Add
@@ -90,7 +45,7 @@ const DailyGoalsContainer = () => {
       ) : (
         <ul>
           {goals.map((goal) => (
-            <li key={goal.task_id} className="mb-2">
+            <li key={goal.goal_id} className="mb-2">
               {goal.title}
               {/* Implement delete and update functionality */}
             </li>
