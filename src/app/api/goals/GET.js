@@ -1,6 +1,6 @@
 // src\app\api\users\[userId]\goals\[goalId]\GET.js
 
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 // import { getServerUser } from "../../../lib/getServerUser";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";

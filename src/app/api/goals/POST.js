@@ -1,5 +1,5 @@
 // src\app\api\users\[userId]\goals\POST.js
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth";
 
@@ -10,15 +10,18 @@ export async function POST(request, params) {
   // const user = await getServerUser(request);
   // const userId= user.id;
   const userId = session.user.id;
-  const goalData = await request.json();
+  const { title } = await request.json();
 
   try {
     const goal = await prisma.goal.create({
       data: {
-        ...goalData,
+        title,
         userId,
       },
     });
+    // const goal = 'hello world!'
+    
+    console.log(`userId: ${userId}, goalData: ${JSON.stringify(goalData)}`);
 
     return new Response(JSON.stringify(goal), {
       status: 201,
