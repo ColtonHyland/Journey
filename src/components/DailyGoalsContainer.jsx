@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import fetchGoals from '../app/utils/fetchGoals';
-import addGoal from '../app/utils/addGoals';
+import addGoal from '../app/utils/addGoal';
+import deleteGoal from '../app/utils/deleteGoal';
 
 const DailyGoalsContainer = () => {
   const [goals, setGoals] = useState([]);
@@ -17,7 +18,11 @@ const DailyGoalsContainer = () => {
     setNewGoalTitle(''); // Clear the input field after adding a goal
   };
 
-  return (
+  const handleDeleteGoal = async (goalId) => {
+    await deleteGoal(goalId, () => fetchGoals(setGoals, setLoading));
+  };
+
+   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">Today's Goals</h2>
       <div className="mb-4">
@@ -29,14 +34,11 @@ const DailyGoalsContainer = () => {
           className="input input-bordered w-full max-w-xs"
           onKeyPress={(e) => {
             if (e.key === 'Enter' && newGoalTitle.trim() !== '') {
-              addGoal();
+              handleAddGoal();
             }
           }}
         />
-        <button
-          onClick={handleAddGoal}
-          className="btn btn-primary ml-2"
-        >
+        <button onClick={handleAddGoal} className="btn btn-primary ml-2">
           Add
         </button>
       </div>
@@ -45,9 +47,9 @@ const DailyGoalsContainer = () => {
       ) : (
         <ul>
           {goals.map((goal) => (
-            <li key={goal.goal_id} className="mb-2">
+            <li key={goal.goal_id} className="mb-2 flex justify-between items-center">
               {goal.title}
-              {/* Implement delete and update functionality */}
+              <span className="cursor-pointer" onClick={() => handleDeleteGoal(goal.goal_id)}>X</span>
             </li>
           ))}
         </ul>
