@@ -22,17 +22,10 @@ const DailyGoalsContainer = () => {
 
   const fetchGoals = async () => {
     setLoading(true);
-    console.log("Debug: userId:", userId)
     try {
-      if (!userId) {
-        throw new Error("User ID is not available");
-      }
       const response = await fetch(`/api/goals`, {
         method: 'GET',
         credentials: 'include',
-        // headers: {
-        //   'Authorization': `Bearer ${session.accessToken}`
-        // },
       });
 
       if (!response.ok) throw new Error('Failed to fetch goals');

@@ -11,20 +11,12 @@ export async function GET(request) {
   if (!session) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
-  // const user = await getServerUser(request);
-  // const userId= user.id;
-  console.log("goals GET route userId:", userId)
-  console.log("prisma: ", prisma)
-  console.log("prisma.goal: ", prisma.goal)
+  const userId = session.user.id;
+
   try {
-    // const goals = await prisma.goal.findMany({
-    //   where: {
-    //     //goal_id: goalId,
-    //     userId: userId,
-    //   },
-    // });
+
     const goals = await prisma.goal.findMany({
-      where: { userId: session.user.id },
+      where: { userId },
     });
 
     if (!goals) {

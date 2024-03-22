@@ -4,11 +4,8 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth";
 
 export async function POST(request, params) {
-  // const { userId } = params;
   const session = await getServerSession(authOptions);
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
-  // const user = await getServerUser(request);
-  // const userId= user.id;
   const userId = session.user.id;
   const { title } = await request.json();
 
@@ -19,9 +16,8 @@ export async function POST(request, params) {
         userId,
       },
     });
-    // const goal = 'hello world!'
     
-    console.log(`userId: ${userId}, goalData: ${JSON.stringify(goalData)}`);
+    console.log(`userId: ${userId}, goal: ${JSON.stringify(goal)}`);
 
     return new Response(JSON.stringify(goal), {
       status: 201,
