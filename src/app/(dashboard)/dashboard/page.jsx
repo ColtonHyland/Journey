@@ -19,7 +19,12 @@ const Dashboard = () => {
       <div className="mt-8">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
 
-        {/* Link to the Calendar Page */}
+        <Link href="/goals">
+          <button className="text-lg text-white bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded">
+            View All Goals
+          </button>
+        </Link>
+
         <Link href="/calendar">
         <button className="text-lg text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded">
           Go to Calendar

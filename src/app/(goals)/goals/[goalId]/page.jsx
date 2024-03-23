@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Goals = () => {
+const Goal = () => {
   return (
     <div>
       <h1>Goals</h1>
@@ -8,4 +8,4 @@ const Goals = () => {
   );
 }
 
-export default Goals;
+export default Goal;
