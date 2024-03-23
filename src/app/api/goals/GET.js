@@ -4,7 +4,6 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 
 export async function GET(request) {
-  // const { userId } = params;
   const session = await getServerSession(authOptions);
   if (!session) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
