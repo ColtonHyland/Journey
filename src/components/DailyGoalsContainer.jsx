@@ -16,7 +16,7 @@ const DailyGoalsContainer = () => {
 
   const handleAddGoal = async () => {
     await addGoal(newGoalTitle, () => fetchGoals(setGoals, setLoading));
-    setNewGoalTitle(''); // Clear the input field after adding a goal
+    setNewGoalTitle('');
   };
 
   const handleDeleteGoal = async (goalId) => {

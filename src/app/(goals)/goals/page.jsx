@@ -7,7 +7,7 @@ const Goals = ({ goals }) => {
     <div>
       <h1 className="text-2xl font-semibold mb-4">Goals</h1>
       <ul>
-        {goals.map((goal) => (
+        {/* {goals.map((goal) => (
           <li key={goal.id} className="mb-4">
             <h2 className="text-xl font-semibold">{goal.title}</h2>
             <p>{goal.description}</p>
@@ -15,7 +15,7 @@ const Goals = ({ goals }) => {
               View Details
             </Link>
           </li>
-        ))}
+        ))} */}
       </ul>
     </div>
   );

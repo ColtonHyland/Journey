@@ -1,9 +1,13 @@
 import React from 'react';
 
-const Goal = () => {
+const Goal = ({ params }) => {
+
+  const goal_id = params.goalId;
+  
   return (
     <div>
-      <h1>Goals</h1>
+      <h1>Goal:</h1> 
+      {`id: ${params.goalId}`}
     </div>
   );
 }
