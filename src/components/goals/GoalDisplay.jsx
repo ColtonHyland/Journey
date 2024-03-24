@@ -1,11 +1,15 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const GoalDisplay = ({ goalId }) => {
   const [goal, setGoal] = useState({});
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+
+  useEffect(() => {
+    getGoal();
+  }, []);
 
 
   const getGoal = async () =>{
@@ -23,7 +27,7 @@ const GoalDisplay = ({ goalId }) => {
 
       const result = await response.json();
       setGoal(result);
-      
+
       console.log('Goal fetched successfully:', result);
       return result;
     } catch (error) {
