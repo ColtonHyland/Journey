@@ -22,17 +22,20 @@ const GoalDisplay = ({ goalId }) => {
       }
 
       const result = await response.json();
+      setGoal(result);
+      
       console.log('Goal fetched successfully:', result);
       return result;
     } catch (error) {
       console.error('Error fetching goal:', error);
       // Handle error (e.g., display an error message)
     }
+    
   };
 
   const addTask = async (task) => {
     try {
-      const response = await fetch(`/api/goals/${goalId}/tasks`, {
+      const response = await fetch(`/api/tasks/${goalId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
