@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 
-const GoalForm = ({ goalId, onSave }) => {
+const GoalForm = ({ goalId }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -25,6 +25,30 @@ const GoalForm = ({ goalId, onSave }) => {
     setDescription('');
     setDueDate('');
     setStatus('active');
+  };
+
+  const onSave = async () => {
+    try {
+      const response = await fetch(`/api/goals/${goalId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, status }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save goal');
+      }
+
+      const result = await response.json();
+      console.log('Goal saved successfully:', result);
+      // Handle success (e.g., display a success message or redirect)
+
+    } catch (error) {
+      console.error('Error saving goal:', error);
+      // Handle error (e.g., display an error message)
+    }
   };
 
   return (
