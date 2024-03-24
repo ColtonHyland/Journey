@@ -1,6 +1,29 @@
 import React from 'react';
 
-const GoalDisplay = ({ goal }) => {
+const GoalDisplay = ({ goalId }) => {
+
+  const goal = async () =>{
+    try { 
+      const response = await fetch(`/api/goals/${goalId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch goal');
+      }
+
+      const result = await response.json();
+      console.log('Goal fetched successfully:', result);
+      return result;
+    } catch (error) {
+      console.error('Error fetching goal:', error);
+      // Handle error (e.g., display an error message)
+    }
+  };
+
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
@@ -30,3 +53,5 @@ const GoalDisplay = ({ goal }) => {
     </div>
   );
 }
+
+export default GoalDisplay;
