@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 
 const GoalDisplay = ({ goalId }) => {
   const [goal, setGoal] = useState({});
+  const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
     getGoal();
+    getTasks();
   }, []);
 
 
@@ -34,8 +36,31 @@ const GoalDisplay = ({ goalId }) => {
       console.error('Error fetching goal:', error);
       // Handle error (e.g., display an error message)
     }
-    
   };
+
+  const getTasks = async () =>{
+    try {
+      const response = await fetch(`/api/tasks/${goalId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tasks');
+      }
+
+      const result = await response.json();
+      setTasks(result);
+      console.log('Tasks fetched successfully:', result);
+      return result;
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      // Handle error (e.g., display an error message)
+    }
+  };
+
 
   const addTask = async (task) => {
     try {
@@ -99,6 +124,17 @@ const GoalDisplay = ({ goalId }) => {
       </div>
       <div>
         <h3 className="text-lg font-medium leading-6 text-gray-900">Tasks</h3>
+        <ul className="divide-y divide-gray-200">
+          {tasks.map((task) => (
+            <li key={task.task_id} className="py-4 flex">
+              <div className="ml-3 flex flex-col">
+                <span className="text-sm font-medium text-gray-900">{task.title}</span>
+                <span className="text-sm text-gray-500">{task.description}</span>
+                <span className="text-sm text-gray-500">{task.dueDate}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
         <p className="mt-1 max-w-2xl text-sm text-gray-500">Tasks for the goal.</p>
         <h3 className="text-lg font-medium leading-6 text-gray-900">Add Task</h3>
         <form onSubmit={handleSubmit} className="space-y-4">

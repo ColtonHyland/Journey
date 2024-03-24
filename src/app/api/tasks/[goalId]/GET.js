@@ -11,7 +11,7 @@ export async function GET(request, { params }) {
 
   try {
     const tasks = await prisma.task.findMany({
-      where: { goal_id: goalId },
+      where: { goalId: goalId },
     })
 
     return new Response(JSON.stringify(tasks), {
