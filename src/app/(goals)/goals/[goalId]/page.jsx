@@ -1,8 +1,9 @@
 import React from 'react';
 import GoalForm from '@/components/goals/NewGoalForm';
 import GoalDisplay from '@/components/goals/GoalDisplay';
+import TaskDisplay from '@/components/goals/TaskDisplay';
 
-const Goal = ({ params }) => {
+const GoalPage = ({ params }) => {
 
   const goal_id = params.goalId;
 
@@ -12,8 +13,9 @@ const Goal = ({ params }) => {
       {`id: ${params.goalId}`}
       <GoalDisplay goalId={goal_id} />
       {/* <GoalForm /> */}
+      <TaskDisplay goalId={goal_id} />
     </div>
   );
 }
 
-export default Goal;
+export default GoalPage;

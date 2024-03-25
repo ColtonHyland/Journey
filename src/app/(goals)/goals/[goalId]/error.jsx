@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export default function Error({ error, reset }) {
-  console.error(error); // Log the error to the console for debugging
+  console.error(error);
 
   return (
     <div className="error-container" style={{ padding: '20px', textAlign: 'center' }}>
@@ -15,9 +15,9 @@ export default function Error({ error, reset }) {
             Go back to Goals
         </Link>
       </p>
-      <button onClick={reset} style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}>
+      {/* <button onClick={reset} style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}>
         Try Again
-      </button>
+      </button> */}
     </div>
   );
 }
