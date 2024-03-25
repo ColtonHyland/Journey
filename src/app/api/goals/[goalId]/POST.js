@@ -14,7 +14,16 @@ export async function POST(request, { params }) {
       where: { goal_id: goalId },
       data: { title, userId, status },
     }) : await prisma.goal.create({
-      data: { title, userId, status },
+      data: { 
+        title,
+        status,
+        goal: {
+          connect: { goal_id: goalId },
+        },
+        user: {
+          connect: { id: userId }, 
+        },
+      },
     });
     
     console.log(`Goal updated/created: ${JSON.stringify(goal)}`);
