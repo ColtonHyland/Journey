@@ -36,22 +36,22 @@ const TaskDisplay = ({ goalId }) => {
     }
   };
 
-  const addTask = async (newTask) => {
+  const addTask = async (newTaskDetails) => {
     try {
       const response = await fetch(`/api/tasks/${goalId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newTask),
+        body: JSON.stringify(newTaskDetails),
       });
 
       if (!response.ok) {
         throw new Error('Failed to save task');
       }
 
-      const result = await response.json();
-      console.log('Task saved successfully:', result);
+      const newTask = await response.json();
+      console.log('Task saved successfully:', newTask);
       setTasks(prevTasks => [newTask, ...prevTasks]);
     } catch (error) {
       console.error('Error saving task:', error);
