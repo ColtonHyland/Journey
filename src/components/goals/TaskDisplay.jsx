@@ -15,7 +15,7 @@ const TaskDisplay = ({ goalId }) => {
 
   const getTasks = async () =>{
     try {
-      const response = await fetch(`/api/tasks/${goalId}`, {
+      const response = await fetch(`/api/goals/${goalId}/tasks`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
