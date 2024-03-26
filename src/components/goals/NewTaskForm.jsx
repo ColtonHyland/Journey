@@ -24,6 +24,7 @@ const NewTaskForm = ({ goalId }) => {
 
   const addTask = async (newTaskDetails) => {
     try {
+      // /api/goals/${goalId}/tasks/${taskId}
       const response = await fetch(`/api/tasks/${goalId}`, {
         method: 'POST',
         headers: {
