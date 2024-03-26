@@ -36,45 +36,13 @@ const TaskDisplay = ({ goalId }) => {
     }
   };
 
-  const addTask = async (newTaskDetails) => {
-    try {
-      const response = await fetch(`/api/tasks/${goalId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTaskDetails),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save task');
-      }
-
-      const newTask = await response.json();
-      console.log('Task saved successfully:', newTask);
-      setTasks(prevTasks => [newTask, ...prevTasks]);
-    } catch (error) {
-      console.error('Error saving task:', error);
-    }
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const task = {
-      title,
-      description,
-      dueDate,
-    };
-    addTask(task);
-  };
-
   return (
     <div>
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium leading-6 text-gray-900">Tasks</h3>
         <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">Add Task</button>
       </div>
-      {showForm && <NewTaskForm goalId={goalId} onAddTask={addTask} />}
+      {showForm && <NewTaskForm goalId={goalId} />}
       <ul className="divide-y divide-gray-200">
         {tasks.map((task) => (
           <li key={task.task_id} className="py-4 flex">

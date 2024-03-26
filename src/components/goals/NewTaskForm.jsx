@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 
-const NewTaskForm = ({ goalId, onAddTask }) => {
+const NewTaskForm = ({ goalId }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -14,13 +14,35 @@ const NewTaskForm = ({ goalId, onAddTask }) => {
       description,
       dueDate,
     };
-    onAddTask(newTask); // Call the parent's function to handle the task addition
+    addTask(newTask); // Call the parent's function to handle the task addition
 
     // Reset form fields
     setTitle('');
     setDescription('');
     setDueDate('');
   };
+
+  const addTask = async (newTaskDetails) => {
+    try {
+      const response = await fetch(`/api/tasks/${goalId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTaskDetails),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save task');
+      }
+
+      const newTask = await response.json();
+      console.log('Task saved successfully:', newTask);
+      setTasks(prevTasks => [newTask, ...prevTasks]);
+    } catch (error) {
+      console.error('Error saving task:', error);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
