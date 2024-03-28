@@ -13,7 +13,7 @@ const TaskDisplay = ({ goalId }) => {
     getTasks();
   }, [getTasks]);
 
-  const getTasks = async () =>{
+  const getTasks = (async () =>{
     try {
       const response = await fetch(`/api/goals/${goalId}/tasks`, {
         method: 'GET',
@@ -34,7 +34,7 @@ const TaskDisplay = ({ goalId }) => {
       console.error('Error fetching tasks:', error);
       // Handle error (e.g., display an error message)
     }
-  };
+  }, [goalId]);
 
   const deleteTask = async (taskId) => {
     try {

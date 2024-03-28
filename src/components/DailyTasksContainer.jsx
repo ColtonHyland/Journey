@@ -14,15 +14,14 @@ const DailyTasks = () => {
   const [userId, setUserId] = useState(null);
   const [status, setStatus] = useState('loading');  
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      getDailyTasks();
-      console.log("Tasks:", tasks);
-    }
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     getDailyTasks();
+  //   }
     
-  }, [status, tasks, getDailyTasks]);
+  // }, [status]);
 
-  const getDailyTasks = async () => {
+  const getDailyTasks = (async () => {
     setLoading(true);
     try {
       // Adjusted to fetch tasks for the logged-in user
@@ -45,9 +44,9 @@ const DailyTasks = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
-  const addTask = async () => {
+  const addTask = (async () => {
     if (!newTaskTitle.trim()) return;
   
     try {
@@ -72,7 +71,7 @@ const DailyTasks = () => {
     } catch (error) {
       console.error("Error adding new task:", error.message);
     }
-  };
+  }, [tasks]);
 
   const deleteSelectedTasks = async () => {
     // Assuming the tasks have an 'id' property

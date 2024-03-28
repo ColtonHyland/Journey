@@ -13,7 +13,7 @@ const GoalDisplay = ({ goalId }) => {
   }, [getGoal]);
 
 
-  const getGoal = async () =>{
+  const getGoal = (async () =>{
     try { 
       const response = await fetch(`/api/goals/${goalId}`, {
         method: 'GET',
@@ -35,7 +35,8 @@ const GoalDisplay = ({ goalId }) => {
       console.error('Error fetching goal:', error);
       // Handle error (e.g., display an error message)
     }
-  };
+    
+  }, [goalId]);
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">
