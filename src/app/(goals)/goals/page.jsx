@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import GoalDisplay from '@/components/goals/GoalDisplay';
 import NewGoalForm from '@/components/goals/NewGoalForm';
 
 const Goals = ({ goals }) => {
