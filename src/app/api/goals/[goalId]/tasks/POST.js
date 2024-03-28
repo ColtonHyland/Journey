@@ -9,10 +9,11 @@ export async function POST(request, { params }) {
   const { goalId } = params.goalId ? params : {};
 
   try {
-    const { title, status } = await request.json();
+    const { title, status, description } = await request.json();
     const task = await prisma.task.create({
       data: { 
         title,
+        description,
         status: 'In Progress',
         goalId: goalId,
         userId: userId,

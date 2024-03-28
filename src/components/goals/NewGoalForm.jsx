@@ -14,13 +14,9 @@ const GoalForm = ({ goalId }) => {
       description,
       dueDate,
       status,
-      // Assuming your API or handling function expects a userId, you might need to include it here
-      // userId: 'your-user-id',
     };
-    // Call the onSave callback prop with the new goal
     onSave(goal);
     
-    // Optionally reset the form fields here
     setTitle('');
     setDescription('');
     setDueDate('');
@@ -29,7 +25,7 @@ const GoalForm = ({ goalId }) => {
 
   const onSave = async () => {
     try {
-      const response = await fetch(`/api/goals/${goalId}`, {
+      const response = await fetch(`/api/goals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
