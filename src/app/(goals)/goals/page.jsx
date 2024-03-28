@@ -10,6 +10,7 @@ const Goals = ({ goals }) => {
         Back to Dashboard
       </Link>
       <h1 className="text-2xl font-semibold mb-4">Goals</h1>
+      <NewGoalForm />
       <ul>
         {/* {goals.map((goal) => (
           <li key={goal.id} className="mb-4">
