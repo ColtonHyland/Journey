@@ -10,7 +10,7 @@ const GoalDisplay = ({ goalId }) => {
 
   useEffect(() => {
     getGoal();
-  }, []);
+  }, [getGoal]);
 
 
   const getGoal = async () =>{

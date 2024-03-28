@@ -97,12 +97,12 @@ export const LoginForm = () => {
         onClick={() => signIn("google", { callbackUrl })}
         role="button"
       >
-        <img
+        {/* <img
           className="pr-2"
           src="/images/google.svg"
           alt=""
           style={{ height: "2rem" }}
-        />
+        /> */}
         Continue with Google
       </a>
       <a
@@ -111,12 +111,12 @@ export const LoginForm = () => {
         onClick={() => signIn("github", { callbackUrl })}
         role="button"
       >
-        <img
+        {/* <img
           className="pr-2"
           src="/images/github.svg"
           alt=""
           style={{ height: "2.2rem" }}
-        />
+        /> */}
         Continue with GitHub
       </a>
     </form>

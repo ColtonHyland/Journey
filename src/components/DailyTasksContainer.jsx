@@ -20,7 +20,7 @@ const DailyTasks = () => {
       console.log("Tasks:", tasks);
     }
     
-  }, [status]);
+  }, [status, tasks, getDailyTasks]);
 
   const getDailyTasks = async () => {
     setLoading(true);

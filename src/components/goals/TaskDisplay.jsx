@@ -11,7 +11,7 @@ const TaskDisplay = ({ goalId }) => {
 
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [getTasks]);
 
   const getTasks = async () =>{
     try {
