@@ -5,6 +5,7 @@ const NewTaskForm = ({ goalId }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  // const [tasks, setTasks] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,8 +25,16 @@ const NewTaskForm = ({ goalId }) => {
 
   const addTask = async (newTaskDetails) => {
     try {
-      // /api/goals/${goalId}/tasks/${taskId}
-      const response = await fetch(`/api/tasks/${goalId}`, {
+      // api\goals\[goalId]\tasks
+      // const response = await fetch(`/api/tasks/${goalId}`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(newTaskDetails),
+      // });
+
+      const response = await fetch(`/api/goals/${goalId}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +48,7 @@ const NewTaskForm = ({ goalId }) => {
 
       const newTask = await response.json();
       console.log('Task saved successfully:', newTask);
-      setTasks(prevTasks => [newTask, ...prevTasks]);
+      // setTasks(prevTasks => [newTask, ...prevTasks]);
     } catch (error) {
       console.error('Error saving task:', error);
     }
