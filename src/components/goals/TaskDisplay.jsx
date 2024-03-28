@@ -63,14 +63,13 @@ const TaskDisplay = ({ goalId }) => {
         <h3 className="text-lg font-medium leading-6 text-gray-900">Tasks</h3>
         <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">Add Task</button>
       </div>
-      {showForm && <NewTaskForm goalId={goalId} getTasks={getTasks} />}
+      {showForm && <NewTaskForm goalId={goalId} onTaskAdded={getTasks} />}
       <ul className="divide-y divide-gray-200">
         {tasks.map((task) => (
           <li key={task.task_id} className="py-4 flex justify-between items-center">
             <div>
               <span className="text-sm font-medium text-gray-900">{task.title}</span>
               <span className="text-sm text-gray-500">{task.description}</span>
-              <span className="text-sm text-gray-500">{task.dueDate}</span>
             </div>
             <button onClick={() => deleteTask(task.task_id)} className="text-red-500 hover:text-red-700">X</button>
           </li>
