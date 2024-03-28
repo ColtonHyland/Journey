@@ -25,15 +25,6 @@ const NewTaskForm = ({ goalId }) => {
 
   const addTask = async (newTaskDetails) => {
     try {
-      // api\goals\[goalId]\tasks
-      // const response = await fetch(`/api/tasks/${goalId}`, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(newTaskDetails),
-      // });
-
       const response = await fetch(`/api/goals/${goalId}/tasks`, {
         method: 'POST',
         headers: {
