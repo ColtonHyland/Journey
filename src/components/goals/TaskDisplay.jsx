@@ -11,7 +11,7 @@ const TaskDisplay = ({ goalId }) => {
 
   useEffect(() => {
     getTasks();
-  }, [goalId]);
+  }, []);
 
   const getTasks = async () =>{
     try {
@@ -36,21 +36,43 @@ const TaskDisplay = ({ goalId }) => {
     }
   };
 
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`/api/goals/${goalId}/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete task');
+      }
+
+      console.log('Task deleted successfully:', taskId);
+      // Refresh task list after deletion
+      getTasks();
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium leading-6 text-gray-900">Tasks</h3>
         <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">Add Task</button>
       </div>
-      {showForm && <NewTaskForm goalId={goalId} />}
+      {showForm && <NewTaskForm goalId={goalId} getTasks={getTasks} />}
       <ul className="divide-y divide-gray-200">
         {tasks.map((task) => (
-          <li key={task.task_id} className="py-4 flex">
-            <div className="ml-3 flex flex-col">
+          <li key={task.task_id} className="py-4 flex justify-between items-center">
+            <div>
               <span className="text-sm font-medium text-gray-900">{task.title}</span>
               <span className="text-sm text-gray-500">{task.description}</span>
               <span className="text-sm text-gray-500">{task.dueDate}</span>
             </div>
+            <button onClick={() => deleteTask(task.task_id)} className="text-red-500 hover:text-red-700">X</button>
           </li>
         ))}
       </ul>
