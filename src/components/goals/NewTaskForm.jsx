@@ -1,10 +1,11 @@
 'use client';
 import React, { useState } from 'react';
 
-const NewTaskForm = ({ goalId }) => {
+const NewTaskForm = ({ goalId, onTaskAdded }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  // const [tasks, setTasks] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,8 +25,7 @@ const NewTaskForm = ({ goalId }) => {
 
   const addTask = async (newTaskDetails) => {
     try {
-      // /api/goals/${goalId}/tasks/${taskId}
-      const response = await fetch(`/api/tasks/${goalId}`, {
+      const response = await fetch(`/api/goals/${goalId}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,8 +38,9 @@ const NewTaskForm = ({ goalId }) => {
       }
 
       const newTask = await response.json();
+      onTaskAdded();
       console.log('Task saved successfully:', newTask);
-      setTasks(prevTasks => [newTask, ...prevTasks]);
+      // setTasks(prevTasks => [newTask, ...prevTasks]);
     } catch (error) {
       console.error('Error saving task:', error);
     }
@@ -54,10 +55,6 @@ const NewTaskForm = ({ goalId }) => {
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
         <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" rows="3" required></textarea>
-      </div>
-      <div>
-        <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">Due Date</label>
-        <input type="date" id="dueDate" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required />
       </div>
       <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Add Task</button>
     </form>
