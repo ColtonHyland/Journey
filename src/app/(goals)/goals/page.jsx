@@ -1,10 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
+import NewGoalForm from '@/components/goals/NewGoalForm';
 
 const Goals = ({ goals }) => {
 
   return (
     <div>
+      <Link href='/dashboard'>
+        Back to Dashboard
+      </Link>
       <h1 className="text-2xl font-semibold mb-4">Goals</h1>
       <ul>
         {/* {goals.map((goal) => (
