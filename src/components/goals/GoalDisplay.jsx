@@ -9,34 +9,36 @@ const GoalDisplay = ({ goalId }) => {
   const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
-    getGoal();
-  }, [getGoal]);
-
-
-  const getGoal = (async () =>{
-    try { 
-      const response = await fetch(`/api/goals/${goalId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch goal');
+    const getGoal = (async () =>{
+      try { 
+        const response = await fetch(`/api/goals/${goalId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch goal');
+        }
+  
+        const result = await response.json();
+        setGoal(result);
+  
+        console.log('Goal fetched successfully:', result);
+        return result;
+      } catch (error) {
+        console.error('Error fetching goal:', error);
+        // Handle error (e.g., display an error message)
       }
+      
+    });
 
-      const result = await response.json();
-      setGoal(result);
-
-      console.log('Goal fetched successfully:', result);
-      return result;
-    } catch (error) {
-      console.error('Error fetching goal:', error);
-      // Handle error (e.g., display an error message)
-    }
-    
+    getGoal();
   }, [goalId]);
+
+
+ 
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-lg">

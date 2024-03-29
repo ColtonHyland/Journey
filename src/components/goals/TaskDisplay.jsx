@@ -10,31 +10,33 @@ const TaskDisplay = ({ goalId }) => {
   const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
-    getTasks();
-  }, [getTasks]);
-
-  const getTasks = (async () =>{
-    try {
-      const response = await fetch(`/api/goals/${goalId}/tasks`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch tasks');
+    const getTasks = (async () =>{
+      try {
+        const response = await fetch(`/api/goals/${goalId}/tasks`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch tasks');
+        }
+  
+        const result = await response.json();
+        setTasks(result);
+        console.log('Tasks fetched successfully:', result);
+        return result;
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+        // Handle error (e.g., display an error message)
       }
-
-      const result = await response.json();
-      setTasks(result);
-      console.log('Tasks fetched successfully:', result);
-      return result;
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-      // Handle error (e.g., display an error message)
-    }
+    });
+    getTasks();
+    
   }, [goalId]);
+
+  
 
   const deleteTask = async (taskId) => {
     try {
