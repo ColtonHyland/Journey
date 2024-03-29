@@ -36,16 +36,20 @@ model Goal {
 }
 
 model Task {
-  task_id      String    @id @default(cuid())
-  goalId       String
+  task_id      String      @id @default(cuid())
+  goalId       String?     // Optional link to a Goal
   userId       String
-  title        String    @db.VarChar(100)
+  title        String      @db.VarChar(100)
   description  String?
-  status       String?   @db.VarChar(20)
-  created_at   DateTime? @default(now()) @db.Timestamp(6)
-  updated_at   DateTime? @default(now()) @db.Timestamp(6)
-  goal         Goal      @relation(fields: [goalId], references: [goal_id], onDelete: Cascade)
-  user         User      @relation(fields: [userId], references: [id])
+  status       String?     @db.VarChar(20)
+  created_at   DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?   @default(now()) @db.Timestamp(6)
+  dueDate      DateTime?   // Optional due date for the task
+  recurrence   String?     // Indicates the recurrence pattern (e.g., "daily", "weekly")
+  daysOfWeek   String?     // Comma-separated days when the task recurs (e.g., "Mon,Tue,Wed")
+  endDate      DateTime?   // Optional end date for task recurrence
+  goal         Goal?       @relation(fields: [goalId], references: [goal_id], onDelete: Cascade)
+  user         User        @relation(fields: [userId], references: [id])
 }
 
 model Account {
