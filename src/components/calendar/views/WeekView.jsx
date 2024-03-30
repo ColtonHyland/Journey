@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCalendar } from '../context/CalendarContext';
+import { useCalendar } from '../CalendarContext';
 import { startOfWeek, endOfWeek, eachDayOfInterval, format } from 'date-fns';
 
 const WeekView = () => {
