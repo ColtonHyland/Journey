@@ -1,13 +1,17 @@
 import prisma from '@/lib/prisma';
-import { getServerUser } from "@/lib/getServerUser";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
 
-  const user = await getServerUser(request);
-  const userId = user.id;
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  }
+  const userId = session.user.id;
   const { title, description, goalId } = await request.json();
-  
+
   try {
     const task = await prisma.task.create({
       data: {

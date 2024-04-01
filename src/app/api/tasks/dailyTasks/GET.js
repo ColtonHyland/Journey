@@ -1,11 +1,15 @@
 import prisma from '@/lib/prisma';
-import { getServerUser } from "@/lib/getServerUser";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import { startOfDay, endOfDay } from 'date-fns';
 
 export async function GET(request) {
-  const user = await getServerUser(request);
-  const userId = user.id;
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+  }
+  const userId = session.user.id;
 
   try {
     const dailyTasks = await prisma.task.findMany({

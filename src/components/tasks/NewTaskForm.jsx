@@ -15,7 +15,6 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
       description,
       dueDate,
     };
-    console.log ('newTask:', newTask);
     addTask(newTask); // Call the parent's function to handle the task addition
 
     setTitle('');
