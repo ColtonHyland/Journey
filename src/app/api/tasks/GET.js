@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from '@/lib/prisma';
-import { getServerUser } from "../../../lib/getServerUser";
+import { getServerUser } from "@/lib/getServerUser";
 
 export async function GET(request) {
     // JSON Web Token {
@@ -20,11 +20,10 @@ export async function GET(request) {
         const tasks = await prisma.task.findMany({
             where: {
                 userId,
-                type: "task",
             },
         });
         
-        return new Response(JSON.stringify({ tasks }), {
+        return new NextResponse(JSON.stringify({ tasks }), {
             status: 200, // OK
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +31,7 @@ export async function GET(request) {
         });
     } catch (error) {
         console.error("Error fetching tasks:", error);
-        return new Response(JSON.stringify({ error: "Failed to fetch tasks" }), {
+        return new NextResponse(JSON.stringify({ error: "Failed to fetch tasks" }), {
             status: 500,
             headers: {
                 'Content-Type': 'application/json',

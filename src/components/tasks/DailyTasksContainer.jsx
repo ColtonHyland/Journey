@@ -7,23 +7,23 @@ const DailyTasks = () => {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
 
-  const getDailyTasks = async () => {
-    try {
-      const response = await fetch(`/api/tasks`, {
-        method: 'GET',
-        credentials: 'include',
-      });
+  // const getDailyTasks = async () => {
+  //   try {
+  //     const response = await fetch(`/api/tasks`, {
+  //       method: 'GET',
+  //       credentials: 'include',
+  //     });
     
-      if (!response.ok) {
-        throw new Error("Failed to fetch daily tasks");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch daily tasks");
+  //     }
   
-      const data = await response.json();
-      setTasks(data.tasks || []);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  //     const data = await response.json();
+  //     setTasks(data.tasks || []);
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // };
 
   // const addTask = async () => {
   //   if (!newTaskTitle.trim()) return;
