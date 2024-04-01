@@ -39,7 +39,6 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
         }
 
         await response.json();
-        onTaskAdded();
       } catch (error) {
         console.error('Error saving task:', error);
       }

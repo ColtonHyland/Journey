@@ -20,7 +20,7 @@ const DailyTasksContainer = () => {
       <p>Here are your tasks for today:</p>
       <ul>
         {tasks.map((task) => (
-          <li key={task.id}>{task.title}</li>
+          <li key={task.task_id}>{task.title}</li>
         ))}
       </ul>
     </div>
