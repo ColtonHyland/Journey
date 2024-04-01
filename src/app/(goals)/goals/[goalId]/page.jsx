@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import GoalDisplay from '@/components/goals/GoalDisplay';
-import TaskDisplay from '@/components/goals/TaskDisplay';
+import TaskDisplay from '@/components/tasks/TaskDisplay';
 
 const GoalPage = ({ params }) => {
 

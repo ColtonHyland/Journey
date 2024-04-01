@@ -1,5 +1,5 @@
 import React from 'react';
-import NewTaskForm from '@/components/goals/NewTaskForm';
+import NewTaskForm from '@/components/tasks/NewTaskForm';
 
 const SchedulePage = ({ params }) => {
   const { date } = params;

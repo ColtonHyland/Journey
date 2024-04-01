@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import fetchGoals from '../app/utils/fetchGoals';
-import addGoal from '../app/utils/addGoal';
-import deleteGoal from '../app/utils/deleteGoal';
+import fetchGoals from '../../app/utils/fetchGoals';
+import addGoal from '../../app/utils/addGoal';
+import deleteGoal from '../../app/utils/deleteGoal';
 
 const DailyGoalsContainer = () => {
   const [goals, setGoals] = useState([]);
