@@ -37,14 +37,14 @@ model Goal {
 
 model Task {
   task_id      String    @id @default(cuid())
-  goalId       String
+  goalId       String?
   userId       String
   title        String    @db.VarChar(100)
   description  String?
   status       String?   @db.VarChar(20)
   created_at   DateTime? @default(now()) @db.Timestamp(6)
   updated_at   DateTime? @default(now()) @db.Timestamp(6)
-  goal         Goal      @relation(fields: [goalId], references: [goal_id], onDelete: Cascade)
+  goal         Goal?      @relation(fields: [goalId], references: [goal_id], onDelete: Cascade)
   user         User      @relation(fields: [userId], references: [id])
 }
 

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Task" ALTER COLUMN "goalId" DROP NOT NULL;

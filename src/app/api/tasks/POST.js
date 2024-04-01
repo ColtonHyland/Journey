@@ -6,7 +6,7 @@ export async function POST(request) {
 
   const user = await getServerUser(request);
   const userId = user.id;
-  const { title, description } = await request.json();
+  const { title, description, goalId } = await request.json();
   
   try {
     const task = await prisma.task.create({
