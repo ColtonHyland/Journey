@@ -1,41 +1,31 @@
 import prisma from '@/lib/prisma';
+import { getServerUser } from "@/lib/getServerUser";
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-  try {
-    const { title, userId } = await request.json();
-    
-    if (!title || !userId) {
-      return new Response(JSON.stringify({ error: "Title and userId are required." }), {
-        status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    }
+  const user = await getServerUser(request);
+  const userId = user.id;
 
-    const result = await prisma.task.create({
+  try {
+    const task = await prisma.task.create({
       data: {
-        title,
+        ...request.body,
         userId,
-        type: "task",
       },
     });
-
-    return new Response(JSON.stringify(result), {
-      status: 201, // Successfully created
-      message: "Task created successfully",
+    return new NextResponse(JSON.stringify({ task }), {
+      status: 201,
       headers: {
         'Content-Type': 'application/json',
       },
     });
   } catch (error) {
-    console.error("Error adding new task:", error);
-    console.error("Prisma error details:", error.message);
-    return new Response(JSON.stringify({ error: "Failed to add the task." }), {
-        status: 500,
-        headers: {
-            'Content-Type': 'application/json',
-        },
+    console.error("Error creating task:", error);
+    return new NextResponse(JSON.stringify({ error: "Failed to create task" }), {
+      status: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-}
+  }
 }

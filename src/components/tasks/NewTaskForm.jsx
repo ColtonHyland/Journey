@@ -24,23 +24,45 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
   };
 
   const addTask = async (newTaskDetails) => {
-    try {
-      const response = await fetch(`/api/goals/${goalId}/tasks`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTaskDetails),
-      });
+    if (goalId) {
+      try {
+        const response = await fetch(`/api/goals/${goalId}/tasks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newTaskDetails),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to save task');
+        }
+  
+        await response.json();
+        onTaskAdded();
+      } catch (error) {
+        console.error('Error saving task:', error);
+      }
+    } else {
+      try {
+        const response = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newTaskDetails),
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to save task');
+        if (!response.ok) {
+          throw new Error('Failed to save task');
+        }
+
+        await response.json();
+        onTaskAdded();
+      } catch (error) {
+        console.error('Error saving task:', error);
       }
 
-      await response.json();
-      onTaskAdded();
-    } catch (error) {
-      console.error('Error saving task:', error);
     }
   };
 
