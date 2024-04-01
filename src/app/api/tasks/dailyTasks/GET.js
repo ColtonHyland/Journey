@@ -11,7 +11,7 @@ export async function GET(request) {
     const dailyTasks = await prisma.task.findMany({
       where: {
         userId,
-        createdAt: {
+        created_at: {
           gte: startOfDay(new Date()),
           lte: endOfDay(new Date()),
         },
