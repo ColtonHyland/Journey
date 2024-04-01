@@ -15,6 +15,7 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
       description,
       dueDate,
     };
+    console.log ('newTask:', newTask);
     addTask(newTask); // Call the parent's function to handle the task addition
 
     setTitle('');
@@ -24,26 +25,7 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
   };
 
   const addTask = async (newTaskDetails) => {
-    if (goalId) {
-      try {
-        const response = await fetch(`/api/goals/${goalId}/tasks`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newTaskDetails),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to save task');
-        }
-  
-        await response.json();
-        onTaskAdded();
-      } catch (error) {
-        console.error('Error saving task:', error);
-      }
-    } else {
+    
       try {
         const response = await fetch('/api/tasks', {
           method: 'POST',
@@ -62,9 +44,7 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
       } catch (error) {
         console.error('Error saving task:', error);
       }
-
-    }
-  };
+    };
 
   return (
     <div>

@@ -3,13 +3,16 @@ import { getServerUser } from "@/lib/getServerUser";
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
+
   const user = await getServerUser(request);
   const userId = user.id;
-
+  const { title, description } = await request.json();
+  
   try {
     const task = await prisma.task.create({
       data: {
-        ...request.body,
+        title,
+        description,
         userId,
       },
     });
