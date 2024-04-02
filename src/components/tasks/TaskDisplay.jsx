@@ -5,9 +5,6 @@ import NewTaskForm from './NewTaskForm';
 const TaskDisplay = ({ goalId }) => {
   const [tasks, setTasks] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
 
   useEffect(() => {
     const getTasks = (async () =>{
