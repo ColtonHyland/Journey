@@ -2,9 +2,13 @@ import React from 'react';
 import NewTaskForm from '@/components/tasks/NewTaskForm';
 import Link from 'next/link';
 import DailyTasks from '@/components/tasks/DailyTasksContainer';
+import PrevNextView from '@/components/calendar/PrevNextView';
 
 const DaySchedulePage = ({ params }) => {
   const { date } = params;
+
+  const yesterday = new Date(date);
+  const tomorrow = new Date(date);
 
   return (
     <div>
@@ -14,6 +18,7 @@ const DaySchedulePage = ({ params }) => {
       <br />
       <DailyTasks />
       <Link href="/calendar">Back to calendar</Link>
+      <PrevNextView date={date} />
     </div>
   );
 };
