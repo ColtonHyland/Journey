@@ -1,11 +1,13 @@
 'use client';
 import React, { useState } from 'react';
+import { useTasks } from '@/app/context/TaskContext';
 
 const NewTaskForm = ({ goalId, onTaskAdded }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const { addTask } = useTasks();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,26 +25,27 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
     setIsFormVisible(false); // Hide the form after submission
   };
 
-  const addTask = async (newTaskDetails) => {
+  // const addTask = async (newTaskDetails) => {
     
-      try {
-        const response = await fetch('/api/tasks', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newTaskDetails),
-        });
+  //     try {
+  //       const response = await fetch('/api/tasks', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(newTaskDetails),
+  //       });
 
-        if (!response.ok) {
-          throw new Error('Failed to save task');
-        }
+  //       if (!response.ok) {
+  //         throw new Error('Failed to save task');
+  //       }
 
-        await response.json();
-      } catch (error) {
-        console.error('Error saving task:', error);
-      }
-    };
+  //       await response.json();
+  //       window.dispatchEvent(new CustomEvent('task-added'));
+  //     } catch (error) {
+  //       console.error('Error saving task:', error);
+  //     }
+  //   };
 
   return (
     <div>

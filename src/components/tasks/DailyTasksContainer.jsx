@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect } from 'react';
 import useDailyTasks from '@/app/hooks/useDailyTasks';
+import { useTasks } from '@/app/context/TaskContext';
 
 const DailyTasksContainer = () => {
-  const { tasks, loading, error } = useDailyTasks();
+  const { tasks, loading, error } = useTasks();
 
   useEffect(() => {
     if (tasks.length > 0) {
