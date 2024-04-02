@@ -40,12 +40,26 @@ export const TaskProvider = ({ children }) => {
         }
     };
 
+    const deleteTask = async (taskId) => {
+      console.log('taskId', taskId)
+      try {
+          const response = await fetch(`/api/tasks/${taskId}`, {
+              method: 'DELETE',
+              headers: {'Content-Type': 'application/json'},
+          });
+          if (!response.ok) throw new Error('Failed to delete task');
+          fetchTasks(); // Refetch tasks after deletion
+      } catch (error) {
+          setError(error.message);
+      }
+  };
+
     useEffect(() => {
         fetchTasks();
     }, []);
 
     return (
-        <TaskContext.Provider value={{ tasks, loading, error, addTask }}>
+        <TaskContext.Provider value={{ tasks, loading, error, addTask, deleteTask  }}>
             {children}
         </TaskContext.Provider>
     );
