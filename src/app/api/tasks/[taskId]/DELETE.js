@@ -1,20 +1,22 @@
 import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { NextResponse } from 'next/server';
 
 export async function DELETE(request, { params }) {
 
   const session = await getServerSession(authOptions);
-  if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  if (!session) return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   const userId = session.user.id;
-  const { goalId } = params.goalId ? params : {};
+  const { taskId } = params.goalId ? params : {};
+
 
   try {
     const task = await prisma.task.delete({
-      where: { id: goalId },
+      where: { task_id: taskId },
     })
 
-    return new Response(JSON.stringify(task), {
+    return new NextResponse(JSON.stringify(task), {
       status: 201,
       headers: {
         'Content-Type': 'application/json',
@@ -22,7 +24,7 @@ export async function DELETE(request, { params }) {
     });
   } catch (error) {
     console.error('Error deleting task:', error);
-    return new Response(JSON.stringify({ error: 'Failed to delete task' }), {
+    return new NextResponse(JSON.stringify({ error: 'Failed to delete task' }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',
