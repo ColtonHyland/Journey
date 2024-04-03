@@ -1,8 +1,9 @@
 'use client';
 import React from 'react';
-import NewTaskForm from '@/components/tasks/NewTaskForm';
 import Link from 'next/link';
+import NewTaskForm from '@/components/tasks/NewTaskForm';
 import DailyTasks from '@/components/tasks/DailyTasksContainer';
+import PrevNextDate from '@/components/calendar/PrevNextDate';
 import { TaskProvider } from '@/app/context/TaskContext';
 
 const DaySchedulePage = ({ params }) => {
@@ -16,6 +17,7 @@ const DaySchedulePage = ({ params }) => {
         <NewTaskForm />
         <br />
         <DailyTasks />
+        <PrevNextDate date={date} />
         <Link href="/calendar">Back to calendar</Link>
       </div>
     </TaskProvider>
