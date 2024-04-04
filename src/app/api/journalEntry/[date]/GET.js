@@ -2,13 +2,14 @@ import prisma from '@/lib/prisma';
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from 'next/server';
+import { parseISO } from 'date-fns';
 
 export async function GET(request, { params }) {
 
   const session = await getServerSession(authOptions);
   if (!session) return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   const userId = session.user.id;
-  const { date } = params.date ? params : {};
+  const date = params.date ? parseISO(params.date) : null;
 
   try {
     const journalEntry = await prisma.journalEntry.findUnique({
