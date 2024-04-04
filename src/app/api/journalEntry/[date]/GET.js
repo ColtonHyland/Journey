@@ -19,6 +19,7 @@ export async function GET(request, { params }) {
        },
     })
 
+    console.log('GET Journal entry:', journalEntry)
     return new NextResponse(JSON.stringify(journalEntry), {
       status: 201,
       headers: {
