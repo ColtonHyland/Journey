@@ -15,7 +15,6 @@ import React, { useState, useEffect } from 'react';const JournalEntryField = ({ 
             });
             if (!response.ok) throw new Error('Failed to fetch journal entry');
             const data = await response.json();
-            console.log('FETCH Journal entry:', data);
             setJournalEntry(data.content);
         } catch (error) {
             setError(error.message);
@@ -32,7 +31,7 @@ import React, { useState, useEffect } from 'react';const JournalEntryField = ({ 
                 body: JSON.stringify({ journalEntry }),
             });
             if (!response.ok) throw new Error('Failed to update journal entry');
-            fetchJournalEntry(); // Refetch journal entry after updating
+            fetchJournalEntry();
         } catch (error) {
             setError(error.message);
         }
