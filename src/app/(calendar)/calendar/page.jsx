@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { CalendarProvider, useCalendar } from '@/components/calendar/CalendarContext';
+import { CalendarProvider, useCalendar } from '@/app/context/CalendarContext';
 import CalendarNavigation from '@/components/calendar/CalendarNavigation';
 import CalendarGrid from '@/components/calendar/CalendarGrid';
 import DayView from '@/components/calendar/views/DayView';
