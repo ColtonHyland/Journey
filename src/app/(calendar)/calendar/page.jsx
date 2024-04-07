@@ -10,13 +10,15 @@ import YearView from '@/components/calendar/views/YearView';
 const CalendarPage = () => {
   // Use a local state to manage the view as a fallback
   const [localView, setLocalView] = useState('month');
-  const calendarContext = useCalendar();
+  const { currentView, setCurrentView } = useCalendar();
 
-  const currentView = calendarContext ? calendarContext.currentView : localView;
-  const setCurrentView = calendarContext ? calendarContext.setCurrentView : setLocalView;
+  // Sync localView with context's currentView
+  useEffect(() => {
+    setLocalView(currentView);
+  }, [currentView]);
 
   const renderCalendarView = () => {
-    switch (currentView) {
+    switch (localView) {
       case 'day':
         return <DayView />;
       case 'week':
