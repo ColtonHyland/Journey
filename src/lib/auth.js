@@ -75,6 +75,7 @@ export const authOptions = {
         user: {
           ...session.user,
           id: token.id,
+          randomKey: token.randomKey,
         },
       };
     },
@@ -84,6 +85,7 @@ export const authOptions = {
         return {
           ...token,
           id: u.id,
+          randomKey: u.randomKey,
         };
       }
       return token;

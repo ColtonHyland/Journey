@@ -1,7 +1,9 @@
 import 'server-only';
-import { getToken } from "next-auth/jwt"
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./auth";
 
-export async function getServerUser(req) {
-  const token = await getToken({ req })
-  return JSON.stringify(token?.id);
+export async function getServerUser(request) {
+  const session = await getServerSession(request, {}, authOptions);
+  const user = session?.user;
+  return [user]; // Handle cases where there is no session/user
 }
