@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { CalendarProvider, useCalendar } from '@/app/context/CalendarContext';
+import { useCalendar } from '@/app/context/CalendarContext';
 import CalendarNavigation from '@/components/calendar/CalendarNavigation';
 import CalendarGrid from '@/components/calendar/CalendarGrid';
 import DayView from '@/components/calendar/views/DayView';
@@ -14,16 +14,8 @@ const CalendarPage = () => {
 
   // Sync localView with context's currentView
   useEffect(() => {
-    try {
-      setLocalView(currentView);
-
-    } catch (error){
-      // Handle errors
-      console.error('Error setting local view:', error);
-    }
-    console.log('currentView:', currentView);
-
-  }, [currentView, localView]);
+    console.log('Current view in CalendarPage:', currentView);
+  }, []);
 
   const renderCalendarView = () => {
     switch (currentView) {
@@ -41,10 +33,10 @@ const CalendarPage = () => {
   };
 
   return (
-    <CalendarProvider>
+    <>
       <CalendarNavigation setCurrentView={setCurrentView} />
       {renderCalendarView()}
-    </CalendarProvider>
+    </>
   );
 };
 
