@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCalendar } from '@/app/context/CalendarContext';
 import { format, addMonths, subMonths } from 'date-fns';
 
@@ -27,16 +27,15 @@ const CalendarNavigation = () => {
 
       {/* Center section */}
       <div className="flex flex-col items-center">
-        {/* View selection dropdown */}
-        <select
+      <select
           value={currentView}
-          onChange={(e) => setCurrentView(e.target.value)}
+          onChange={(e) => {
+            setCurrentView(e.target.value);
+          }}
           className="mb-2 p-1 rounded-lg border border-gray-300"
         >
-          {viewOptions.map((option) => (
-            <option key={option} value={option}>
-              {option.charAt(0).toUpperCase() + option.slice(1)}
-            </option>
+          {viewOptions.map(option => (
+            <option key={option} value={option}>{option.charAt(0).toUpperCase() + option.slice(1)}</option>
           ))}
         </select>
         {/* Selected date */}

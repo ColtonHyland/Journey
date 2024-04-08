@@ -14,11 +14,19 @@ const CalendarPage = () => {
 
   // Sync localView with context's currentView
   useEffect(() => {
-    setLocalView(currentView);
-  }, [currentView]);
+    try {
+      setLocalView(currentView);
+
+    } catch (error){
+      // Handle errors
+      console.error('Error setting local view:', error);
+    }
+    console.log('currentView:', currentView);
+
+  }, [currentView, localView]);
 
   const renderCalendarView = () => {
-    switch (localView) {
+    switch (currentView) {
       case 'day':
         return <DayView />;
       case 'week':
