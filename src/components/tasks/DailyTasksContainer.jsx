@@ -5,7 +5,7 @@ import { useTasks } from '@/app/context/TaskContext';
 const DailyTasksContainer = () => {
   const { tasks, loading, error, deleteTask } = useTasks();
 
-  if (loading) return <div>Loading...</div>;
+//   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
