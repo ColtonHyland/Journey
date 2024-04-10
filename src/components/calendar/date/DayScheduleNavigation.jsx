@@ -12,7 +12,7 @@ const DayScheduleNavigation = ({ date }) => {
       <div className="flex items-center justify-between p-4">
         {/* Previous button with left chevron */}
         <Link href={`/schedule/${prevDate}`} className="text-xl font-semibold hover:text-blue-500 transition-colors">
-          &#9664; Previous
+          &#9664;
         </Link>
 
         {/* Center section for the date */}
@@ -22,7 +22,7 @@ const DayScheduleNavigation = ({ date }) => {
 
         {/* Next button with right chevron */}
         <Link href={`/schedule/${nextDate}`} className="text-xl font-semibold hover:text-blue-500 transition-colors">
-          Next &#9654;
+          &#9654;
         </Link>
       </div>
 
