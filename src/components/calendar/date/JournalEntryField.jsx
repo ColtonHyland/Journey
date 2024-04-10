@@ -42,16 +42,16 @@ import React, { useState, useEffect } from 'react';const JournalEntryField = ({ 
     }, []);
 
     return (
-        <div>
-            <h2 className="text-lg font-bold">Journal Entry for {date}</h2>
+        <div className="flex flex-col h-full">
+            <h2 className="text-lg font-bold mb-2">Journal Entry</h2>
             <textarea
                 value={journalEntry}
                 onChange={(e) => setJournalEntry(e.target.value)}
-                className="border border-gray-300 p-2 w-full"
-            />
+                className="flex-1 border border-gray-300 p-2 w-full resize-none"
+            ></textarea>
             <button 
                 onClick={updateJournalEntry} 
-                className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded self-end">
                 Save
             </button>
         </div>
