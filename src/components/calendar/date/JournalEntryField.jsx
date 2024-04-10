@@ -56,10 +56,10 @@ const JournalEntryField = ({ date }) => {
             if (journalEntry) {
                 saveEntry();
             }
-        }, 1500); // Wait for 1.5s of inactivity before saving
+        }, 1500);
 
         return () => {
-            clearTimeout(handler); // Clear timeout if journalEntry changes before the time elapses
+            clearTimeout(handler);
         };
     }, [journalEntry, saveEntry]);
 
@@ -68,6 +68,7 @@ const JournalEntryField = ({ date }) => {
     }, [date]);
 
     return (
+        // <div>
         <div className="flex flex-col h-full p-4">
             <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
             <textarea
@@ -76,8 +77,11 @@ const JournalEntryField = ({ date }) => {
                 className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto"
                 style={{ minHeight: '2rem' }}
             />
-            {showSavedMessage && <p className="text-gray-500 italic mt-2">Saved!</p>}
+            <div className="h-6">
+                {showSavedMessage && <p className="text-gray-500 italic text-center">Saved!</p>}
+            </div>
         </div>
+        
     );
 }
 
