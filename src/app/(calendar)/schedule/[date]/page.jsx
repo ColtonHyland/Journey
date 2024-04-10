@@ -1,16 +1,13 @@
 'use client';
 import React from 'react';
-import Link from 'next/link';
 import NewTaskForm from '@/components/tasks/NewTaskForm';
 import DailyTasks from '@/components/tasks/DailyTasksContainer';
 import DayScheduleNavigation from '@/components/calendar/date/DayScheduleNavigation';
 import JournalEntryField from '@/components/calendar/date/JournalEntryField';
 import { TaskProvider } from '@/app/context/TaskContext';
-import { format, parseISO } from 'date-fns';
 
 const DaySchedulePage = ({ params }) => {
   const { date } = params;
-  const formattedDate = format(parseISO(date), 'MMMM do, yyyy');
 
   return (
     <TaskProvider>

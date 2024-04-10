@@ -27,6 +27,8 @@ export const TaskProvider = ({ children }) => {
     };
 
     const addTask = async (newTaskDetails) => {
+        const optimisticTask = { ...newTaskDetails, task_id: Date.now() };
+        setTasks(currentTasks => [optimisticTask, ...currentTasks]);
         try {
             const response = await fetch('/api/tasks', {
                 method: 'POST',
@@ -34,9 +36,12 @@ export const TaskProvider = ({ children }) => {
                 body: JSON.stringify(newTaskDetails),
             });
             if (!response.ok) throw new Error('Failed to add task');
-            fetchTasks(); // Refetch tasks after adding
+            // fetchTasks();
+            // No need to refetch all tasks; assume the task is added successfully
+            // Optionally, update the task in the state with any additional data returned from the server
         } catch (error) {
             setError(error.message);
+            setTasks(currentTasks => currentTasks.filter(task => task.task_id !== optimisticTask.task_id)); // Rollback if failed
         }
     };
 
