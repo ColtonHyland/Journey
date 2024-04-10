@@ -14,9 +14,6 @@ export async function PUT(request, { params }) {
   const body = await request.json();
   const { journalEntry: content } = body;
 
-  console.log(`Date received: ${date}, Content received: ${content}`);
-
-
   try {
 
     const journalEntry = await prisma.journalEntry.upsert({
