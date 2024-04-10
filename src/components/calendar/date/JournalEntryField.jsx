@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const JournalEntryField = ({ date }) => {
 
     const [journalEntry, setJournalEntry] = useState('');
+    const [showSavedMessage, setShowSavedMessage] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -33,25 +34,34 @@ const JournalEntryField = ({ date }) => {
         };
     };
 
-    useEffect(() => {
-        const saveEntry = async () => {
-            try {
-                const response = await fetch(`/api/journalEntry/${date}`, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ journalEntry }),
-                });
-                if (!response.ok) throw new Error('Failed to update journal entry');
-            } catch (error) {
-                setError(error.message);
-            }
-        };
-
-        if (journalEntry) {
-            const debouncedSave = debounce(saveEntry, 2000);
-            debouncedSave();
+    const saveEntry = useCallback(async () => {
+        try {
+            const response = await fetch(`/api/journalEntry/${date}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ journalEntry }),
+            });
+            if (!response.ok) throw new Error('Failed to update journal entry');
+            
+            // Show "Saved!" message only after successful save
+            setShowSavedMessage(true);
+            setTimeout(() => setShowSavedMessage(false), 2500); // Keep "Saved!" visible for 2.5 seconds
+        } catch (error) {
+            setError(error.message);
         }
     }, [journalEntry, date]);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if (journalEntry) {
+                saveEntry();
+            }
+        }, 1500); // Wait for 1.5s of inactivity before saving
+
+        return () => {
+            clearTimeout(handler); // Clear timeout if journalEntry changes before the time elapses
+        };
+    }, [journalEntry, saveEntry]);
 
     useEffect(() => {
         fetchJournalEntry();
@@ -59,13 +69,14 @@ const JournalEntryField = ({ date }) => {
 
     return (
         <div className="flex flex-col h-full p-4">
-            <h2 className="text-2xl font-bold">Journal Entry</h2>
+            <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
             <textarea
                 value={journalEntry}
                 onChange={(e) => setJournalEntry(e.target.value)}
                 className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto"
                 style={{ minHeight: '2rem' }}
             />
+            {showSavedMessage && <p className="text-gray-500 italic mt-2">Saved!</p>}
         </div>
     );
 }

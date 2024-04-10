@@ -18,7 +18,7 @@ const DaySchedulePage = ({ params }) => {
         <DayScheduleNavigation date={date} />
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           <div>
-            <h1 className="text-2xl font-bold mb-4">Schedule for {formattedDate}</h1>
+          <h2 className="text-2xl font-bold text-center">Today's Tasks</h2>
             <NewTaskForm />
             <DailyTasks />
           </div>
