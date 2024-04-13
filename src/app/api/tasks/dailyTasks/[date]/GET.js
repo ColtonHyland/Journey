@@ -3,24 +3,36 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 import { startOfDay, endOfDay } from 'date-fns';
+import { parseISO } from 'date-fns';
 
-export async function GET(request) {
+export async function GET(request, { params }) {
   const session = await getServerSession(authOptions);
   if (!session) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
   const userId = session.user.id;
+  const dateString = params.date;
+  // Construct a UTC date object at midnight of the given date
+  const taskDate = new Date(`${dateString}T00:00:00Z`);
+
+  const startDate = startOfDay(taskDate);
+  const endDate = endOfDay(taskDate);
+
+  console.log('UTC Day Start:', startDate.toISOString());
+  console.log('UTC Day End:', endDate.toISOString());
 
   try {
     const dailyTasks = await prisma.task.findMany({
       where: {
         userId,
         created_at: {
-          gte: startOfDay(new Date()),
-          lte: endOfDay(new Date()),
+          gte: startOfDay(taskDate),
+          lte: endOfDay(taskDate),
         },
       }
     });
+
+    console.log('Filtered dailyTasks', dailyTasks);
 
     return new NextResponse(JSON.stringify({ dailyTasks }), {
       status: 200,

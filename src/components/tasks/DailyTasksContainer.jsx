@@ -2,9 +2,9 @@
 import React, { useEffect } from 'react';
 import { useTasks } from '@/app/context/TaskContext';
 
-const DailyTasksContainer = () => {
+const DailyTasksContainer = ({ date }) => {
   const { tasks, loading, error, deleteTask } = useTasks();
-
+  
 //   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 

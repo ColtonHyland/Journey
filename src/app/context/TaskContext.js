@@ -4,15 +4,16 @@ const TaskContext = createContext();
 
 export const useTasks = () => useContext(TaskContext);
 
-export const TaskProvider = ({ children }) => {
+export const TaskProvider = ({ children, date }) => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const fetchTasks = async () => {
         setLoading(true);
+        console.log('fetchTasks date', date)
         try {
-            const response = await fetch('/api/tasks/dailyTasks', {
+            const response = await fetch(`/api/tasks/dailyTasks/${date}`, {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
             });
@@ -48,7 +49,7 @@ export const TaskProvider = ({ children }) => {
               headers: {'Content-Type': 'application/json'},
           });
           if (!response.ok) throw new Error('Failed to delete task');
-          fetchTasks(); // Refetch tasks after deletion
+          fetchTasks();
       } catch (error) {
           setError(error.message);
       }
