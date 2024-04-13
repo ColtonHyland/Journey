@@ -12,14 +12,7 @@ export async function GET(request, { params }) {
   }
   const userId = session.user.id;
   const dateString = params.date;
-  // Construct a UTC date object at midnight of the given date
   const taskDate = new Date(`${dateString}T00:00:00Z`);
-
-  const startDate = startOfDay(taskDate);
-  const endDate = endOfDay(taskDate);
-
-  console.log('UTC Day Start:', startDate.toISOString());
-  console.log('UTC Day End:', endDate.toISOString());
 
   try {
     const dailyTasks = await prisma.task.findMany({
