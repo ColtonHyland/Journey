@@ -2,6 +2,7 @@
 import React from 'react';
 import NewTaskForm from '@/components/tasks/NewTaskForm';
 import DailyTasksContainer from '@/components/tasks/DailyTasksContainer';
+import TimeSlotList from '@/components/calendar/date/TimeSlotList';
 import DayScheduleNavigation from '@/components/calendar/date/DayScheduleNavigation';
 import JournalEntryField from '@/components/calendar/date/JournalEntryField';
 import { TaskProvider } from '@/app/context/TaskContext';
@@ -17,7 +18,8 @@ const DaySchedulePage = ({ params }) => {
           <div>
           <h2 className="text-2xl font-bold text-center">Today's Tasks</h2>
             <NewTaskForm date={date}/>
-            <DailyTasksContainer date={date}/>
+            <TimeSlotList date={date}/>
+            {/* <DailyTasksContainer date={date}/> */}
           </div>
           <div className="h-full">
             <JournalEntryField date={date} />
