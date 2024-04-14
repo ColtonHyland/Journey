@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 const JournalEntryField = ({ date }) => {
 
     const [journalEntry, setJournalEntry] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
     const [showSavedMessage, setShowSavedMessage] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -17,6 +18,7 @@ const JournalEntryField = ({ date }) => {
             if (!response.ok) throw new Error('Failed to fetch journal entry');
             const data = await response.json();
             setJournalEntry(data.content);
+            setIsTyping(false);
         } catch (error) {
             setError(error.message);
         } finally {
@@ -25,20 +27,22 @@ const JournalEntryField = ({ date }) => {
     };
 
     const saveEntry = useCallback(async () => {
-        try {
-            const response = await fetch(`/api/journalEntry/${date}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ journalEntry }),
-            });
-            if (!response.ok) throw new Error('Failed to update journal entry');
-            
-            setShowSavedMessage(true);
-            setTimeout(() => setShowSavedMessage(false), 2500);
-        } catch (error) {
-            setError(error.message);
+        if (isTyping) {
+            try {
+                const response = await fetch(`/api/journalEntry/${date}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ journalEntry }),
+                });
+                if (!response.ok) throw new Error('Failed to update journal entry');
+                
+                setShowSavedMessage(true);
+                setTimeout(() => setShowSavedMessage(false), 2500);
+            } catch (error) {
+                setError(error.message);
+            }
         }
-    }, [journalEntry, date]);
+    }, [journalEntry, date, isTyping]);
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -58,7 +62,10 @@ const JournalEntryField = ({ date }) => {
             <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
             <textarea
                 value={journalEntry}
-                onChange={(e) => setJournalEntry(e.target.value)}
+                onChange={(e) => {
+                    setJournalEntry(e.target.value);
+                    setIsTyping(true);
+                }}
                 className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto"
                 style={{ minHeight: '2rem' }}
             />
