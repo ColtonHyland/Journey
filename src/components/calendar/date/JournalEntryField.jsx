@@ -24,16 +24,6 @@ const JournalEntryField = ({ date }) => {
         }
     };
 
-    const debounce = (func, delay) => {
-        let inDebounce;
-        return function() {
-            const context = this;
-            const args = arguments;
-            clearTimeout(inDebounce);
-            inDebounce = setTimeout(() => func.apply(context, args), delay);
-        };
-    };
-
     const saveEntry = useCallback(async () => {
         try {
             const response = await fetch(`/api/journalEntry/${date}`, {
@@ -43,9 +33,8 @@ const JournalEntryField = ({ date }) => {
             });
             if (!response.ok) throw new Error('Failed to update journal entry');
             
-            // Show "Saved!" message only after successful save
             setShowSavedMessage(true);
-            setTimeout(() => setShowSavedMessage(false), 2500); // Keep "Saved!" visible for 2.5 seconds
+            setTimeout(() => setShowSavedMessage(false), 2500);
         } catch (error) {
             setError(error.message);
         }
@@ -53,14 +42,10 @@ const JournalEntryField = ({ date }) => {
 
     useEffect(() => {
         const handler = setTimeout(() => {
-            if (journalEntry) {
-                saveEntry();
-            }
+            saveEntry();
         }, 1500);
 
-        return () => {
-            clearTimeout(handler);
-        };
+        return () => clearTimeout(handler);
     }, [journalEntry, saveEntry]);
 
     useEffect(() => {
@@ -77,7 +62,7 @@ const JournalEntryField = ({ date }) => {
                 className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto"
                 style={{ minHeight: '2rem' }}
             />
-            <div className="h-6">
+            <div className="h-4">
                 {showSavedMessage && <p className="text-gray-500 italic text-center">Saved!</p>}
             </div>
         </div>
