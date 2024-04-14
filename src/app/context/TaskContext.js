@@ -35,7 +35,7 @@ export const TaskProvider = ({ children, date }) => {
                 body: JSON.stringify(newTaskDetails),
             });
             if (!response.ok) throw new Error('Failed to add task');
-            fetchTasks(); // Refetch tasks after adding
+            fetchTasks();
         } catch (error) {
             setError(error.message);
         }
