@@ -12,7 +12,7 @@ export async function GET(request, { params }) {
   }
   const userId = session.user.id;
   const dateString = params.date;
-  const taskDate = new Date(`${dateString}T00:00:00Z`);
+  const taskDate = new Date(`${dateString}`);
 
   try {
     const dailyTasks = await prisma.task.findMany({
