@@ -11,7 +11,6 @@ export const TaskProvider = ({ children, date }) => {
 
     const fetchTasks = async () => {
         setLoading(true);
-        console.log('fetchTasks date', date)
         try {
             const response = await fetch(`/api/tasks/dailyTasks/${date}`, {
                 method: 'GET',
