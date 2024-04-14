@@ -2,11 +2,10 @@
 import React, { useState } from 'react';
 import { useTasks } from '@/app/context/TaskContext';
 
-const NewTaskForm = ({ goalId, onTaskAdded }) => {
+const NewTaskForm = ({ date }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
   const { addTask } = useTasks();
 
   const handleSubmit = async (e) => {
@@ -15,13 +14,13 @@ const NewTaskForm = ({ goalId, onTaskAdded }) => {
     const newTask = {
       title,
       description,
-      dueDate,
+      assigned_date: date,
     };
     addTask(newTask); // Call the parent's function to handle the task addition
 
     setTitle('');
     setDescription('');
-    setDueDate('');
+
     setIsFormVisible(false); // Hide the form after submission
   };
 

@@ -16,7 +16,7 @@ const DaySchedulePage = ({ params }) => {
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
           <div>
           <h2 className="text-2xl font-bold text-center">Today's Tasks</h2>
-            <NewTaskForm />
+            <NewTaskForm date={date}/>
             <DailyTasksContainer date={date}/>
           </div>
           <div className="h-full">
