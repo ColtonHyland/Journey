@@ -41,7 +41,6 @@ export const TaskProvider = ({ children, date }) => {
     };
 
     const deleteTask = async (taskId) => {
-      console.log('taskId', taskId)
       try {
           const response = await fetch(`/api/tasks/${taskId}`, {
               method: 'DELETE',

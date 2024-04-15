@@ -22,8 +22,6 @@ export async function GET(request, { params }) {
       }
     });
 
-    console.log('Filtered dailyTasks', dailyTasks);
-
     return new NextResponse(JSON.stringify({ dailyTasks }), {
       status: 200,
       headers: {
