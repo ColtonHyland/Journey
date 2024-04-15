@@ -7,20 +7,33 @@ const TimeSlotList = ({ date }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Set initial scroll position when the component mounts
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    const initialScrollPosition = savedScrollPosition ? parseInt(savedScrollPosition, 10) : 340;
     if (containerRef.current) {
-      const initialScrollPosition = 340;  // Assuming each slot is 50px high, adjust 6 AM
       containerRef.current.scrollTop = initialScrollPosition;
     }
-  }, [date]);  // Rerun if the date changes to reset the scroll position
+    const handleScroll = () => {
+      if (containerRef.current) {
+        sessionStorage.setItem('scrollPosition', containerRef.current.scrollTop);
+      }
+    };
+
+    containerRef.current.addEventListener('scroll', handleScroll);
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [date]);
 
   return (
     <div ref={containerRef} className="overflow-auto h-full">
-      {Array.from({ length: 24 }, (_, i) => (
+      {Array.from({ length: 24 }, (_, i) => i).filter(hour => hour !== 0).map(hour => (
         <TimeSlot
-          key={i}
-          hour={i}
-          tasks={tasks.filter(t => new Date(t.assigned_date).getHours() === i)}
+          key={hour}
+          hour={hour}
+          tasks={tasks.filter(t => new Date(t.assigned_date).getHours() === hour)}
         />
       ))}
     </div>
