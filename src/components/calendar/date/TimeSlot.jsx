@@ -7,11 +7,17 @@ const TimeSlot = forwardRef(({ hour, tasks }, ref) => {
   return (
     <div ref={ref} className="flex items-center my-4">
       {/* Display Hour with the text on the left */}
-      <div className="text-left font-bold text-gray-700 w-12">
+      <div className="text-left font-bold text-gray-700 ">
         {displayHour}
       </div>
-      {/* Horizontal divider that starts right after the hour and extends to the end */}
       <div className="flex-grow ml-4 border-t border-gray-300"></div>
+      {/* <div className="flex-1 space-y-2">
+        {tasks.map(task => (
+          <div key={task.task_id} className="bg-blue-100 rounded p-2 text-sm">
+            {task.title}
+          </div>
+        ))}
+      </div> */}
     </div>
   );
 });
