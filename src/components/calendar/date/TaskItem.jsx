@@ -1,23 +1,25 @@
 'use client';
 import React from 'react';
 
-const TaskItem = ({ start, duration, title, color = 'bg-blue-200' }) => {
-  // Calculate the top offset and height based on the start time and duration
-  const hourHeight = 80; // assuming each slot has a height of 80 pixels
-  const topPosition = (start % 24) * hourHeight;
-  const height = duration * hourHeight;
+const TaskItem = ({ task, hourHeight = 60 }) => {
+  const startHour = new Date(task.assigned_date).getHours();
+  const startMinute = new Date(task.assigned_date).getMinutes();
+  const durationHours = Math.floor(task.duration / 60); // assuming duration is in minutes
+  const durationMinutes = task.duration % 60;
+
+  const top = (startHour * hourHeight) + (startMinute / 60 * hourHeight);
+  const height = (durationHours * hourHeight) + (durationMinutes / 60 * hourHeight);
 
   return (
     <div
-      className={`absolute ${color} rounded p-2 text-sm`}
+      className={`absolute left-14 right-5 rounded-lg bg-blue-300 text-white text-sm p-1`}
       style={{
-        top: `${topPosition}px`,
-        height: `${height}px`,
-        left: '0',
-        right: '0',
+        top: `${top}px`,
+        height: `80px`,
+        zIndex: 10 // ensure it's above the slot dividers
       }}
     >
-      {title}
+      {task.title}
     </div>
   );
 };

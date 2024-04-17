@@ -1,5 +1,7 @@
+'use client';
 import React, { useRef, useEffect } from 'react';
 import TimeSlot from './TimeSlot';
+import TaskItem from './TaskItem';
 import { useTasks } from '@/app/context/TaskContext';
 
 const TimeSlotList = ({ date }) => {
@@ -28,14 +30,17 @@ const TimeSlotList = ({ date }) => {
     };
   }, [date]);
 
+  useEffect(() => {
+    console.log('Tasks updated:', tasks);
+  }, [tasks]);
+
   return (
-    <div ref={containerRef} className="overflow-auto h-full">
-      {Array.from({ length: 24 }, (_, i) => i).map(hour => (
-        <TimeSlot
-          key={hour}
-          hour={hour}
-          tasks={tasks.filter(t => new Date(t.assigned_date).getHours() === hour)}
-        />
+    <div ref={containerRef} className="overflow-auto h-full relative">
+      {Array.from({ length: 24 }, (_, i) => (
+        <TimeSlot key={i} hour={i} />
+      ))}
+      {tasks.map(task => (
+        <TaskItem key={task.task_id} task={task} />
       ))}
     </div>
   );
