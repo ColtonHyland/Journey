@@ -8,10 +8,11 @@ const TimeSlotList = ({ date }) => {
 
   useEffect(() => {
     const savedScrollPosition = sessionStorage.getItem('scrollPosition');
-    const initialScrollPosition = savedScrollPosition ? parseInt(savedScrollPosition, 10) : 340;
+    const initialScrollPosition = savedScrollPosition ? parseInt(savedScrollPosition, 10) : 0;
     if (containerRef.current) {
       containerRef.current.scrollTop = initialScrollPosition;
     }
+
     const handleScroll = () => {
       if (containerRef.current) {
         sessionStorage.setItem('scrollPosition', containerRef.current.scrollTop);
@@ -29,7 +30,7 @@ const TimeSlotList = ({ date }) => {
 
   return (
     <div ref={containerRef} className="overflow-auto h-full">
-      {Array.from({ length: 24 }, (_, i) => i).filter(hour => hour !== 0).map(hour => (
+      {Array.from({ length: 24 }, (_, i) => i).map(hour => (
         <TimeSlot
           key={hour}
           hour={hour}
