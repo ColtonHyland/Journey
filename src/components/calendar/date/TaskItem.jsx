@@ -22,8 +22,8 @@ const TaskItem = ({ task, hourHeight = 60 }) => {
     className="absolute left-14 right-5 rounded-lg bg-blue-300 text-white text-sm p-1"
     style={{
       top: `${top}px`,
-      height: `${height}px`,
-      zIndex: 10 // ensure it's above the slot dividers
+      height: `800px`,
+      zIndex: 10
     }}
   >
     <button
