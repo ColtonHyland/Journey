@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useTasks } from '@/app/context/TaskContext';
 
-const NewTaskForm = ({ date }) => {
+const NewTaskForm = ({ setShowForm, date }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -21,7 +21,7 @@ const NewTaskForm = ({ date }) => {
       end_time: endTime,
     };
     addTask(newTask); 
-
+    setShowForm(false);
     setTitle('');
     setDescription('');
     setStartTime('');
@@ -30,16 +30,13 @@ const NewTaskForm = ({ date }) => {
   };
 
   return (
-    <div>
-      {!isFormVisible && (
-        <button
-          onClick={() => setIsFormVisible(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-        >
-          Add new task +
-        </button>
-      )}
-      {isFormVisible && (
+    <div className="fixed top-1/3 left-1/3 right-1/3 bg-white p-4 border border-gray-300 shadow-lg rounded-md z-50">
+    <div className="flex justify-between items-center">
+      <h3 className="text-lg font-bold">Add New Task</h3>
+      <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-gray-700">
+        <span className="text-xl">&times;</span>
+      </button>
+    </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
@@ -63,9 +60,9 @@ const NewTaskForm = ({ date }) => {
             </button>
           </div>
         </form>
-      )}
-    </div>
+        </div>
   );
+
 };
 
 export default NewTaskForm;
