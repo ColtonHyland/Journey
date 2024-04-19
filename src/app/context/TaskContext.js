@@ -41,17 +41,23 @@ export const TaskProvider = ({ children, date }) => {
     };
 
     const deleteTask = async (taskId) => {
-      try {
-          const response = await fetch(`/api/tasks/${taskId}`, {
-              method: 'DELETE',
-              headers: {'Content-Type': 'application/json'},
-          });
-          if (!response.ok) throw new Error('Failed to delete task');
-          fetchTasks();
-      } catch (error) {
-          setError(error.message);
-      }
-  };
+        // Optimistically remove the task from the UI
+        const newTasks = tasks.filter(task => task.task_id !== taskId);
+        setTasks(newTasks);
+    
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`, {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+            });
+            if (!response.ok) throw new Error('Failed to delete task');
+            // No need to fetchTasks if deletion is successful
+        } catch (error) {
+            setError(error.message);
+            // Revert the UI change if there's an error
+            fetchTasks();
+        }
+    };
 
     useEffect(() => {
         fetchTasks();

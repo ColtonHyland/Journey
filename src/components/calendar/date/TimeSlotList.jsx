@@ -35,7 +35,9 @@ const TimeSlotList = ({ date }) => {
   }, [tasks]);
 
   return (
-    <div ref={containerRef} className="overflow-auto h-full relative">
+    <>
+      <h2 className="text-2xl font-bold text-center">Today's Tasks</h2>
+      <div ref={containerRef} className="overflow-auto h-full relative">
       {Array.from({ length: 24 }, (_, i) => (
         <TimeSlot key={i} hour={i} />
       ))}
@@ -43,6 +45,8 @@ const TimeSlotList = ({ date }) => {
         <TaskItem key={task.task_id} task={task} />
       ))}
     </div>
+    </>
+    
   );
 };
 
