@@ -14,7 +14,7 @@ const DaySchedulePage = ({ params }) => {
     <TaskProvider date={date}>
       <div className="flex flex-col" style={{ height: `calc(100vh - var(--appbar-height, 64px))` }}>
         <DayScheduleNavigation date={date} />
-        <div className="flex flex-1 overflow-hidden"> {/* Ensure this is a flex container */}
+        <div className="flex flex-1 overflow-hidden"> 
           <div className="flex flex-col w-full md:w-1/2 p-4 overflow-auto">
             <h2 className="text-2xl font-bold text-center">Today's Tasks</h2>
             <NewTaskForm date={date}/>
