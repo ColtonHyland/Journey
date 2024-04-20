@@ -57,23 +57,23 @@ const JournalEntryField = ({ date }) => {
     }, [date]);
 
     return (
-        // <div>
-        <div className="flex flex-col h-full p-4">
-            <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
-            <textarea
-                value={journalEntry}
-                onChange={(e) => {
-                    setJournalEntry(e.target.value);
-                    setIsTyping(true);
-                }}
-                className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto"
-                style={{ minHeight: '2rem' }}
-            />
-            <div className="h-4">
-                {showSavedMessage && <p className="text-gray-500 italic text-center">Saved!</p>}
+        <div className="flex flex-col h-full p-4 relative">
+        <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
+        <textarea
+            value={journalEntry}
+            onChange={(e) => {
+                setJournalEntry(e.target.value);
+                setIsTyping(true);
+            }}
+            className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto relative"
+            style={{ minHeight: '2rem' }}
+        />
+        {showSavedMessage && (
+            <div className="absolute bottom-5 left-0 right-0 mb-2 text-center pointer-events-none">
+                <span className="text-gray-500 italic bg-white px-2">Saved!</span>
             </div>
-        </div>
-        
+        )}
+    </div>
     );
 }
 

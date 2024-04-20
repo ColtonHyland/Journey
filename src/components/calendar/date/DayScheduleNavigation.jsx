@@ -25,17 +25,6 @@ const DayScheduleNavigation = ({ date }) => {
           &#9654;
         </Link>
       </div>
-
-      {/* Links to Calendar and Dashboard */}
-      <div className="text-center mb-4">
-        <Link href="/calendar" className="text-blue-600 hover:underline mx-2">
-          Calendar
-        </Link>
-        |
-        <Link href="/dashboard" className="text-blue-600 hover:underline mx-2">
-          Dashboard
-        </Link>
-      </div>
     </>
   );
 };
