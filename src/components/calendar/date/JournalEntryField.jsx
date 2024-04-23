@@ -77,4 +77,4 @@ const JournalEntryField = ({ date }) => {
     );
 }
 
-export default JournalEntryField;
+export default JournalEntryField;``
