@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import TimeSlot from './TimeSlot';
 import TaskItem from './TaskItem';
-import NewTaskForm from '@/components/tasks/NewTaskForm'; // Ensure this is the correct path
+import NewTaskForm from '@/components/tasks/NewTaskForm';
 import { useTasks } from '@/app/context/TaskContext';
 
 const TimeSlotList = ({ date }) => {
@@ -47,7 +47,7 @@ const TimeSlotList = ({ date }) => {
         </button>
       </div>
       {showForm && <NewTaskForm setShowForm={setShowForm} date={date} />}
-      <div ref={containerRef} className="overflow-auto h-full relative">
+      <div ref={containerRef} className="overflow-auto h-full relative" style={{ height: '100%' }}>
         {Array.from({ length: 24 }, (_, i) => (
           <TimeSlot key={i} hour={i} />
         ))}

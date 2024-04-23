@@ -8,12 +8,17 @@ const TimeSlot = forwardRef(({ hour }, ref) => {
   
   return (
     <div ref={ref} className="flex flex-col justify-between h-20 relative">
+      <div className="absolute top-0 left-16 bottom-0 w-0.5 bg-gray-300"></div>
       {showDivider && (
         <div className="flex justify-between items-center " style={{ marginTop: '-12px' }}>
           <div className="text-left font-bold text-gray-700 px-1">
             {displayHour}
           </div>
-          <div className="flex-grow border-t border-gray-300"></div>
+          
+          <div className="flex-grow border-t border-gray-300">
+          
+
+          </div>
         </div>
       )}
     </div>
