@@ -1,4 +1,5 @@
 'use client';
+import '@/app/globals.css'
 import React, { useRef, useEffect, useState } from 'react';
 import TimeSlot from './TimeSlot';
 import TaskItem from './TaskItem';
