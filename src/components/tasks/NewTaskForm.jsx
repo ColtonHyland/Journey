@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { useTasks } from '@/app/context/TaskContext';
 
@@ -11,6 +11,17 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [endTime, setEndTime] = useState('');
   const [error, setError] = useState('');
   const { addTask } = useTasks();
+
+  // Round time to the nearest quarter hour for default values
+  useEffect(() => {
+    const now = new Date();
+    const roundedMinutes = Math.ceil(now.getMinutes() / 15) * 15;
+    now.setMinutes(roundedMinutes % 60);
+    now.setHours(now.getHours() + (roundedMinutes >= 60 ? 1 : 0));
+    const defaultTime = now.toTimeString().substring(0, 5);
+    setStartTime(defaultTime);
+    setEndTime(defaultTime);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,40 +48,68 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
   return (
     <Draggable handle=".handle">
-      <div className="absolute top-1/4 left-1/4 right-1/4 bg-white p-4 border border-gray-300 shadow-lg rounded-md z-50 handle" style={{ cursor: 'move' }}>
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold">Add New Task</h3>
-          <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-gray-700">
-            <span className="text-xl">&times;</span>
-          </button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
-            <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required />
-          </div>
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-            <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" rows="3" required></textarea>
-          </div>
-          <div className="input-group">
-            <label htmlFor="assigned-date">Assigned Date</label>
-            <input type="date" id="assigned-date" value={assignedDate} onChange={(e) => setAssignedDate(e.target.value)} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="start-time">Start Time</label>
-            <input type="time" id="start-time" step="900" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="end-time">End Time</label>
-            <input type="time" id="end-time" step="900" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+      <div className="absolute top-1/4 left-1/4 right-1/4 bg-white p-4 border border-gray-300 shadow-lg rounded-md z-50 handle" style={{ cursor: 'move', width: '30%' }}>
+        <button onClick={() => setShowForm(false)} className="text-gray-500 hover:text-gray-700 absolute right-2 top-2">
+          <span className="text-xl">&times;</span>
+        </button>
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+          <input
+            type="text"
+            id="title"
+            placeholder="Task name"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            required
+          />
+          <textarea
+            id="description"
+            placeholder="Task details"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            rows="3"
+            required
+          />
+          <input
+            type="date"
+            id="assigned-date"
+            value={assignedDate}
+            onChange={(e) => setAssignedDate(e.target.value)}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+            required
+          />
+          <div className="flex justify-between">
+            <div className="flex-1 pr-2">
+              <input
+                type="time"
+                id="start-time"
+                step="900"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+                required
+              />
+            </div>
+            <div className="flex-1 pl-2">
+              <input
+                type="time"
+                id="end-time"
+                step="900"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+                required
+              />
+            </div>
           </div>
           {error && <div className="text-red-500">{error}</div>}
-          <div className="flex justify-end">
-            <button type="submit" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              Add Task
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
+          >
+            Confirm
+          </button>
         </form>
       </div>
     </Draggable>
