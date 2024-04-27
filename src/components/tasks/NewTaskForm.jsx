@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
+import TimeSelector from './TimeSelector';
 import { useTasks } from '@/app/context/TaskContext';
 
 const NewTaskForm = ({ setShowForm, date }) => {
@@ -11,17 +12,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [endTime, setEndTime] = useState('');
   const [error, setError] = useState('');
   const { addTask } = useTasks();
-
-  // Round time to the nearest quarter hour for default values
-  useEffect(() => {
-    const now = new Date();
-    const roundedMinutes = Math.ceil(now.getMinutes() / 15) * 15;
-    now.setMinutes(roundedMinutes % 60);
-    now.setHours(now.getHours() + (roundedMinutes >= 60 ? 1 : 0));
-    const defaultTime = now.toTimeString().substring(0, 5);
-    setStartTime(defaultTime);
-    setEndTime(defaultTime);
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,25 +71,15 @@ const NewTaskForm = ({ setShowForm, date }) => {
           />
           <div className="flex justify-between">
             <div className="flex-1 pr-2">
-              <input
-                type="time"
+              <TimeSelector
                 id="start-time"
-                step="900"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                required
+                onChange={(time) => setStartTime(time)}
               />
             </div>
             <div className="flex-1 pl-2">
-              <input
-                type="time"
+              <TimeSelector
                 id="end-time"
-                step="900"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md shadow-sm"
-                required
+                onChange={(time) => setEndTime(time)}
               />
             </div>
           </div>
