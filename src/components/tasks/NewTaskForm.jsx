@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import TimeSelector from './TimeSelector';
@@ -13,27 +12,58 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [error, setError] = useState('');
   const { addTask } = useTasks();
 
+  useEffect(() => {
+    const current = new Date();
+    current.setMinutes(Math.ceil(current.getMinutes() / 15) * 15);
+    const initialTime = current.toISOString();
+    setStartTime(initialTime);
+    setEndTime(new Date(current.getTime() + 15 * 60000).toISOString());
+  }, [date]);
+
+  const handleStartTimeChange = (isoTime) => {
+    setStartTime(isoTime);
+    const endDate = new Date(new Date(isoTime).getTime() + 15 * 60000);
+    setEndTime(endDate.toISOString());
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (new Date(`${assignedDate}T${endTime}`) < new Date(`${assignedDate}T${startTime}`)) {
-      setError("End time cannot be before start time.");
+  
+    console.log("Assigned Date:", assignedDate);
+    console.log("Start Time:", startTime);
+    console.log("End Time:", endTime);
+  
+    const startDate = new Date(startTime);
+    const endDate = new Date(endTime);
+  
+    console.log("ISO Start Date:", startDate.toISOString());
+    console.log("ISO End Date:", endDate.toISOString());
+  
+    if (endDate <= startDate) {
+      setError("End time cannot be before or equal to start time.");
       return;
     }
-
+  
     const newTask = {
       title,
       description,
-      assigned_date: assignedDate,
-      start_time: startTime,
-      end_time: endTime,
+      assigned_date: startDate.toISOString(),
+      start_time: startDate.toISOString(),
+      end_time: endDate.toISOString(),
     };
-    addTask(newTask);
-    setShowForm(false);
-    setTitle('');
-    setDescription('');
-    setStartTime('');
-    setEndTime('');
-    setError('');
+  
+    try {
+      await addTask(newTask);
+      setShowForm(false);
+      setTitle('');
+      setDescription('');
+      setStartTime('');
+      setEndTime('');
+      setError('');
+    } catch (error) {
+      console.error("Failed to create task:", error);
+      setError("Failed to create task: " + error.message);
+    }
   };
 
   return (
@@ -73,7 +103,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
             <div className="flex-1 pr-2">
               <TimeSelector
                 id="start-time"
-                onChange={(time) => setStartTime(time)}
+                onChange={handleStartTimeChange}
               />
             </div>
             <div className="flex-1 pl-2">
