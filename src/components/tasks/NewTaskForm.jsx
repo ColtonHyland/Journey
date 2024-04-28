@@ -33,29 +33,18 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    console.log("Assigned Date:", assignedDate);
-    console.log("Start Time:", startTime);
-    console.log("End Time:", endTime);
   
     try {
-      const startDate = new Date(startTime);
-      const endDate = new Date(endTime);
-    
-      console.log("ISO Start Date:", startDate.toISOString());
-      console.log("ISO End Date:", endDate.toISOString());
-    
-      if (endDate <= startDate) {
-        setError("End time cannot be before or equal to start time.");
-        return;
-      }
+      const dateStr = assignedDate;
+      const startTimeStr = new Date(startTime).toISOString().substring(11, 19); // Extracts time part 'HH:MM:SS'
+      const endTimeStr = new Date(endTime).toISOString().substring(11, 19); // Extracts time part 'HH:MM:SS'
     
       const newTask = {
         title,
         description,
-        assigned_date: startDate.toISOString(),
-        start_time: startDate.toISOString(),
-        end_time: endDate.toISOString(),
+        assigned_date: dateStr,
+        start_time: startTimeStr,
+        end_time: endTimeStr,
       };
     
       await addTask(newTask);
