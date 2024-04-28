@@ -27,11 +27,10 @@ const TimeSelector = ({ id, onChange, label }) => {
   };
 
   const handleSelect = (isoTime) => {
-    const timeString = new Date(isoTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
     setSelectedTime(isoTime);
     setIsOpen(false);
     if (onChange) {
-      onChange(timeString);
+      onChange(isoTime);
     }
   };
 

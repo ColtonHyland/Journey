@@ -21,38 +21,43 @@ const NewTaskForm = ({ setShowForm, date }) => {
   }, [date]);
 
   const handleStartTimeChange = (isoTime) => {
-    setStartTime(isoTime);
-    const endDate = new Date(new Date(isoTime).getTime() + 15 * 60000);
-    setEndTime(endDate.toISOString());
+    try {
+      const parsedTime = new Date(isoTime);
+      setStartTime(isoTime);
+      const endDate = new Date(parsedTime.getTime() + 15 * 60000);
+      setEndTime(endDate.toISOString());
+    } catch (error) {
+      console.error("Error parsing date:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     console.log("Assigned Date:", assignedDate);
     console.log("Start Time:", startTime);
     console.log("End Time:", endTime);
   
-    const startDate = new Date(startTime);
-    const endDate = new Date(endTime);
-  
-    console.log("ISO Start Date:", startDate.toISOString());
-    console.log("ISO End Date:", endDate.toISOString());
-  
-    if (endDate <= startDate) {
-      setError("End time cannot be before or equal to start time.");
-      return;
-    }
-  
-    const newTask = {
-      title,
-      description,
-      assigned_date: startDate.toISOString(),
-      start_time: startDate.toISOString(),
-      end_time: endDate.toISOString(),
-    };
-  
     try {
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+    
+      console.log("ISO Start Date:", startDate.toISOString());
+      console.log("ISO End Date:", endDate.toISOString());
+    
+      if (endDate <= startDate) {
+        setError("End time cannot be before or equal to start time.");
+        return;
+      }
+    
+      const newTask = {
+        title,
+        description,
+        assigned_date: startDate.toISOString(),
+        start_time: startDate.toISOString(),
+        end_time: endDate.toISOString(),
+      };
+    
       await addTask(newTask);
       setShowForm(false);
       setTitle('');
@@ -61,7 +66,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
       setEndTime('');
       setError('');
     } catch (error) {
-      console.error("Failed to create task:", error);
+      console.error("Error during form submission:", error);
       setError("Failed to create task: " + error.message);
     }
   };
