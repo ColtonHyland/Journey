@@ -8,8 +8,8 @@ const TaskItem = ({ task, hourHeight = 80 }) => {
 
   const startTime = new Date(task.start_time);
   const endTime = new Date(task.end_time);
-  const startMinutesFromMidnight = startTime.getUTCHours() * 60 + startTime.getUTCMinutes();
-  const endMinutesFromMidnight = endTime.getUTCHours() * 60 + endTime.getUTCMinutes();
+  const startMinutesFromMidnight = startTime.getHours() * 60 + startTime.getMinutes();
+  const endMinutesFromMidnight = endTime.getHours() * 60 + endTime.getMinutes();
   const durationMinutes = endMinutesFromMidnight - startMinutesFromMidnight;
   const top = (startMinutesFromMidnight / 60) * hourHeight;
   const height = (durationMinutes / 60) * hourHeight;

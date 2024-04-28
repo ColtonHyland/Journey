@@ -18,7 +18,7 @@ const TimeSelector = ({ id, onChange, label }) => {
   const generateTimeOptions = () => {
     const times = [];
     let currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Start at midnight
+    currentDate.setHours(0, 0, 0, 0);
     for (let i = 0; i < 4 * 24; i++) {
       times.push(new Date(currentDate).toISOString());
       currentDate.setMinutes(currentDate.getMinutes() + 15);
@@ -27,10 +27,14 @@ const TimeSelector = ({ id, onChange, label }) => {
   };
 
   const handleSelect = (isoTime) => {
-    setSelectedTime(isoTime);
+    const time = new Date(isoTime);
+    const localTimeString = time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    const localDateTimeString = new Date(time.getTime() - (time.getTimezoneOffset() * 60000)).toISOString().replace('Z', '');
+  
+    setSelectedTime(localDateTimeString);
     setIsOpen(false);
     if (onChange) {
-      onChange(isoTime);
+      onChange(localDateTimeString);
     }
   };
 

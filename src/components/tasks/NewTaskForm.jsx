@@ -33,20 +33,19 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    const startTimeStr = new Date(startTime).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    const endTimeStr = new Date(endTime).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+    
+    const newTask = {
+      title,
+      description,
+      assigned_date: assignedDate,
+      start_time: startTimeStr,   
+      end_time: endTimeStr,  
+    };
   
     try {
-      const dateStr = assignedDate;
-      const startTimeStr = new Date(startTime).toISOString().substring(11, 19); // Extracts time part 'HH:MM:SS'
-      const endTimeStr = new Date(endTime).toISOString().substring(11, 19); // Extracts time part 'HH:MM:SS'
-    
-      const newTask = {
-        title,
-        description,
-        assigned_date: dateStr,
-        start_time: startTimeStr,
-        end_time: endTimeStr,
-      };
-    
       await addTask(newTask);
       setShowForm(false);
       setTitle('');
