@@ -41,7 +41,7 @@ const TimeSlotList = ({ date }) => {
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="px-4 py-2 border border-blue-500 text-blue-500 font-bold text-sm rounded-full hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
           style={{ whiteSpace: 'nowrap' }}
         >
           <span className="mr-2">+</span>Add Task
