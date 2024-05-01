@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const TimeSelector = ({ id, onChange, label, defaultHour = 19 }) => {
+const TimeSelector = ({ id, onChange, label }) => {
   const [selectedTime, setSelectedTime] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
@@ -12,9 +12,12 @@ const TimeSelector = ({ id, onChange, label, defaultHour = 19 }) => {
     const minutes = currentTime.getMinutes();
     const roundedMinutes = Math.ceil(minutes / 15) * 15;
     currentTime.setMinutes(roundedMinutes % 60);
-    currentTime.setHours(currentTime.getHours() + (roundedMinutes >= 60 ? 1 : 0), 0, 0, 0);  // Set to a default hour (e.g., 7 PM)
+    currentTime.setHours(currentTime.getHours() + (roundedMinutes >= 60 ? 1 : 0), 0, 0, 0);
+    if (id === 'end-time') {
+      currentTime.setMinutes(currentTime.getMinutes() + 15);
+    }
     setSelectedTime(currentTime.toISOString());
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (isOpen && selectedTime) {
