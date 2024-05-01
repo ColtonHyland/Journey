@@ -25,6 +25,15 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
   const colors = ["bg-blue-200", "bg-green-200", "bg-red-200"]; // Faint shades for each color
   const backgroundColor = colors[index % colors.length];
 
+  const formatTime = (date) => {
+    const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+    return date.toLocaleTimeString([], options).replace(' AM', '').replace(' PM', '');
+  };
+  
+  const amPm = endTime.getHours() >= 12 ? ' PM' : ' AM';
+  const formattedStartTime = formatTime(startTime);
+  const formattedEndTime = formatTime(endTime);
+
   return (
     <div
       className={`absolute left-24 right-14 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300`}
@@ -43,8 +52,7 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
         {isDeleting ? 'Deleting...' : 'X'}
       </button>
       <div className="font-bold">{task.title}</div>
-      <div className="text-xs"> • {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-      {task.description && <p className="text-xs">{task.description}</p>}
+      <div className="text-xs"> • {formattedStartTime} - {formattedEndTime}{amPm}</div>      {task.description && <p className="text-xs">{task.description}</p>}
     </div>
   );
 };
