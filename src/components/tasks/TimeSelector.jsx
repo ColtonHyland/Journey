@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const TimeSelector = ({ id, onChange, label }) => {
+const TimeSelector = ({ id, onChange, label, defaultHour = 19 }) => {
   const [selectedTime, setSelectedTime] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
+  const dropdownRef = useRef(null); 
 
   useEffect(() => {
+    generateTimeOptions();
     const currentTime = new Date();
     const minutes = currentTime.getMinutes();
     const roundedMinutes = Math.ceil(minutes / 15) * 15;
     currentTime.setMinutes(roundedMinutes % 60);
-    currentTime.setHours(currentTime.getHours() + (roundedMinutes >= 60 ? 1 : 0));
+    currentTime.setHours(currentTime.getHours() + (roundedMinutes >= 60 ? 1 : 0), 0, 0, 0);  // Set to a default hour (e.g., 7 PM)
     setSelectedTime(currentTime.toISOString());
-    generateTimeOptions();
   }, []);
+
+  useEffect(() => {
+    if (isOpen && selectedTime) {
+      scrollToSelectedTime();
+    }
+  }, [isOpen, selectedTime]);
 
   const generateTimeOptions = () => {
     const times = [];
@@ -26,9 +33,17 @@ const TimeSelector = ({ id, onChange, label }) => {
     setOptions(times);
   };
 
+  const scrollToSelectedTime = () => {
+    const index = options.findIndex(option => option === selectedTime);
+    const node = dropdownRef.current;
+    if (node && index >= 0) {
+      const element = node.children[index];
+      if (element) element.scrollIntoView({ block: 'center' });
+    }
+  };
+
   const handleSelect = (isoTime) => {
     const time = new Date(isoTime);
-    const localTimeString = time.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
     const localDateTimeString = new Date(time.getTime() - (time.getTimezoneOffset() * 60000)).toISOString().replace('Z', '');
   
     setSelectedTime(localDateTimeString);
@@ -43,13 +58,13 @@ const TimeSelector = ({ id, onChange, label }) => {
       {label && <label htmlFor={id} className="block text-sm font-medium text-gray-700">{label}</label>}
       <div className="relative">
         <button
-        type="button"
+          type="button"
           className="block w-full p-2 border border-gray-300 rounded-md shadow-sm bg-white"
           onClick={() => setIsOpen(!isOpen)}>
           {new Date(selectedTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
         </button>
         {isOpen && (
-          <div className="absolute w-full border border-gray-300 rounded-md shadow-sm bg-white max-h-32 overflow-auto">
+          <div ref={dropdownRef} className="absolute w-full border border-gray-300 rounded-md shadow-sm bg-white max-h-32 overflow-auto">
             {options.map((isoTime, index) => (
               <div
                 key={index}
