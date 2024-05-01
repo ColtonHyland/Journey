@@ -1,14 +1,16 @@
-'use client';
-import React, { useState } from 'react';
-import { useTasks } from '@/app/context/TaskContext';
+"use client";
+import React, { useState } from "react";
+import { useTasks } from "@/app/context/TaskContext";
+import clsx from "clsx";
 
-const TaskItem = ({ task, hourHeight = 80 }) => {
+const TaskItem = ({ task, hourHeight = 80, index }) => {
   const { deleteTask } = useTasks();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const startTime = new Date(task.start_time);
   const endTime = new Date(task.end_time);
-  const startMinutesFromMidnight = startTime.getHours() * 60 + startTime.getMinutes();
+  const startMinutesFromMidnight =
+    startTime.getHours() * 60 + startTime.getMinutes();
   const endMinutesFromMidnight = endTime.getHours() * 60 + endTime.getMinutes();
   const durationMinutes = endMinutesFromMidnight - startMinutesFromMidnight;
   const top = (startMinutesFromMidnight / 60) * hourHeight;
@@ -18,11 +20,14 @@ const TaskItem = ({ task, hourHeight = 80 }) => {
     setIsDeleting(true);
     await deleteTask(task.task_id);
     setIsDeleting(false);
-};
+  };
+
+  const colors = ["bg-blue-200", "bg-green-200", "bg-red-200"]; // Faint shades for each color
+  const backgroundColor = colors[index % colors.length];
 
   return (
     <div
-      className="absolute left-24 right-14 rounded-lg bg-blue-300 text-white text-sm p-1 border border-dark-blue-3"
+      className={`absolute left-24 right-14 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300`}
       style={{
         top: `${top}px`,
         height: `${height}px`,
@@ -37,7 +42,8 @@ const TaskItem = ({ task, hourHeight = 80 }) => {
       >
         {isDeleting ? 'Deleting...' : 'X'}
       </button>
-      {task.title}
+      <div className="font-bold">{task.title}</div>
+      <div className="text-xs"> • {startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
       {task.description && <p className="text-xs">{task.description}</p>}
     </div>
   );

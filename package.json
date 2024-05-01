@@ -16,6 +16,7 @@
     "@vercel/postgres": "^0.4.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "clsx": "^2.1.1",
     "cookies": "^0.8.0",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.0.1",

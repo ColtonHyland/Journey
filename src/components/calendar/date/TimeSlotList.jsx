@@ -1,10 +1,10 @@
-'use client';
-import '@/app/globals.css'
-import React, { useRef, useEffect, useState } from 'react';
-import TimeSlot from './TimeSlot';
-import TaskItem from './TaskItem';
-import NewTaskForm from '@/components/tasks/NewTaskForm';
-import { useTasks } from '@/app/context/TaskContext';
+"use client";
+import "@/app/globals.css";
+import React, { useRef, useEffect, useState } from "react";
+import TimeSlot from "./TimeSlot";
+import TaskItem from "./TaskItem";
+import NewTaskForm from "@/components/tasks/NewTaskForm";
+import { useTasks } from "@/app/context/TaskContext";
 
 const TimeSlotList = ({ date }) => {
   const { tasks } = useTasks();
@@ -12,23 +12,28 @@ const TimeSlotList = ({ date }) => {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
-    const initialScrollPosition = savedScrollPosition ? parseInt(savedScrollPosition, 10) : 0;
+    const savedScrollPosition = sessionStorage.getItem("scrollPosition");
+    const initialScrollPosition = savedScrollPosition
+      ? parseInt(savedScrollPosition, 10)
+      : 0;
     if (containerRef.current) {
       containerRef.current.scrollTop = initialScrollPosition;
     }
 
     const handleScroll = () => {
       if (containerRef.current) {
-        sessionStorage.setItem('scrollPosition', containerRef.current.scrollTop);
+        sessionStorage.setItem(
+          "scrollPosition",
+          containerRef.current.scrollTop
+        );
       }
     };
 
-    containerRef.current.addEventListener('scroll', handleScroll);
+    containerRef.current.addEventListener("scroll", handleScroll);
 
     return () => {
       if (containerRef.current) {
-        containerRef.current.removeEventListener('scroll', handleScroll);
+        containerRef.current.removeEventListener("scroll", handleScroll);
       }
     };
   }, [date]);
@@ -52,12 +57,13 @@ const TimeSlotList = ({ date }) => {
         {Array.from({ length: 24 }, (_, i) => (
           <TimeSlot key={i} hour={i} />
         ))}
-        {tasks.map(task => (
-          <TaskItem key={task.task_id} task={task} />
+        {tasks.map((task, index) => (
+          <TaskItem key={task.task_id} task={task} index={index} />
         ))}
       </div>
     </>
   );
 };
+
 
 export default TimeSlotList;
