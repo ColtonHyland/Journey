@@ -101,7 +101,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
             <div className="flex-1 pl-2">
               <TimeSelector
                 id="end-time"
-                onChange={handleStartTimeChange}
+                onChange={(time) => setEndTime(time)}
               />
             </div>
           </div>
