@@ -25,11 +25,14 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
   const backgroundColor = colors[index % colors.length];
 
   const formatTime = (date) => {
-    const options = { hour: 'numeric', minute: '2-digit', hour12: true };
-    return date.toLocaleTimeString([], options).replace(' AM', '').replace(' PM', '');
+    const options = { hour: "numeric", minute: "2-digit", hour12: true };
+    return date
+      .toLocaleTimeString([], options)
+      .replace(" AM", "")
+      .replace(" PM", "");
   };
-  
-  const amPm = endTime.getHours() >= 12 ? ' PM' : ' AM';
+
+  const amPm = endTime.getHours() >= 12 ? " PM" : " AM";
   const formattedStartTime = formatTime(startTime);
   const formattedEndTime = formatTime(endTime);
 
@@ -39,19 +42,26 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
       style={{
         top: `${top}px`,
         height: `${height}px`,
-        zIndex: 10
+        zIndex: 10,
       }}
     >
       <button
         onClick={handleDelete}
         disabled={isDeleting}
         className="absolute top-0 right-0 text-red-500 hover:text-red-700 focus:outline-none"
-        style={{ padding: '4px' }}
+        style={{ padding: "4px" }}
       >
-        {isDeleting ? 'Deleting...' : 'X'}
+        {isDeleting ? "Deleting..." : "X"}
       </button>
-      <div className="font-bold">{task.title}</div>
-      <div className="text-xs"> • {formattedStartTime} - {formattedEndTime}{amPm}</div>      {task.description && <p className="text-xs">{task.description}</p>}
+      <div>
+        <span className="font-bold">{task.title}</span>
+        <span className="text-xs">
+          {" "}
+          • {formattedStartTime} - {formattedEndTime}
+          {amPm}
+        </span>
+      </div>{" "}
+      {task.description && <p className="text-xs">{task.description}</p>}
     </div>
   );
 };
