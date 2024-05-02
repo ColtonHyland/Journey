@@ -57,7 +57,7 @@ const JournalEntryField = ({ date }) => {
     }, [date]);
 
     return (
-        <div className="flex flex-col h-full p-4 relative">
+        <div className="flex flex-col h-full relative">
         <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
         <textarea
             value={journalEntry}
