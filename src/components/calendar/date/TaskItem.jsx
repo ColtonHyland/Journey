@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { useTasks } from "@/app/context/TaskContext";
-import clsx from "clsx";
 
 const TaskItem = ({ task, hourHeight = 80, index }) => {
   const { deleteTask } = useTasks();
