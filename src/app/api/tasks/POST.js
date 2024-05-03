@@ -19,7 +19,7 @@ export async function POST(request) {
         title,
         description,
         userId: session.user.id,
-        assigned_date: new Date(assigned_date), // This is just the date
+        assigned_date: new Date(assigned_date),
         start_time: new Date(start_time),
         end_time: new Date(end_time),
       },

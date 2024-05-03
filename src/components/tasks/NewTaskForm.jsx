@@ -3,6 +3,7 @@ import Draggable from 'react-draggable';
 import TimeSelector from './TimeSelector';
 import { useTasks } from '@/app/context/TaskContext';
 import { formatInTimeZone } from 'date-fns-tz';
+// import Modal from './Modal';
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState('');
@@ -10,17 +11,42 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [assignedDate, setAssignedDate] = useState(date);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [isRepeating, setIsRepeating] = useState(false);
+  const [repeatUntil, setRepeatUntil] = useState('');
+  const [repeatDays, setRepeatDays] = useState({
+    Monday: false,
+    Tuesday: false,
+    Wednesday: false,
+    Thursday: false,
+    Friday: false,
+    Saturday: false,
+    Sunday: false,
+  });
   const [error, setError] = useState('');
   const { tasks, addTask } = useTasks();
 
   useEffect(() => {
-    // Set initial times considering the user's local timezone
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const now = new Date();
     now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
     setStartTime(formatInTimeZone(now, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
     setEndTime(formatInTimeZone(new Date(now.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
   }, [date]);
+
+  const handleRepeatChange = (event) => {
+    setIsRepeating(event.target.checked);
+  };
+
+  const handleRepeatUntilChange = (event) => {
+    setRepeatUntil(event.target.value);
+  };
+
+  const handleDayChange = (day) => {
+    setRepeatDays(prevDays => ({
+      ...prevDays,
+      [day]: !prevDays[day]
+    }));
+  };
 
   const handleStartTimeChange = (isoTime) => {
     try {
@@ -127,6 +153,22 @@ const NewTaskForm = ({ setShowForm, date }) => {
               />
             </div>
           </div>
+          {/* {isRepeating && (
+          <Modal onClose={() => setIsRepeating(false)}>
+            <label>Repeat until:
+              <input type="date" value={repeatUntil} onChange={handleRepeatUntilChange} />
+            </label>
+            <div>
+              {Object.keys(repeatDays).map(day => (
+                <label key={day}>
+                  <input type="checkbox" checked={repeatDays[day]} onChange={() => handleDayChange(day)} />
+                  {day}
+                </label>
+              ))}
+            </div>
+            <button onClick={() => setIsRepeating(false)}>Confirm</button>
+          </Modal>
+        )} */}
           {error && <div className="text-red-500">{error}</div>}
           <button
             type="submit"
