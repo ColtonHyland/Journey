@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import TimeSelector from './TimeSelector';
 import { useTasks } from '@/app/context/TaskContext';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState('');
@@ -13,38 +14,43 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const { addTask } = useTasks();
 
   useEffect(() => {
-    const current = new Date();
-    current.setMinutes(Math.ceil(current.getMinutes() / 15) * 15);
-    const initialTime = current.toISOString();
-    setStartTime(initialTime);
-    setEndTime(new Date(current.getTime() + 15 * 60000).toISOString());
+    // Set initial times considering the user's local timezone
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const now = new Date();
+    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
+    setStartTime(formatInTimeZone(now, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+    setEndTime(formatInTimeZone(new Date(now.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
   }, [date]);
 
   const handleStartTimeChange = (isoTime) => {
     try {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const parsedTime = new Date(isoTime);
-      setStartTime(isoTime);
+      setStartTime(formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
       const endDate = new Date(parsedTime.getTime() + 15 * 60000);
-      setEndTime(endDate.toISOString());
+      setEndTime(formatInTimeZone(endDate, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
     } catch (error) {
       console.error("Error parsing date:", error);
+      setError("Failed to parse start time");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const startTimeStr = new Date(startTime).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-    const endTimeStr = new Date(endTime).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-    
+
+    if (!assignedDate || !startTime || !endTime) {
+      setError('Please ensure all date and time fields are filled correctly.');
+      return;
+    }
+
     const newTask = {
       title,
       description,
       assigned_date: assignedDate,
-      start_time: startTimeStr,   
-      end_time: endTimeStr,  
+      start_time: startTime, // Already in UTC format
+      end_time: endTime,    // Already in UTC format
     };
-  
+
     try {
       await addTask(newTask);
       setShowForm(false);

@@ -10,20 +10,18 @@ export async function POST(request) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
   }
   const userId = session.user.id;
-  const { title, description, goalId, assigned_date, start_time, end_time } = await request.json();
+  const { title, description, goalId, assigned_date, start_time, end_time} = await request.json();
 
   try {
-    const startDateTime = new Date(`${assigned_date}T${start_time}:00`).toISOString();
-    const endDateTime = new Date(`${assigned_date}T${end_time}:00`).toISOString();
-    
+
     const task = await prisma.task.create({
       data: {
         title,
         description,
         userId: session.user.id,
-        assigned_date: new Date(assigned_date).toISOString(), 
-        start_time: startDateTime,
-        end_time: endDateTime,
+        assigned_date: new Date(assigned_date), // This is just the date
+        start_time: new Date(start_time),
+        end_time: new Date(end_time),
       },
     });
 
