@@ -11,7 +11,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [error, setError] = useState('');
-  const { addTask } = useTasks();
+  const { tasks, addTask } = useTasks();
 
   useEffect(() => {
     // Set initial times considering the user's local timezone
@@ -43,15 +43,31 @@ const NewTaskForm = ({ setShowForm, date }) => {
       return;
     }
 
-    const newTask = {
-      title,
-      description,
-      assigned_date: assignedDate,
-      start_time: startTime, // Already in UTC format
-      end_time: endTime,    // Already in UTC format
-    };
+    const startDateTime = new Date(`${assignedDate}T${startTime.substring(11, 19)}`);
+    const endDateTime = new Date(`${assignedDate}T${endTime.substring(11, 19)}`);
+
+    // Conflict checking
+    const newTaskInterval = { start: startDateTime, end: endDateTime };
+    for (const task of tasks) {
+        const taskStart = new Date(task.start_time);
+        const taskEnd = new Date(task.end_time);
+        if (newTaskInterval.start < taskEnd && newTaskInterval.end > taskStart) {
+          if (!(newTaskInterval.start.getTime() === taskEnd.getTime() || newTaskInterval.end.getTime() === taskStart.getTime())) {
+            setError('Task times cannot overlap with existing tasks.');
+            return;
+          }
+        }
+    }
 
     try {
+      const newTask = {
+        title,
+        description,
+        assigned_date: assignedDate,
+        start_time: startTime, // Already in UTC format
+        end_time: endTime,    // Already in UTC format
+      };
+
       await addTask(newTask);
       setShowForm(false);
       setTitle('');
