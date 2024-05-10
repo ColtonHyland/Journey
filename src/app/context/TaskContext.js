@@ -12,14 +12,13 @@ export const TaskProvider = ({ children, date }) => {
   const timeConflict = (newTask) => {
     console.log("Checking for conflicts with new task:", newTask);
     return tasks.some(task => {
-        // Ensure correct string format for Date parsing
-        const taskStartStr = `${task.assigned_date.split('T')[0]} ${task.start_time}`;
-        const taskEndStr = `${task.assigned_date.split('T')[0]} ${task.end_time}`;
+        const taskStartStr = `${task.assigned_date} ${task.start_time}:00`;
+        const taskEndStr = `${task.assigned_date} ${task.end_time}:00`;
         const taskStart = new Date(taskStartStr);
         const taskEnd = new Date(taskEndStr);
 
-        const newTaskStartStr = `${newTask.assigned_date} ${newTask.start_time}`;
-        const newTaskEndStr = `${newTask.assigned_date} ${newTask.end_time}`;
+        const newTaskStartStr = `${newTask.assigned_date} ${newTask.start_time}:00`;
+        const newTaskEndStr = `${newTask.assigned_date} ${newTask.end_time}:00`;
         const newTaskStart = new Date(newTaskStartStr);
         const newTaskEnd = new Date(newTaskEndStr);
 
@@ -37,8 +36,7 @@ export const TaskProvider = ({ children, date }) => {
     });
 };
 
-
-const fetchTasks = async () => {
+  const fetchTasks = async () => {
     setLoading(true);
     try {
         const response = await fetch(`/api/tasks/dailyTasks/${date}`, {
@@ -61,27 +59,26 @@ const fetchTasks = async () => {
     }
 };
 
-const addTask = async (newTaskDetails) => {
-    console.log("Adding new task with details: ", newTaskDetails);
+  const addTask = async (newTaskDetails) => {
     if (timeConflict(newTaskDetails)) {
-        console.log("Conflict detected, cannot add task.");
-        setError('Cannot add task that overlaps with another task.');
-        return;
+      console.log("Conflict detected, cannot add task.");
+      setError("Cannot add task that overlaps with another task.");
+      return;
     }
     try {
-        const response = await fetch('/api/tasks', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(newTaskDetails),
-        });
-        if (!response.ok) throw new Error('Failed to add task');
-        console.log("Task added successfully.");
-        fetchTasks();
+      const response = await fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTaskDetails),
+      });
+      if (!response.ok) throw new Error("Failed to add task");
+      console.log("Task added successfully.");
+      fetchTasks();
     } catch (error) {
-        console.error("Error adding task:", error);
-        setError(error.message);
+      console.error("Error adding task:", error);
+      setError(error.message);
     }
-};
+  };
 
   const deleteTask = async (taskId) => {
     // Optimistically remove the task from the UI
