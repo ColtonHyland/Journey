@@ -5,24 +5,20 @@ const TimeSelector = ({ id, onChange, label }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // useMemo to avoid recalculating time options unnecessarily
   const options = useMemo(() => {
     const times = [];
     let currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
-    for (let i = 0; i < 4 * 24; i++) {  // generates 15-minute increments for 24 hours
+    for (let i = 0; i < 4 * 24; i++) {
       times.push(new Date(currentDate).toISOString());
       currentDate.setMinutes(currentDate.getMinutes() + 15);
     }
     return times;
-  }, []);  // Dependencies array is empty, so this only runs once on mount
+  }, []);
 
   useEffect(() => {
     const currentTime = new Date();
-    const minutes = currentTime.getMinutes();
-    const roundedMinutes = Math.ceil(minutes / 15) * 15;
-    currentTime.setMinutes(roundedMinutes % 60);
-    currentTime.setHours(currentTime.getHours() + (roundedMinutes >= 60 ? 1 : 0), 0, 0, 0);
+    currentTime.setMinutes(Math.ceil(currentTime.getMinutes() / 15) * 15);
     if (id === 'end-time') {
       currentTime.setMinutes(currentTime.getMinutes() + 15);
     }
@@ -45,12 +41,10 @@ const TimeSelector = ({ id, onChange, label }) => {
   };
 
   const handleSelect = (isoTime) => {
-    const time = new Date(isoTime);
-    const localDateTimeString = new Date(time.getTime() - (time.getTimezoneOffset() * 60000)).toISOString().replace('Z', '');
-    setSelectedTime(localDateTimeString);
+    setSelectedTime(isoTime);
     setIsOpen(false);
     if (onChange) {
-      onChange(localDateTimeString);
+      onChange(isoTime);
     }
   };
 

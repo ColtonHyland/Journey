@@ -62,41 +62,52 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!assignedDate || !startTime || !endTime) {
       setError("Please ensure all date and time fields are filled correctly.");
       return;
     }
-  
-    const startDateTime = new Date(`${assignedDate}T${startTime.substring(11, 19)}`);
-    const endDateTime = new Date(`${assignedDate}T${endTime.substring(11, 19)}`);
-  
+
+    const startDateTime = new Date(
+      `${assignedDate}T${startTime.substring(11, 19)}`
+    );
+    const endDateTime = new Date(
+      `${assignedDate}T${endTime.substring(11, 19)}`
+    );
+
     // Conflict checking
     const newTaskInterval = { start: startDateTime, end: endDateTime };
     for (const task of tasks) {
       const taskStart = new Date(task.start_time);
       const taskEnd = new Date(task.end_time);
       if (newTaskInterval.start < taskEnd && newTaskInterval.end > taskStart) {
-        if (!(newTaskInterval.start.getTime() === taskEnd.getTime() || newTaskInterval.end.getTime() === taskStart.getTime())) {
+        if (
+          !(
+            newTaskInterval.start.getTime() === taskEnd.getTime() ||
+            newTaskInterval.end.getTime() === taskStart.getTime()
+          )
+        ) {
           setError("Task times cannot overlap with existing tasks.");
           return;
         }
       }
     }
-  
-    const daysOfWeekSelected = Object.entries(daysOfWeek).filter(([_, checked]) => checked).map(([day, _]) => day);
-  
+
+    const daysOfWeekSelected = Object.entries(daysOfWeek)
+      .filter(([_, checked]) => checked)
+      .map(([day, _]) => day);
+
     const newTask = {
       title,
       description,
       assigned_date: assignedDate,
       start_time: startTime, // Already in UTC format
-      end_time: endTime,    // Already in UTC format
+      end_time: endTime, // Already in UTC format
       repeat: repeat,
       repeatUntil: repeat ? repeatUntil : undefined,
-      daysOfWeek: repeat ? daysOfWeekSelected : undefined
+      daysOfWeek: repeat ? daysOfWeekSelected : undefined,
     };
-  
+
     try {
       await addTask(newTask);
       setShowForm(false);
@@ -112,7 +123,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
         Wednesday: false,
         Thursday: false,
         Friday: false,
-        Saturday: false
+        Saturday: false,
       });
       setError("");
     } catch (error) {
@@ -161,9 +172,11 @@ const NewTaskForm = ({ setShowForm, date }) => {
           />
           <div className="flex justify-between">
             <div className="flex-1 pr-2">
+              <div className="text-gray-600 text-sm">Start</div>
               <TimeSelector id="start-time" onChange={handleStartTimeChange} />
             </div>
             <div className="flex-1 pl-2">
+              <div className="text-gray-600 text-sm">End</div>
               <TimeSelector
                 id="end-time"
                 onChange={(time) => setEndTime(time)}
@@ -215,7 +228,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
                   type="button"
                   onClick={() => {
                     setShowModal(false);
-                    // Implement logic to handle the confirmation of repetition settings
                   }}
                 >
                   Confirm

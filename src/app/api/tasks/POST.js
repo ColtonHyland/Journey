@@ -23,17 +23,20 @@ export async function POST(request) {
   } = await request.json();
 
   // Map days of the week from names to indices
-  const dayIndices = {
-    'Sunday': 0,
-    'Monday': 1,
-    'Tuesday': 2,
-    'Wednesday': 3,
-    'Thursday': 4,
-    'Friday': 5,
-    'Saturday': 6
-  };
-  const daysOfWeekIndices = daysOfWeek.map(day => dayIndices[day]);
-
+  let daysOfWeekIndices = [];
+  if (daysOfWeek && Array.isArray(daysOfWeek)) {
+    const dayIndices = {
+      'Sunday': 0,
+      'Monday': 1,
+      'Tuesday': 2,
+      'Wednesday': 3,
+      'Thursday': 4,
+      'Friday': 5,
+      'Saturday': 6
+    };
+    daysOfWeekIndices = daysOfWeek.map(day => dayIndices[day]);
+  }
+  
   try {
     const tasks = [];
     if (daysOfWeek && repeatUntil) {

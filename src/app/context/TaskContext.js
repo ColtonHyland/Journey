@@ -10,7 +10,6 @@ export const TaskProvider = ({ children, date }) => {
   const [error, setError] = useState(null);
 
   const timeConflict = (newTask) => {
-    console.log("Checking for conflicts with new task:", newTask);
     return tasks.some(task => {
         const taskStartStr = `${task.assigned_date} ${task.start_time}:00`;
         const taskEndStr = `${task.assigned_date} ${task.end_time}:00`;
@@ -21,16 +20,10 @@ export const TaskProvider = ({ children, date }) => {
         const newTaskEndStr = `${newTask.assigned_date} ${newTask.end_time}:00`;
         const newTaskStart = new Date(newTaskStartStr);
         const newTaskEnd = new Date(newTaskEndStr);
-
-        console.log(`Task being checked against: `, { taskStartStr, taskEndStr, taskStart, taskEnd });
-        console.log(`New task times: `, { newTaskStartStr, newTaskEndStr, newTaskStart, newTaskEnd });
-
         const startConflict = newTaskStart < taskEnd && newTaskStart >= taskStart;
         const endConflict = newTaskEnd > taskStart && newTaskEnd <= taskEnd;
         const exactStartConflict = newTaskStart.getTime() === taskStart.getTime();
         const exactEndConflict = newTaskEnd.getTime() === taskEnd.getTime();
-
-        console.log(`Conflict details: `, { startConflict, endConflict, exactStartConflict, exactEndConflict });
 
         return startConflict || endConflict || exactStartConflict || exactEndConflict;
     });
@@ -45,11 +38,7 @@ export const TaskProvider = ({ children, date }) => {
         });
         if (!response.ok) throw new Error('Failed to fetch tasks');
         const data = await response.json();
-        console.log("Tasks fetched: ", data.dailyTasks.map(task => ({
-            assigned_date: task.assigned_date,
-            start_time: task.start_time,
-            end_time: task.end_time
-        })));
+
         setTasks(data.dailyTasks);
     } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -60,10 +49,7 @@ export const TaskProvider = ({ children, date }) => {
 };
 
 const addTask = async (newTaskDetails) => {
-  console.log("Submitting new task with details:", newTaskDetails); // Log the task details being submitted
-
   if (timeConflict(newTaskDetails)) {
-    console.log("Conflict detected, cannot add task.");
     setError("Cannot add task that overlaps with another task.");
     return;
   }
@@ -79,7 +65,6 @@ const addTask = async (newTaskDetails) => {
       throw new Error("Failed to add task");
     }
     const addedTask = await response.json(); // Assuming the response includes the added task data
-    console.log("Task added successfully:", addedTask); // Log the response from the server
     fetchTasks(); // Refresh the tasks list
   } catch (error) {
     console.error("Error adding task:", error);
