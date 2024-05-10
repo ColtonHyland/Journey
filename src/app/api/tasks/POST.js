@@ -36,7 +36,7 @@ export async function POST(request) {
     };
     daysOfWeekIndices = daysOfWeek.map(day => dayIndices[day]);
   }
-  
+
   try {
     const tasks = [];
     if (daysOfWeek && repeatUntil) {
@@ -57,7 +57,6 @@ export async function POST(request) {
             start_time: startTimeComplete,
             end_time: endTimeComplete,
           };
-          console.log("Creating task with:", taskData);
           const task = await prisma.task.create({ data: taskData });
           tasks.push(task);
         }
@@ -78,7 +77,6 @@ export async function POST(request) {
       tasks.push(task);
     }
 
-    console.log("Tasks created:", tasks.length); // Log how many tasks were created
     return new NextResponse(JSON.stringify({ tasks }), {
       status: 201,
       headers: {
