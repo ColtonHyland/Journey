@@ -22,68 +22,79 @@ export async function POST(request) {
     daysOfWeek,
   } = await request.json();
 
-  console.log("Received task data:", { title, description, goalId, assigned_date, start_time, end_time, repeatUntil, daysOfWeek });
-
+  // Map days of the week from names to indices
+  const dayIndices = {
+    'Sunday': 0,
+    'Monday': 1,
+    'Tuesday': 2,
+    'Wednesday': 3,
+    'Thursday': 4,
+    'Friday': 5,
+    'Saturday': 6
+  };
+  const daysOfWeekIndices = daysOfWeek.map(day => dayIndices[day]);
 
   try {
     const tasks = [];
     if (daysOfWeek && repeatUntil) {
-        // Generate tasks for each selected day of the week until the repeatUntil date
-        const endDate = new Date(repeatUntil);
-        let currentDate = new Date(assigned_date);
-        console.log(`Generating repeated tasks from ${currentDate.toISOString()} to ${endDate.toISOString()}`);
+      const endDate = new Date(repeatUntil);
+      let currentDate = new Date(assigned_date);
 
-        while (currentDate <= endDate) {
-            const dayOfWeek = currentDate.getDay(); // Sunday = 0, Monday = 1, ..., Saturday = 6
-            console.log(`Checking date: ${currentDate.toISOString()} (Day ${dayOfWeek})`);
-
-            if (daysOfWeek.includes(dayOfWeek)) {
-                const taskData = {
-                    title,
-                    description,
-                    userId,
-                    goalId,
-                    assigned_date: currentDate,
-                    start_time: new Date(`${currentDate.toISOString().split('T')[0]}T${start_time}`),
-                    end_time: new Date(`${currentDate.toISOString().split('T')[0]}T${end_time}`),
-                };
-                console.log("Creating task on:", currentDate.toISOString());
-                const task = await prisma.task.create({ data: taskData });
-                tasks.push(task);
-            }
-            currentDate.setDate(currentDate.getDate() + 1);
+      while (currentDate <= endDate) {
+        const dayOfWeek = currentDate.getDay();
+        if (daysOfWeekIndices.includes(dayOfWeek)) {
+          const startTimeComplete = new Date(`${currentDate.toISOString().split('T')[0]}T${start_time.split('T')[1]}`);
+          const endTimeComplete = new Date(`${currentDate.toISOString().split('T')[0]}T${end_time.split('T')[1]}`);
+          const taskData = {
+            title,
+            description,
+            userId,
+            goalId,
+            assigned_date: currentDate,
+            start_time: startTimeComplete,
+            end_time: endTimeComplete,
+          };
+          console.log("Creating task with:", taskData);
+          const task = await prisma.task.create({ data: taskData });
+          tasks.push(task);
         }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
     } else {
-        // Create a single task if not repeating
-        console.log("Creating a single task on:", assigned_date);
-        const task = await prisma.task.create({
-            data: {
-                title,
-                description,
-                userId,
-                goalId,
-                assigned_date: new Date(assigned_date),
-                start_time: new Date(start_time),
-                end_time: new Date(end_time),
-            },
-        });
-        tasks.push(task);
+      const task = await prisma.task.create({
+        data: {
+          title,
+          description,
+          userId,
+          goalId,
+          assigned_date: new Date(assigned_date),
+          start_time: new Date(start_time),
+          end_time: new Date(end_time),
+        },
+      });
+      tasks.push(task);
     }
 
-    console.log("Created tasks count:", tasks.length);
+    console.log("Tasks created:", tasks.length); // Log how many tasks were created
     return new NextResponse(JSON.stringify({ tasks }), {
-        status: 201,
-        headers: {
-            'Content-Type': 'application/json',
-        },
+      status: 201,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-} catch (error) {
+  } catch (error) {
     console.error("Error creating tasks:", error);
-    return new NextResponse(JSON.stringify({ error: "Failed to create tasks", details: error.message }), {
+    return new NextResponse(
+      JSON.stringify({
+        error: "Failed to create tasks",
+        details: error.message,
+      }),
+      {
         status: 500,
         headers: {
-            'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-    });
-}
+      }
+    );
+  }
 }

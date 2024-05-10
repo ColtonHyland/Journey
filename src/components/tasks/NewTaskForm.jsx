@@ -62,52 +62,58 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!assignedDate || !startTime || !endTime) {
       setError("Please ensure all date and time fields are filled correctly.");
       return;
     }
-
-    const startDateTime = new Date(
-      `${assignedDate}T${startTime.substring(11, 19)}`
-    );
-    const endDateTime = new Date(
-      `${assignedDate}T${endTime.substring(11, 19)}`
-    );
-
+  
+    const startDateTime = new Date(`${assignedDate}T${startTime.substring(11, 19)}`);
+    const endDateTime = new Date(`${assignedDate}T${endTime.substring(11, 19)}`);
+  
     // Conflict checking
     const newTaskInterval = { start: startDateTime, end: endDateTime };
     for (const task of tasks) {
       const taskStart = new Date(task.start_time);
       const taskEnd = new Date(task.end_time);
       if (newTaskInterval.start < taskEnd && newTaskInterval.end > taskStart) {
-        if (
-          !(
-            newTaskInterval.start.getTime() === taskEnd.getTime() ||
-            newTaskInterval.end.getTime() === taskStart.getTime()
-          )
-        ) {
+        if (!(newTaskInterval.start.getTime() === taskEnd.getTime() || newTaskInterval.end.getTime() === taskStart.getTime())) {
           setError("Task times cannot overlap with existing tasks.");
           return;
         }
       }
     }
-
+  
+    const daysOfWeekSelected = Object.entries(daysOfWeek).filter(([_, checked]) => checked).map(([day, _]) => day);
+  
+    const newTask = {
+      title,
+      description,
+      assigned_date: assignedDate,
+      start_time: startTime, // Already in UTC format
+      end_time: endTime,    // Already in UTC format
+      repeat: repeat,
+      repeatUntil: repeat ? repeatUntil : undefined,
+      daysOfWeek: repeat ? daysOfWeekSelected : undefined
+    };
+  
     try {
-      const newTask = {
-        title,
-        description,
-        assigned_date: assignedDate,
-        start_time: startTime, // Already in UTC format
-        end_time: endTime, // Already in UTC format
-      };
-
       await addTask(newTask);
       setShowForm(false);
       setTitle("");
       setDescription("");
       setStartTime("");
       setEndTime("");
+      setRepeat(false);
+      setDaysOfWeek({
+        Sunday: false,
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false,
+        Saturday: false
+      });
       setError("");
     } catch (error) {
       console.error("Error during form submission:", error);

@@ -59,26 +59,33 @@ export const TaskProvider = ({ children, date }) => {
     }
 };
 
-  const addTask = async (newTaskDetails) => {
-    if (timeConflict(newTaskDetails)) {
-      console.log("Conflict detected, cannot add task.");
-      setError("Cannot add task that overlaps with another task.");
-      return;
+const addTask = async (newTaskDetails) => {
+  console.log("Submitting new task with details:", newTaskDetails); // Log the task details being submitted
+
+  if (timeConflict(newTaskDetails)) {
+    console.log("Conflict detected, cannot add task.");
+    setError("Cannot add task that overlaps with another task.");
+    return;
+  }
+  try {
+    const response = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTaskDetails),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Failed to add task:", errorData);
+      throw new Error("Failed to add task");
     }
-    try {
-      const response = await fetch("/api/tasks", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newTaskDetails),
-      });
-      if (!response.ok) throw new Error("Failed to add task");
-      console.log("Task added successfully.");
-      fetchTasks();
-    } catch (error) {
-      console.error("Error adding task:", error);
-      setError(error.message);
-    }
-  };
+    const addedTask = await response.json(); // Assuming the response includes the added task data
+    console.log("Task added successfully:", addedTask); // Log the response from the server
+    fetchTasks(); // Refresh the tasks list
+  } catch (error) {
+    console.error("Error adding task:", error);
+    setError(error.message);
+  }
+};
 
   const deleteTask = async (taskId) => {
     // Optimistically remove the task from the UI
