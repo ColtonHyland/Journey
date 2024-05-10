@@ -38,7 +38,7 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
 
   return (
     <div
-      className={`absolute left-24 right-14 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300`}
+      className={`absolute left-24 right-8 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300`}
       style={{
         top: `${top}px`,
         height: `${height}px`,
