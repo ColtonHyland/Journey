@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { MdClose } from "react-icons/md";
 
 const Modal = ({ onClose, children }) => {
   const handleOutsideClick = (e) => {

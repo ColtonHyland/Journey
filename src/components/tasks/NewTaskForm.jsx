@@ -4,7 +4,7 @@ import TimeSelector from "./TimeSelector";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
 import Modal from "./Modal";
-import { MdClose } from 'react-icons/md';
+import { MdClose } from "react-icons/md";
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState("");
@@ -133,6 +133,16 @@ const NewTaskForm = ({ setShowForm, date }) => {
     }
   };
 
+  const handleModalClose = () => {
+    // Ensure at least one day is selected before allowing to close the modal on confirm
+    const anyDaySelected = Object.values(daysOfWeek).some(Boolean);
+    if (anyDaySelected) {
+      setShowModal(false);
+    } else {
+      setError("Please select at least one day to repeat.");
+    }
+  };
+
   return (
     <Draggable handle=".handle">
       <div
@@ -198,49 +208,36 @@ const NewTaskForm = ({ setShowForm, date }) => {
           </div>
           {showModal && (
             <Modal onClose={() => setShowModal(false)}>
-              <form>
-                <label htmlFor="repeat-until">Repeat until:</label>
-                <input
-                  type="date"
-                  id="repeat-until"
-                  value={repeatUntil}
-                  onChange={(e) => setRepeatUntil(e.target.value)}
-                />
+              <div className="space-y-4">
                 {Object.keys(daysOfWeek).map((day) => (
-                  <div key={day}>
+                  <div key={day} className="flex items-center">
                     <input
                       type="checkbox"
                       id={day}
                       checked={daysOfWeek[day]}
-                      onChange={(e) =>
-                        setDaysOfWeek({
-                          ...daysOfWeek,
-                          [day]: e.target.checked,
-                        })
-                      }
+                      onChange={(e) => setDaysOfWeek({
+                        ...daysOfWeek,
+                        [day]: e.target.checked
+                      })}
+                      className="mr-2"
                     />
                     <label htmlFor={day}>{day}</label>
                   </div>
                 ))}
-                <button type="button" onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowModal(false);
-                  }}
-                >
-                  Confirm
-                </button>
-              </form>
+                <div className="flex justify-between mt-4">
+                  <button type="button" onClick={() => setShowModal(false)} className="py-2 px-4 bg-white text-black border-none rounded-md">
+                    Cancel
+                  </button>
+                  <button type="button" onClick={handleModalClose} className="py-2 px-4 bg-black text-white rounded-md">
+                    Confirm
+                  </button>
+                </div>
+              </div>
             </Modal>
           )}
+
           {error && <div className="text-red-500">{error}</div>}
-          <button
-            type="submit"
-            className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
-          >
+          <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
             Confirm
           </button>
         </form>
