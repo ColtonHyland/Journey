@@ -4,6 +4,7 @@ import TimeSelector from "./TimeSelector";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
 import Modal from "./Modal";
+import { MdClose } from 'react-icons/md';
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState("");
@@ -142,7 +143,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
           onClick={() => setShowForm(false)}
           className="text-gray-500 hover:text-gray-700 absolute right-2 top-2"
         >
-          <span className="text-xl">&times;</span>
+          <MdClose />
         </button>
         <form onSubmit={handleSubmit} className="space-y-4 pt-2">
           <input

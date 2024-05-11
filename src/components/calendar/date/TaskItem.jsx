@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTasks } from "@/app/context/TaskContext";
+import { MdClose } from 'react-icons/md';
 
 const TaskItem = ({ task, hourHeight = 80, index }) => {
   const { deleteTask } = useTasks();
@@ -48,10 +49,10 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
       <button
         onClick={handleDelete}
         disabled={isDeleting}
-        className="absolute top-0 right-0 text-red-500 hover:text-red-700 focus:outline-none"
+        className="absolute top-0 right-0 text-black focus:outline-none"
         style={{ padding: "4px" }}
       >
-        {isDeleting ? "Deleting..." : "X"}
+        {isDeleting ? "Deleting..." : <MdClose />}
       </button>
       <div>
         <span className="font-bold">{task.title}</span>
