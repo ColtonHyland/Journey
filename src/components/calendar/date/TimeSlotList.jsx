@@ -5,6 +5,7 @@ import TimeSlot from "./TimeSlot";
 import TaskItem from "./TaskItem";
 import NewTaskForm from "@/components/tasks/NewTaskForm";
 import { useTasks } from "@/app/context/TaskContext";
+import { MdAdd } from "react-icons/md";
 
 const TimeSlotList = ({ date }) => {
   const { tasks } = useTasks();
@@ -50,7 +51,7 @@ const TimeSlotList = ({ date }) => {
         className="inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
         style={{ whiteSpace: "nowrap", position: 'relative', top: '25%', transform: 'translateY(-50%)' }}
       >
-        <span className="mr-2">+</span>Add Task
+        <span className="mr-1"><MdAdd /></span>Add Task
       </button>
     </div>
       {showForm && <NewTaskForm setShowForm={setShowForm} date={date} />}
