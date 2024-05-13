@@ -3,7 +3,7 @@ import Draggable from "react-draggable";
 import TimeSelector from "./TimeSelector";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
-import Modal from "./Modal";
+import RepeatOptions from "./RepeatOptions";
 import { MdClose } from "react-icons/md";
 
 const NewTaskForm = ({ setShowForm, date }) => {
@@ -12,10 +12,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [assignedDate, setAssignedDate] = useState(date);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-
-  const [repeat, setRepeat] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [repeatUntil, setRepeatUntil] = useState("");
+  const [showRepeatOptions, setShowRepeatOptions] = useState(false);
   const [daysOfWeek, setDaysOfWeek] = useState({
     Sunday: false,
     Monday: false,
@@ -25,38 +22,24 @@ const NewTaskForm = ({ setShowForm, date }) => {
     Friday: false,
     Saturday: false,
   });
-
   const [error, setError] = useState("");
   const { tasks, addTask } = useTasks();
 
   useEffect(() => {
-    // Set initial times considering the user's local timezone
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const now = new Date();
     now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
     setStartTime(formatInTimeZone(now, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
-    setEndTime(
-      formatInTimeZone(
-        new Date(now.getTime() + 15 * 60000),
-        timeZone,
-        "yyyy-MM-dd'T'HH:mm:ssXXX"
-      )
-    );
+    setEndTime(formatInTimeZone(new Date(now.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
   }, [date]);
 
   const handleStartTimeChange = (isoTime) => {
     try {
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const parsedTime = new Date(isoTime);
-      setStartTime(
-        formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX")
-      );
-      const endDate = new Date(parsedTime.getTime() + 15 * 60000);
-      setEndTime(
-        formatInTimeZone(endDate, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX")
-      );
+      setStartTime(formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+      setEndTime(formatInTimeZone(new Date(parsedTime.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
     } catch (error) {
-      console.error("Error parsing date:", error);
       setError("Failed to parse start time");
     }
   };
@@ -69,54 +52,58 @@ const NewTaskForm = ({ setShowForm, date }) => {
       return;
     }
 
-    const startDateTime = new Date(
-      `${assignedDate}T${startTime.substring(11, 19)}`
-    );
-    const endDateTime = new Date(
-      `${assignedDate}T${endTime.substring(11, 19)}`
-    );
-
-    // Conflict checking
-    const newTaskInterval = { start: startDateTime, end: endDateTime };
-    for (const task of tasks) {
-      const taskStart = new Date(task.start_time);
-      const taskEnd = new Date(task.end_time);
-      if (newTaskInterval.start < taskEnd && newTaskInterval.end > taskStart) {
-        if (
-          !(
-            newTaskInterval.start.getTime() === taskEnd.getTime() ||
-            newTaskInterval.end.getTime() === taskStart.getTime()
-          )
-        ) {
-          setError("Task times cannot overlap with existing tasks.");
-          return;
-        }
-      }
-    }
-
-    const daysOfWeekSelected = Object.entries(daysOfWeek)
-      .filter(([_, checked]) => checked)
-      .map(([day, _]) => day);
+    const startDateTime = new Date(`${assignedDate}T${startTime.substring(11, 19)}`);
+    const endDateTime = new Date(`${assignedDate}T${endTime.substring(11, 19)}`);
 
     const newTask = {
       title,
       description,
       assigned_date: assignedDate,
-      start_time: startTime, // Already in UTC format
-      end_time: endTime, // Already in UTC format
-      repeat: repeat,
-      repeatUntil: repeat ? repeatUntil : undefined,
-      daysOfWeek: repeat ? daysOfWeekSelected : undefined,
+      start_time: startTime,
+      end_time: endTime,
+      repeat: Object.values(daysOfWeek).some(day => day),
+      daysOfWeek: Object.keys(daysOfWeek).filter(day => daysOfWeek[day]),
     };
 
     try {
       await addTask(newTask);
       setShowForm(false);
-      setTitle("");
-      setDescription("");
-      setStartTime("");
-      setEndTime("");
-      setRepeat(false);
+      resetForm();
+    } catch (error) {
+      setError("Failed to create task: " + error.message);
+    }
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setAssignedDate(date);
+    setStartTime("");
+    setEndTime("");
+    setShowRepeatOptions(false);
+    setDaysOfWeek({
+      Sunday: false,
+      Monday: false,
+      Tuesday: false,
+      Wednesday: false,
+      Thursday: false,
+      Friday: false,
+      Saturday: false,
+    });
+    setError("");
+  };
+
+  const handleCancelRepeat = () => {
+    setShowRepeatOptions(false);
+  };
+
+  const handleConfirmRepeat = () => {
+    setShowRepeatOptions(false);
+  };
+
+  const handleRepeatChange = (e) => {
+    const isChecked = e.target.checked;
+    if (!isChecked) {
       setDaysOfWeek({
         Sunday: false,
         Monday: false,
@@ -126,21 +113,8 @@ const NewTaskForm = ({ setShowForm, date }) => {
         Friday: false,
         Saturday: false,
       });
-      setError("");
-    } catch (error) {
-      console.error("Error during form submission:", error);
-      setError("Failed to create task: " + error.message);
     }
-  };
-
-  const handleModalClose = () => {
-    // Ensure at least one day is selected before allowing to close the modal on confirm
-    const anyDaySelected = Object.values(daysOfWeek).some(Boolean);
-    if (anyDaySelected) {
-      setShowModal(false);
-    } else {
-      setError("Please select at least one day to repeat.");
-    }
+    setShowRepeatOptions(isChecked);
   };
 
   return (
@@ -155,92 +129,65 @@ const NewTaskForm = ({ setShowForm, date }) => {
         >
           <MdClose />
         </button>
-        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-          <input
-            type="text"
-            id="title"
-            placeholder="Task name"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            required
-          />
-          <textarea
-            id="description"
-            placeholder="Task details"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            rows="3"
-          />
-          <input
-            type="date"
-            id="assigned-date"
-            value={assignedDate}
-            onChange={(e) => setAssignedDate(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            required
-          />
-          <div className="flex justify-between">
-            <div className="flex-1 pr-2">
-              <div className="text-gray-600 text-sm">Start</div>
-              <TimeSelector id="start-time" onChange={handleStartTimeChange} />
-            </div>
-            <div className="flex-1 pl-2">
-              <div className="text-gray-600 text-sm">End</div>
-              <TimeSelector
-                id="end-time"
-                onChange={(time) => setEndTime(time)}
-              />
-            </div>
-          </div>
-          <div>
+        {!showRepeatOptions ? (
+          <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             <input
-              type="checkbox"
-              id="repeat"
-              checked={repeat}
-              onChange={(e) => {
-                setRepeat(e.target.checked);
-                setShowModal(e.target.checked);
-              }}
+              type="text"
+              id="title"
+              placeholder="Task name"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
             />
-            <label htmlFor="repeat"> Repeat</label>
-          </div>
-          {showModal && (
-            <Modal onClose={() => setShowModal(false)}>
-              <div className="space-y-4">
-                {Object.keys(daysOfWeek).map((day) => (
-                  <div key={day} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id={day}
-                      checked={daysOfWeek[day]}
-                      onChange={(e) => setDaysOfWeek({
-                        ...daysOfWeek,
-                        [day]: e.target.checked
-                      })}
-                      className="mr-2"
-                    />
-                    <label htmlFor={day}>{day}</label>
-                  </div>
-                ))}
-                <div className="flex justify-between mt-4">
-                  <button type="button" onClick={() => setShowModal(false)} className="py-2 px-4 bg-white text-black border-none rounded-md">
-                    Cancel
-                  </button>
-                  <button type="button" onClick={handleModalClose} className="py-2 px-4 bg-black text-white rounded-md">
-                    Confirm
-                  </button>
-                </div>
+            <textarea
+              id="description"
+              placeholder="Task details"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              rows="3"
+            />
+            <input
+              type="date"
+              id="assigned-date"
+              value={assignedDate}
+              onChange={(e) => setAssignedDate(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              required
+            />
+            <div className="flex justify-between">
+              <div className="flex-1 pr-2">
+                <div className="text-gray-600 text-sm">Start</div>
+                <TimeSelector id="start-time" onChange={handleStartTimeChange} />
               </div>
-            </Modal>
-          )}
-
-          {error && <div className="text-red-500">{error}</div>}
-          <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
-            Confirm
-          </button>
-        </form>
+              <div className="flex-1 pl-2">
+                <div className="text-gray-600 text-sm">End</div>
+                <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} />
+              </div>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="repeat"
+                checked={Object.values(daysOfWeek).some(day => day)}
+                onChange={handleRepeatChange}
+              />
+              <label htmlFor="repeat"> Repeat</label>
+            </div>
+            {error && <div className="text-red-500">{error}</div>}
+            <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
+              Confirm
+            </button>
+          </form>
+        ) : (
+          <RepeatOptions
+            daysOfWeek={daysOfWeek}
+            setDaysOfWeek={setDaysOfWeek}
+            onConfirm={handleConfirmRepeat}
+            onCancel={handleCancelRepeat}
+          />
+        )}
       </div>
     </Draggable>
   );
