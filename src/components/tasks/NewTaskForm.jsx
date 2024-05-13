@@ -22,6 +22,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
     Friday: false,
     Saturday: false,
   });
+  const [repeatUntil, setRepeatUntil] = useState("");
   const [error, setError] = useState("");
   const { tasks, addTask } = useTasks();
 
@@ -63,6 +64,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
       end_time: endTime,
       repeat: Object.values(daysOfWeek).some(day => day),
       daysOfWeek: Object.keys(daysOfWeek).filter(day => daysOfWeek[day]),
+      repeatUntil: repeatUntil || null,
     };
 
     try {
@@ -90,6 +92,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
       Friday: false,
       Saturday: false,
     });
+    setRepeatUntil("");
     setError("");
   };
 
@@ -113,6 +116,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
         Friday: false,
         Saturday: false,
       });
+      setRepeatUntil("");
     }
     setShowRepeatOptions(isChecked);
   };
@@ -186,6 +190,8 @@ const NewTaskForm = ({ setShowForm, date }) => {
             setDaysOfWeek={setDaysOfWeek}
             onConfirm={handleConfirmRepeat}
             onCancel={handleCancelRepeat}
+            repeatUntil={repeatUntil}
+            setRepeatUntil={setRepeatUntil}
           />
         )}
       </div>

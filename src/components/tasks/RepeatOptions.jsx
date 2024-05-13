@@ -1,8 +1,18 @@
 import React from "react";
 
-const RepeatOptions = ({ daysOfWeek, setDaysOfWeek, onConfirm, onCancel }) => {
+const RepeatOptions = ({ daysOfWeek, setDaysOfWeek, onConfirm, onCancel, repeatUntil, setRepeatUntil }) => {
   return (
     <div className="space-y-4">
+      <div>
+        <label htmlFor="repeat-until">Repeat Until:</label>
+        <input
+          type="date"
+          id="repeat-until"
+          value={repeatUntil}
+          onChange={(e) => setRepeatUntil(e.target.value)}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+        />
+      </div>
       {Object.keys(daysOfWeek).map((day) => (
         <div key={day} className="flex items-center">
           <input
