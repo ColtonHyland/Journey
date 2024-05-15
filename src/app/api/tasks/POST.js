@@ -57,12 +57,14 @@ export async function POST(request) {
             start_time: startTimeComplete,
             end_time: endTimeComplete,
           };
+          console.log("Creating single task:", title, description, userId, goalId, assigned_date, start_time, end_time);
           const task = await prisma.task.create({ data: taskData });
           tasks.push(task);
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
     } else {
+      console.log("Creating single task:", title, description, userId, goalId, assigned_date, start_time, end_time);
       const task = await prisma.task.create({
         data: {
           title,
