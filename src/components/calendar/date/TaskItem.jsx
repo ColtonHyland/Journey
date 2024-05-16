@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import EditTask from "@/components/tasks/EditTask"; // Adjust the import path as needed
+import EditTask from "@/components/tasks/EditTask";
+import ConfirmationDialog from "./ConfirmationDialog";
 import { useTasks } from "@/app/context/TaskContext";
 import { MdClose, MdModeEdit } from 'react-icons/md';
 
@@ -8,6 +9,7 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
   const { deleteTask } = useTasks();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const startTime = new Date(task.start_time);
   const endTime = new Date(task.end_time);
@@ -30,6 +32,14 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
 
   const closeEdit = () => {
     setIsEditing(false);
+  };
+
+  const confirmDelete = () => {
+    setShowConfirm(true);
+  };
+
+  const cancelDelete = () => {
+    setShowConfirm(false);
   };
 
   const colors = ["bg-blue-200", "bg-green-200", "bg-red-200"]; // Faint shades for each color
@@ -58,7 +68,7 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
         }}
       >
         <button
-          onClick={handleDelete}
+          onClick={confirmDelete}
           disabled={isDeleting}
           className="absolute top-0 right-0 text-black focus:outline-none"
           style={{ padding: "4px" }}
@@ -83,6 +93,13 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
         {task.description && <p className="text-xs">{task.description}</p>}
       </div>
       {isEditing && <EditTask task={task} closeEdit={closeEdit} />}
+      {showConfirm && (
+        <ConfirmationDialog
+          message="Are you sure?"
+          onConfirm={handleDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </>
   );
 };
