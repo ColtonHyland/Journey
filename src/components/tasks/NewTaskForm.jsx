@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Draggable from "react-draggable";
 import TimeSelector from "./TimeSelector";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
@@ -122,7 +121,8 @@ const NewTaskForm = ({ setShowForm, date }) => {
   };
 
   return (
-    <Draggable handle=".handle">
+  
+      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
         className="absolute top-1/4 left-1/4 right-1/4 bg-white p-4 border border-gray-300 shadow-lg rounded-md z-50 handle"
         style={{ cursor: "move", width: "30%" }}
@@ -195,7 +195,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
           />
         )}
       </div>
-    </Draggable>
+      </div>
   );
 };
 

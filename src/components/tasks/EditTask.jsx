@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdClose } from 'react-icons/md';
-import Draggable from 'react-draggable';
 import { useTasks } from "@/app/context/TaskContext";
+import TimeSelector from "./TimeSelector";
+import { formatInTimeZone } from "date-fns-tz";
 
 const EditTask = ({ task, closeEdit }) => {
   const { editTask, timeConflict } = useTasks();
@@ -11,6 +12,26 @@ const EditTask = ({ task, closeEdit }) => {
   const [assignedDate, setAssignedDate] = useState(task.assigned_date);
   const [startTime, setStartTime] = useState(task.start_time);
   const [endTime, setEndTime] = useState(task.end_time);
+
+  useEffect(() => {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const start = new Date(task.start_time);
+    const end = new Date(task.end_time);
+
+    setStartTime(formatInTimeZone(start, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+    setEndTime(formatInTimeZone(end, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+  }, [task]);
+
+  const handleStartTimeChange = (isoTime) => {
+    try {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const parsedTime = new Date(isoTime);
+      setStartTime(formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+      setEndTime(formatInTimeZone(new Date(parsedTime.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+    } catch (error) {
+      console.error("Failed to parse start time", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +54,6 @@ const EditTask = ({ task, closeEdit }) => {
   };
 
   return (
-    <Draggable handle=".handle">
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
           <div className="handle cursor-move text-gray-500 flex justify-between items-center mb-4">
@@ -85,31 +105,15 @@ const EditTask = ({ task, closeEdit }) => {
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">
-                  Start Time
-                </label>
-                <input
-                  type="time"
-                  id="startTime"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">
-                  End Time
-                </label>
-                <input
-                  type="time"
-                  id="endTime"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  required
-                />
+              <div className="flex justify-between">
+                <div className="flex-1 pr-2">
+                  <div className="text-gray-600 text-sm">Start</div>
+                  <TimeSelector id="start-time" onChange={handleStartTimeChange} />
+                </div>
+                <div className="flex-1 pl-2">
+                  <div className="text-gray-600 text-sm">End</div>
+                  <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} />
+                </div>
               </div>
               <div className="flex justify-end space-x-2">
                 <button
@@ -121,7 +125,7 @@ const EditTask = ({ task, closeEdit }) => {
                 </button>
                 <button
                   type="submit"
-                  className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                  className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
                 >
                   Confirm
                 </button>
@@ -130,7 +134,6 @@ const EditTask = ({ task, closeEdit }) => {
           </form>
         </div>
       </div>
-    </Draggable>
   );
 };
 
