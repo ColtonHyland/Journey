@@ -73,7 +73,6 @@ const addTask = async (newTaskDetails) => {
 };
 
   const deleteTask = async (taskId) => {
-    // Optimistically remove the task from the UI
     const newTasks = tasks.filter((task) => task.task_id !== taskId);
     setTasks(newTasks);
 
@@ -83,11 +82,33 @@ const addTask = async (newTaskDetails) => {
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) throw new Error("Failed to delete task");
-      // No need to fetchTasks if deletion is successful
     } catch (error) {
       setError(error.message);
-      // Revert the UI change if there's an error
       fetchTasks();
+    }
+  };
+
+  const editTask = async (updatedTask) => {
+    if (timeConflict(updatedTask)) {
+      setError("Cannot update task due to time conflict.");
+      return;
+    }
+    try {
+      const response = await fetch(`/api/tasks/${updatedTask.task_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedTask),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Failed to update task:", errorData);
+        throw new Error("Failed to update task");
+      }
+      const editedTask = await response.json();
+      fetchTasks(); // Refresh the tasks list
+    } catch (error) {
+      console.error("Error updating task:", error);
+      setError(error.message);
     }
   };
 
@@ -97,7 +118,7 @@ const addTask = async (newTaskDetails) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, loading, error, addTask, deleteTask }}
+      value={{ tasks, loading, error, addTask, editTask, deleteTask }}
     >
       {children}
     </TaskContext.Provider>
