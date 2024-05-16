@@ -1,3 +1,2 @@
-export { GET } from '../../goals/[goalId]/tasks/GET';
-export { POST } from '../../goals/[goalId]/tasks/POST';
+export { PUT } from './PUT';
 export { DELETE } from './DELETE';

@@ -105,7 +105,7 @@ const addTask = async (newTaskDetails) => {
         throw new Error("Failed to update task");
       }
       const editedTask = await response.json();
-      fetchTasks(); // Refresh the tasks list
+      fetchTasks();
     } catch (error) {
       console.error("Error updating task:", error);
       setError(error.message);
