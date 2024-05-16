@@ -67,7 +67,7 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
         </button>
         <button
           onClick={handleEdit}
-          className="absolute top-0 left-0 text-black focus:outline-none"
+          className="absolute top-0 right-5 text-black focus:outline-none"
           style={{ padding: "4px" }}
         >
           <MdModeEdit />

@@ -23,7 +23,8 @@ const NewTaskForm = ({ setShowForm, date }) => {
   });
   const [repeatUntil, setRepeatUntil] = useState("");
   const [error, setError] = useState("");
-  const { tasks, addTask } = useTasks();
+  const [timeConflictWarning, setTimeConflictWarning] = useState("");
+  const { tasks, addTask, timeConflict } = useTasks();
 
   useEffect(() => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -65,6 +66,13 @@ const NewTaskForm = ({ setShowForm, date }) => {
       daysOfWeek: Object.keys(daysOfWeek).filter(day => daysOfWeek[day]),
       repeatUntil: repeatUntil || null,
     };
+
+    if (timeConflict(newTask)) {
+      setTimeConflictWarning("Time conflict with another task");
+      return;
+    } else {
+      setTimeConflictWarning("");
+    }
 
     try {
       await addTask(newTask);
@@ -121,19 +129,17 @@ const NewTaskForm = ({ setShowForm, date }) => {
   };
 
   return (
-  
-      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-        
         <div className="text-gray-500 flex justify-between items-center mb-4">
-            <h2>New Task</h2>
-            <button
-              onClick={() => setShowForm(false)}
-              className="text-gray-500 hover:text-gray-800 focus:outline-none"
-            >
-              <MdClose size={24} />
-            </button>
-          </div>
+          <h2>New Task</h2>
+          <button
+            onClick={() => setShowForm(false)}
+            className="text-gray-500 hover:text-gray-800 focus:outline-none"
+          >
+            <MdClose size={24} />
+          </button>
+        </div>
         {!showRepeatOptions ? (
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             <input
@@ -154,18 +160,18 @@ const NewTaskForm = ({ setShowForm, date }) => {
               rows="3"
             />
             <div>
-            <label htmlFor="assignedDate" className="block text-sm font-medium text-gray-700">
-                  Assigned Date
-                </label>
-            <input
-              type="date"
-              id="assigned-date"
-              value={assignedDate}
-              onChange={(e) => setAssignedDate(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-              required
-            />
-              </div>
+              <label htmlFor="assignedDate" className="block text-sm font-medium text-gray-700">
+                Assigned Date
+              </label>
+              <input
+                type="date"
+                id="assigned-date"
+                value={assignedDate}
+                onChange={(e) => setAssignedDate(e.target.value)}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                required
+              />
+            </div>
             <div className="flex justify-between">
               <div className="flex-1 pr-2">
                 <div className="text-gray-600 text-sm">Start</div>
@@ -185,6 +191,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
               />
               <label htmlFor="repeat"> Repeat</label>
             </div>
+            {timeConflictWarning && <div className="text-red-500">{timeConflictWarning}</div>}
             {error && <div className="text-red-500">{error}</div>}
             <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
               Confirm
@@ -201,7 +208,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
           />
         )}
       </div>
-      </div>
+    </div>
   );
 };
 
