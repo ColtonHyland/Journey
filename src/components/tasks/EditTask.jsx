@@ -12,6 +12,7 @@ const EditTask = ({ task, closeEdit }) => {
   const [assignedDate, setAssignedDate] = useState(task.assigned_date);
   const [startTime, setStartTime] = useState(task.start_time);
   const [endTime, setEndTime] = useState(task.end_time);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -29,7 +30,7 @@ const EditTask = ({ task, closeEdit }) => {
       setStartTime(formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
       setEndTime(formatInTimeZone(new Date(parsedTime.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
     } catch (error) {
-      console.error("Failed to parse start time", error);
+      setError("Failed to parse start time");
     }
   };
 
@@ -49,8 +50,17 @@ const EditTask = ({ task, closeEdit }) => {
       return;
     }
 
-    await editTask(updatedTask);
-    closeEdit();
+    if (!assignedDate || !startTime || !endTime) {
+      setError("Please ensure all date and time fields are filled correctly.");
+      return;
+    }
+
+    try {
+      await editTask(updatedTask);
+      closeEdit();
+    } catch (error) {
+      setError("Failed to edit task: " + error.message);
+    }
   };
 
   return (
@@ -68,12 +78,10 @@ const EditTask = ({ task, closeEdit }) => {
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                  Title
-                </label>
                 <input
                   type="text"
                   id="title"
+                  placeholder="Task name"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
@@ -81,11 +89,9 @@ const EditTask = ({ task, closeEdit }) => {
                 />
               </div>
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                  Description
-                </label>
                 <textarea
                   id="description"
+                  placeholder="Task details"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"

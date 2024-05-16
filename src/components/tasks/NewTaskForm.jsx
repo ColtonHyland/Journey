@@ -123,16 +123,17 @@ const NewTaskForm = ({ setShowForm, date }) => {
   return (
   
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div
-        className="absolute top-1/4 left-1/4 right-1/4 bg-white p-4 border border-gray-300 shadow-lg rounded-md z-50 handle"
-        style={{ cursor: "move", width: "30%" }}
-      >
-        <button
-          onClick={() => setShowForm(false)}
-          className="text-gray-500 hover:text-gray-700 absolute right-2 top-2"
-        >
-          <MdClose />
-        </button>
+      <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+        
+        <div className="handle cursor-move text-gray-500 flex justify-between items-center mb-4">
+            <h2>New Task</h2>
+            <button
+              onClick={() => setShowForm(false)}
+              className="text-gray-500 hover:text-gray-800 focus:outline-none"
+            >
+              <MdClose size={24} />
+            </button>
+          </div>
         {!showRepeatOptions ? (
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             <input
@@ -152,6 +153,10 @@ const NewTaskForm = ({ setShowForm, date }) => {
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               rows="3"
             />
+            <div>
+            <label htmlFor="assignedDate" className="block text-sm font-medium text-gray-700">
+                  Assigned Date
+                </label>
             <input
               type="date"
               id="assigned-date"
@@ -160,6 +165,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
               required
             />
+              </div>
             <div className="flex justify-between">
               <div className="flex-1 pr-2">
                 <div className="text-gray-600 text-sm">Start</div>
