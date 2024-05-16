@@ -118,7 +118,7 @@ const addTask = async (newTaskDetails) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, loading, error, addTask, editTask, deleteTask }}
+      value={{ tasks, loading, error, timeConflict, addTask, editTask, deleteTask }}
     >
       {children}
     </TaskContext.Provider>

@@ -66,7 +66,7 @@ const EditTask = ({ task, closeEdit }) => {
   return (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-          <div className="handle cursor-move text-gray-500 flex justify-between items-center mb-4">
+          <div className="text-gray-500 flex justify-between items-center mb-4">
             <h2>Edit Task</h2>
             <button
               onClick={closeEdit}
@@ -121,20 +121,13 @@ const EditTask = ({ task, closeEdit }) => {
                   <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} />
                 </div>
               </div>
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={closeEdit}
-                  className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
-                >
-                  Confirm
-                </button>
+              <div className="flex justify-start space-x-2">
+                
+                {error && <div className="text-red-500">{error}</div>}
+
+                <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
+              Confirm
+            </button>
               </div>
             </div>
           </form>

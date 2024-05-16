@@ -125,7 +125,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
         
-        <div className="handle cursor-move text-gray-500 flex justify-between items-center mb-4">
+        <div className="text-gray-500 flex justify-between items-center mb-4">
             <h2>New Task</h2>
             <button
               onClick={() => setShowForm(false)}
