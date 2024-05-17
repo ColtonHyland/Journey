@@ -68,7 +68,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
     };
 
     if (timeConflict(newTask)) {
-      setTimeConflictWarning("Time conflict with another task");
+      setTimeConflictWarning("Time conflicts with another task");
       return;
     } else {
       setTimeConflictWarning("");
@@ -176,6 +176,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
               <div className="flex-1 pr-2">
                 <div className="text-gray-600 text-sm">Start</div>
                 <TimeSelector id="start-time" onChange={handleStartTimeChange} />
+                {timeConflictWarning && <div className="text-red-500">{timeConflictWarning}</div>}
               </div>
               <div className="flex-1 pl-2">
                 <div className="text-gray-600 text-sm">End</div>
@@ -191,7 +192,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
               />
               <label htmlFor="repeat"> Repeat</label>
             </div>
-            {timeConflictWarning && <div className="text-red-500">{timeConflictWarning}</div>}
             {error && <div className="text-red-500">{error}</div>}
             <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
               Confirm

@@ -118,6 +118,7 @@ const EditTask = ({ task, closeEdit }) => {
               <div className="flex-1 pr-2">
                 <div className="text-gray-600 text-sm">Start</div>
                 <TimeSelector id="start-time" onChange={handleStartTimeChange} />
+                {timeConflictWarning && <div className="text-red-500">{timeConflictWarning}</div>}
               </div>
               <div className="flex-1 pl-2">
                 <div className="text-gray-600 text-sm">End</div>
