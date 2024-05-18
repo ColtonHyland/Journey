@@ -14,6 +14,10 @@ export const TaskProvider = ({ children, date }) => {
     console.log(`Tasks to check: ${JSON.stringify(tasks)}`);
   
     return tasks.some((task) => {
+      if (task.assigned_date !== newTask.assigned_date) {
+        return false;
+      }
+
       const taskStart = new Date(task.start_time);
       const taskEnd = new Date(task.end_time);
       const newTaskStart = new Date(newTask.start_time);
