@@ -118,7 +118,7 @@ const EditTask = ({ task, closeEdit }) => {
             <div className="flex justify-between">
               <div className="flex-1 pr-2">
                 <div className="text-gray-600 text-sm">Start</div>
-                <TimeSelector id="start-time" onChange={handleStartTimeChange} />
+                <TimeSelector id="start-time" onChange={handleStartTimeChange} initialTime={startTime}/>
                 {timeConflictWarning && (
                   <div data-tip={timeConflictWarning}>
                     <Tooltip place="bottom" type="error" effect="solid" />
@@ -127,7 +127,7 @@ const EditTask = ({ task, closeEdit }) => {
               </div>
               <div className="flex-1 pl-2">
                 <div className="text-gray-600 text-sm">End</div>
-                <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} />
+                <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} initialTime={endTime}/>
               </div>
             </div>
             <div className="flex justify-start space-x-2">

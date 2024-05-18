@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 
-const TimeSelector = ({ id, onChange, label }) => {
+const TimeSelector = ({ id, onChange, initialTime }) => {
   const [selectedTime, setSelectedTime] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -19,22 +19,26 @@ const TimeSelector = ({ id, onChange, label }) => {
   }, []); // Dependencies array is empty, so this only runs once on mount
 
   useEffect(() => {
-    const currentTime = new Date();
-    const minutes = currentTime.getMinutes();
-    const roundedMinutes = Math.ceil(minutes / 15) * 15;
-    if (roundedMinutes === 60) {
-      currentTime.setMinutes(0);
-      currentTime.setHours(currentTime.getHours() + 1);
+    if (initialTime) {
+      setSelectedTime(initialTime);
     } else {
-      currentTime.setMinutes(roundedMinutes);
-    }
+      const currentTime = new Date();
+      const minutes = currentTime.getMinutes();
+      const roundedMinutes = Math.ceil(minutes / 15) * 15;
+      if (roundedMinutes === 60) {
+        currentTime.setMinutes(0);
+        currentTime.setHours(currentTime.getHours() + 1);
+      } else {
+        currentTime.setMinutes(roundedMinutes);
+      }
 
-    if (id === "end-time") {
-      currentTime.setMinutes(currentTime.getMinutes() + 15);
+      if (id === "end-time") {
+        currentTime.setMinutes(currentTime.getMinutes() + 15);
+      }
+      currentTime.setSeconds(0, 0);
+      setSelectedTime(currentTime.toISOString());
     }
-    currentTime.setSeconds(0, 0);
-    setSelectedTime(currentTime.toISOString());
-  }, [id]);
+  }, [id, initialTime]);
 
   useEffect(() => {
     if (isOpen && selectedTime) {
@@ -67,11 +71,6 @@ const TimeSelector = ({ id, onChange, label }) => {
 
   return (
     <div>
-      {label && (
-        <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-          {label}
-        </label>
-      )}
       <div className="relative">
         <button
           type="button"

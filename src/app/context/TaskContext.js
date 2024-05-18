@@ -10,9 +10,7 @@ export const TaskProvider = ({ children, date }) => {
   const [error, setError] = useState(null);
 
   const timeConflict = (newTask) => {
-    console.log(`New task to check: ${JSON.stringify(newTask)}`);
-    console.log(`Tasks to check: ${JSON.stringify(tasks)}`);
-  
+    
     return tasks.some((task) => {
       if (task.assigned_date !== newTask.assigned_date) {
         return false;
@@ -28,14 +26,6 @@ export const TaskProvider = ({ children, date }) => {
       const middleConflict = newTaskStart < taskStart && newTaskEnd > taskEnd;
       const exactStartConflict = newTaskStart.getTime() === taskStart.getTime();
       const exactEndConflict = newTaskEnd.getTime() === taskEnd.getTime();
-  
-      console.log(
-        `Checking startConflict: ${startConflict},
-         endConflict: ${endConflict},
-         middleConflict: ${middleConflict},
-         exactStartConflict: ${exactStartConflict},
-         exactEndConflict: ${exactEndConflict}`
-      );
   
       return (
         startConflict || endConflict || middleConflict || exactStartConflict || exactEndConflict
