@@ -4,7 +4,6 @@ import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
 import RepeatOptions from "./RepeatOptions";
 import { MdClose } from "react-icons/md";
-import { Tooltip } from "react-tooltip";
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState("");
@@ -174,14 +173,14 @@ const NewTaskForm = ({ setShowForm, date }) => {
               />
             </div>
             <div className="flex justify-between">
-              <div className="flex-1 pr-2">
+              <div className="flex-1 pr-2 relative">
                 <div className="text-gray-600 text-sm">Start</div>
-                <TimeSelector id="start-time" onChange={handleStartTimeChange} />
-                {timeConflictWarning && (
-                  <div data-tip={timeConflictWarning}>
-                    <Tooltip place="bottom" type="error" effect="solid" />
-                  </div>
-                )}              </div>
+                <TimeSelector id="start-time" onChange={handleStartTimeChange} data-tooltip-target="tooltip-default" />
+                <div id="tooltip-default" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                  {timeConflictWarning}
+                  <div className="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </div>
               <div className="flex-1 pl-2">
                 <div className="text-gray-600 text-sm">End</div>
                 <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} />

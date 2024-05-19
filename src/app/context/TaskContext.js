@@ -10,26 +10,40 @@ export const TaskProvider = ({ children, date }) => {
   const [error, setError] = useState(null);
 
   const timeConflict = (newTask) => {
-    
+    console.log(`New task to check: ${JSON.stringify(newTask)}`);
+    console.log(`Tasks to check: ${JSON.stringify(tasks)}`);
+  
     return tasks.some((task) => {
-      if (task.assigned_date !== newTask.assigned_date) {
+      const taskAssignedDate = new Date(task.assigned_date).toISOString().split('T')[0];
+      const newTaskAssignedDate = new Date(newTask.assigned_date).toISOString().split('T')[0];
+  
+      if (taskAssignedDate !== newTaskAssignedDate) {
         return false;
       }
-
-      const taskStart = new Date(task.start_time);
-      const taskEnd = new Date(task.end_time);
-      const newTaskStart = new Date(newTask.start_time);
-      const newTaskEnd = new Date(newTask.end_time);
   
-      const startConflict = newTaskStart < taskEnd && newTaskStart >= taskStart;
-      const endConflict = newTaskEnd > taskStart && newTaskEnd <= taskEnd;
-      const middleConflict = newTaskStart < taskStart && newTaskEnd > taskEnd;
-      const exactStartConflict = newTaskStart.getTime() === taskStart.getTime();
-      const exactEndConflict = newTaskEnd.getTime() === taskEnd.getTime();
+      // Normalize task start and end times to UTC for accurate comparison
+      const taskStart = new Date(task.start_time).toISOString();
+      const taskEnd = new Date(task.end_time).toISOString();
+      const newTaskStart = new Date(newTask.start_time).toISOString();
+      const newTaskEnd = new Date(newTask.end_time).toISOString();
   
-      return (
-        startConflict || endConflict || middleConflict || exactStartConflict || exactEndConflict
-      );
+      console.log(`Comparing times:
+        Task: ${task.title},
+        Task Start: ${taskStart},
+        Task End: ${taskEnd},
+        New Task Start: ${newTaskStart},
+        New Task End: ${newTaskEnd}`);
+  
+      // Convert back to Date objects for comparison
+      const taskStartTime = new Date(taskStart).getTime();
+      const taskEndTime = new Date(taskEnd).getTime();
+      const newTaskStartTime = new Date(newTaskStart).getTime();
+      const newTaskEndTime = new Date(newTaskEnd).getTime();
+  
+      const conflict = (newTaskStartTime < taskEndTime && newTaskEndTime > taskStartTime);
+  
+      console.log(`Conflict detected: ${conflict}`);
+      return conflict;
     });
   };
 

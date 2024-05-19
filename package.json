@@ -24,6 +24,7 @@
     "dotenv-cli": "^7.3.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "flowbite": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
     "next": "13.4.10",
     "pg": "^8.11.1",
