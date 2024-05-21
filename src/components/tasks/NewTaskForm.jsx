@@ -31,15 +31,29 @@ const NewTaskForm = ({ setShowForm, date }) => {
     const now = new Date();
     now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
     setStartTime(formatInTimeZone(now, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
-    setEndTime(formatInTimeZone(new Date(now.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+    setEndTime(
+      formatInTimeZone(
+        new Date(now.getTime() + 15 * 60000),
+        timeZone,
+        "yyyy-MM-dd'T'HH:mm:ssXXX"
+      )
+    );
   }, [date]);
 
   const handleStartTimeChange = (isoTime) => {
     try {
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const parsedTime = new Date(isoTime);
-      setStartTime(formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
-      setEndTime(formatInTimeZone(new Date(parsedTime.getTime() + 15 * 60000), timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+      setStartTime(
+        formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX")
+      );
+      setEndTime(
+        formatInTimeZone(
+          new Date(parsedTime.getTime() + 15 * 60000),
+          timeZone,
+          "yyyy-MM-dd'T'HH:mm:ssXXX"
+        )
+      );
     } catch (error) {
       setError("Failed to parse start time");
     }
@@ -53,8 +67,12 @@ const NewTaskForm = ({ setShowForm, date }) => {
       return;
     }
 
-    const startDateTime = new Date(`${assignedDate}T${startTime.substring(11, 19)}`);
-    const endDateTime = new Date(`${assignedDate}T${endTime.substring(11, 19)}`);
+    const startDateTime = new Date(
+      `${assignedDate}T${startTime.substring(11, 19)}`
+    );
+    const endDateTime = new Date(
+      `${assignedDate}T${endTime.substring(11, 19)}`
+    );
 
     const newTask = {
       title,
@@ -62,8 +80,8 @@ const NewTaskForm = ({ setShowForm, date }) => {
       assigned_date: assignedDate,
       start_time: startTime,
       end_time: endTime,
-      repeat: Object.values(daysOfWeek).some(day => day),
-      daysOfWeek: Object.keys(daysOfWeek).filter(day => daysOfWeek[day]),
+      repeat: Object.values(daysOfWeek).some((day) => day),
+      daysOfWeek: Object.keys(daysOfWeek).filter((day) => daysOfWeek[day]),
       repeatUntil: repeatUntil || null,
     };
 
@@ -160,7 +178,10 @@ const NewTaskForm = ({ setShowForm, date }) => {
               rows="3"
             />
             <div>
-              <label htmlFor="assignedDate" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="assignedDate"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Assigned Date
               </label>
               <input
@@ -175,28 +196,46 @@ const NewTaskForm = ({ setShowForm, date }) => {
             <div className="flex justify-between">
               <div className="flex-1 pr-2 relative">
                 <div className="text-gray-600 text-sm">Start</div>
-                <TimeSelector id="start-time" onChange={handleStartTimeChange} data-tooltip-target="tooltip-default" />
-                <div id="tooltip-default" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                <TimeSelector
+                  id="start-time"
+                  onChange={handleStartTimeChange}
+                  data-tooltip-target="tooltip-default"
+                />
+                <div
+                  id="tooltip-default"
+                  role="tooltip"
+                  className={`absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm transition-opacity duration-300 ${
+                    timeConflictWarning
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                  }`}
+                >
                   {timeConflictWarning}
                   <div className="tooltip-arrow" data-popper-arrow></div>
                 </div>
               </div>
               <div className="flex-1 pl-2">
                 <div className="text-gray-600 text-sm">End</div>
-                <TimeSelector id="end-time" onChange={(time) => setEndTime(time)} />
+                <TimeSelector
+                  id="end-time"
+                  onChange={(time) => setEndTime(time)}
+                />
               </div>
             </div>
             <div>
               <input
                 type="checkbox"
                 id="repeat"
-                checked={Object.values(daysOfWeek).some(day => day)}
+                checked={Object.values(daysOfWeek).some((day) => day)}
                 onChange={handleRepeatChange}
               />
               <label htmlFor="repeat"> Repeat</label>
             </div>
             {error && <div className="text-red-500">{error}</div>}
-            <button type="submit" className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
+            <button
+              type="submit"
+              className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
+            >
               Confirm
             </button>
           </form>
