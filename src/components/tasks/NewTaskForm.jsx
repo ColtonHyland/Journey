@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import TimeSelector from "./TimeSelector";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
 import RepeatOptions from "./RepeatOptions";
 import { MdClose } from "react-icons/md";
+import { Tooltip } from 'flowbite';
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState("");
@@ -25,6 +26,8 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [error, setError] = useState("");
   const [timeConflictWarning, setTimeConflictWarning] = useState("");
   const { tasks, addTask, timeConflict } = useTasks();
+  const tooltipRef = useRef(null);
+  const tooltipTriggerRef = useRef(null);
 
   useEffect(() => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -100,6 +103,28 @@ const NewTaskForm = ({ setShowForm, date }) => {
       setError("Failed to create task: " + error.message);
     }
   };
+
+  useEffect(() => {
+    let tooltipInstance;
+    if (timeConflictWarning && tooltipRef.current && tooltipTriggerRef.current) {
+      tooltipInstance = new Tooltip(tooltipRef.current, {
+        placement: 'bottom',
+        triggerType: 'manual',
+      });
+
+      tooltipInstance.show();
+
+      const timer = setTimeout(() => {
+        tooltipInstance.hide();
+        setTimeConflictWarning("");
+      }, 2500);
+
+      return () => {
+        clearTimeout(timer);
+        tooltipInstance.hide();
+      };
+    }
+  }, [timeConflictWarning]);
 
   const resetForm = () => {
     setTitle("");
@@ -194,15 +219,26 @@ const NewTaskForm = ({ setShowForm, date }) => {
               />
             </div>
             <div className="flex justify-between">
-              <div className="flex-1 pr-2 relative">
+              <div className="flex-1 pr-2">
                 <div className="text-gray-600 text-sm">Start</div>
                 <TimeSelector
                   id="start-time"
                   onChange={handleStartTimeChange}
-                  data-tooltip-target="tooltip-default"
+                />
+              </div>
+              <div className="flex-1 pl-2 relative">
+                <div className="text-gray-600 text-sm">End</div>
+                <TimeSelector
+                  id="end-time"
+                  onChange={(time) => setEndTime(time)}
+                  data-tooltip-target="tooltip-bottom"
+                  data-tooltip-placement="bottom"
+                  type="button"
+                  ref={tooltipTriggerRef}
                 />
                 <div
                   id="tooltip-default"
+                  ref={tooltipRef}
                   role="tooltip"
                   className={`absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm transition-opacity duration-300 ${
                     timeConflictWarning
@@ -213,13 +249,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
                   {timeConflictWarning}
                   <div className="tooltip-arrow" data-popper-arrow></div>
                 </div>
-              </div>
-              <div className="flex-1 pl-2">
-                <div className="text-gray-600 text-sm">End</div>
-                <TimeSelector
-                  id="end-time"
-                  onChange={(time) => setEndTime(time)}
-                />
               </div>
             </div>
             <div>
