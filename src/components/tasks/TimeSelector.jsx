@@ -62,6 +62,7 @@ const TimeSelector = ({ id, onChange, initialTime }) => {
     )
       .toISOString()
       .replace("Z", "");
+    console.log(`Selected Time for ${id}: ${localDateTimeString}`);
     setSelectedTime(localDateTimeString);
     setIsOpen(false);
     if (onChange) {

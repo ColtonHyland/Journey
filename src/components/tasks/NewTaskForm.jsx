@@ -4,7 +4,7 @@ import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
 import RepeatOptions from "./RepeatOptions";
 import { MdClose } from "react-icons/md";
-import { Tooltip } from 'flowbite';
+import { Tooltip, Button } from "@material-tailwind/react";
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState("");
@@ -25,9 +25,27 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [repeatUntil, setRepeatUntil] = useState("");
   const [error, setError] = useState("");
   const [timeConflictWarning, setTimeConflictWarning] = useState("");
+  const [showTooltip, setShowTooltip] = useState(false);
   const { tasks, addTask, timeConflict } = useTasks();
   const tooltipRef = useRef(null);
   const tooltipTriggerRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
+      setShowTooltip(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showTooltip) {
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.removeEventListener("click", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showTooltip]);
 
   useEffect(() => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -43,23 +61,41 @@ const NewTaskForm = ({ setShowForm, date }) => {
     );
   }, [date]);
 
+  useEffect(() => {
+    console.log(`Initial Start Time: ${startTime}`);
+    console.log(`Initial End Time: ${endTime}`);
+  }, [startTime, endTime]);
+
   const handleStartTimeChange = (isoTime) => {
     try {
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const parsedTime = new Date(isoTime);
-      setStartTime(
-        formatInTimeZone(parsedTime, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX")
+      const newStartTime = formatInTimeZone(
+        parsedTime,
+        timeZone,
+        "yyyy-MM-dd'T'HH:mm:ssXXX"
       );
-      setEndTime(
-        formatInTimeZone(
-          new Date(parsedTime.getTime() + 15 * 60000),
-          timeZone,
-          "yyyy-MM-dd'T'HH:mm:ssXXX"
-        )
-      );
+      setStartTime(newStartTime);
+
+      const parsedEndTime = new Date(endTime);
+      if (parsedEndTime <= parsedTime) {
+        setEndTime(
+          formatInTimeZone(
+            new Date(parsedTime.getTime() + 15 * 60000),
+            timeZone,
+            "yyyy-MM-dd'T'HH:mm:ssXXX"
+          )
+        );
+      }
+      console.log(`Changed Start Time: ${newStartTime}`);
     } catch (error) {
       setError("Failed to parse start time");
     }
+  };
+
+  const handleEndTimeChange = (time) => {
+    setEndTime(time);
+    console.log(`Changed End Time: ${time}`);
   };
 
   const handleSubmit = async (e) => {
@@ -76,6 +112,12 @@ const NewTaskForm = ({ setShowForm, date }) => {
     const endDateTime = new Date(
       `${assignedDate}T${endTime.substring(11, 19)}`
     );
+
+    if (endDateTime <= startDateTime) {
+      setTimeConflictWarning("End time must be later than start time");
+      setShowTooltip(true);
+      return;
+    }
 
     const newTask = {
       title,
@@ -106,10 +148,14 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
   useEffect(() => {
     let tooltipInstance;
-    if (timeConflictWarning && tooltipRef.current && tooltipTriggerRef.current) {
+    if (
+      timeConflictWarning &&
+      tooltipRef.current &&
+      tooltipTriggerRef.current
+    ) {
       tooltipInstance = new Tooltip(tooltipRef.current, {
-        placement: 'bottom',
-        triggerType: 'manual',
+        placement: "bottom",
+        triggerType: "manual",
       });
 
       tooltipInstance.show();
@@ -230,25 +276,19 @@ const NewTaskForm = ({ setShowForm, date }) => {
                 <div className="text-gray-600 text-sm">End</div>
                 <TimeSelector
                   id="end-time"
-                  onChange={(time) => setEndTime(time)}
-                  data-tooltip-target="tooltip-bottom"
-                  data-tooltip-placement="bottom"
-                  type="button"
-                  ref={tooltipTriggerRef}
-                />
-                <div
-                  id="tooltip-default"
+                  onChange={handleEndTimeChange}
                   ref={tooltipRef}
-                  role="tooltip"
-                  className={`absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm transition-opacity duration-300 ${
-                    timeConflictWarning
-                      ? "opacity-100 visible"
-                      : "opacity-0 invisible"
-                  }`}
-                >
-                  {timeConflictWarning}
-                  <div className="tooltip-arrow" data-popper-arrow></div>
-                </div>
+                />
+                {showTooltip && (
+                  <Tooltip
+                    content={timeConflictWarning}
+                    placement="bottom"
+                    visible={showTooltip}
+                    onClick={() => setShowTooltip(false)}
+                  >
+                    <Button className="hidden" />
+                  </Tooltip>
+                )}
               </div>
             </div>
             <div>
