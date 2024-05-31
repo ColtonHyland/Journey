@@ -4,7 +4,7 @@ import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
 import RepeatOptions from "./RepeatOptions";
 import { MdClose } from "react-icons/md";
-import { Tooltip, Button } from "@material-tailwind/react";
+import Tooltip from "@/components/utils/Tooltip";
 
 const NewTaskForm = ({ setShowForm, date }) => {
   const [title, setTitle] = useState("");
@@ -25,27 +25,13 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [repeatUntil, setRepeatUntil] = useState("");
   const [error, setError] = useState("");
   const [timeConflictWarning, setTimeConflictWarning] = useState("");
-  const [showTooltip, setShowTooltip] = useState(false);
   const { tasks, addTask, timeConflict } = useTasks();
-  const tooltipRef = useRef(null);
-  const tooltipTriggerRef = useRef(null);
 
   const handleClickOutside = (event) => {
     if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
       setShowTooltip(false);
     }
   };
-
-  useEffect(() => {
-    if (showTooltip) {
-      document.addEventListener("click", handleClickOutside);
-    } else {
-      document.removeEventListener("click", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [showTooltip]);
 
   useEffect(() => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -115,7 +101,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
     if (endDateTime <= startDateTime) {
       setTimeConflictWarning("End time must be later than start time");
-      setShowTooltip(true);
       return;
     }
 
@@ -145,32 +130,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
       setError("Failed to create task: " + error.message);
     }
   };
-
-  useEffect(() => {
-    let tooltipInstance;
-    if (
-      timeConflictWarning &&
-      tooltipRef.current &&
-      tooltipTriggerRef.current
-    ) {
-      tooltipInstance = new Tooltip(tooltipRef.current, {
-        placement: "bottom",
-        triggerType: "manual",
-      });
-
-      tooltipInstance.show();
-
-      const timer = setTimeout(() => {
-        tooltipInstance.hide();
-        setTimeConflictWarning("");
-      }, 2500);
-
-      return () => {
-        clearTimeout(timer);
-        tooltipInstance.hide();
-      };
-    }
-  }, [timeConflictWarning]);
 
   const resetForm = () => {
     setTitle("");
@@ -274,21 +233,12 @@ const NewTaskForm = ({ setShowForm, date }) => {
               </div>
               <div className="flex-1 pl-2 relative">
                 <div className="text-gray-600 text-sm">End</div>
-                <TimeSelector
-                  id="end-time"
-                  onChange={handleEndTimeChange}
-                  ref={tooltipRef}
-                />
-                {showTooltip && (
-                  <Tooltip
-                    content={timeConflictWarning}
-                    placement="bottom"
-                    visible={showTooltip}
-                    onClick={() => setShowTooltip(false)}
-                  >
-                    <Button className="hidden" />
-                  </Tooltip>
-                )}
+                <Tooltip content={timeConflictWarning} placement="bottom" error={timeConflictWarning !== ""}>
+                  <TimeSelector
+                    id="end-time"
+                    onChange={handleEndTimeChange}
+                  />
+                </Tooltip>
               </div>
             </div>
             <div>
