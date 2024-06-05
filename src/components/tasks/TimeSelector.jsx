@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 
-const TimeSelector = ({ id, onChange, initialTime }) => {
+const TimeSelector = ({ id, onChange, initialTime, className = "" }) => {
   const [selectedTime, setSelectedTime] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -75,7 +75,7 @@ const TimeSelector = ({ id, onChange, initialTime }) => {
       <div className="relative">
         <button
           type="button"
-          className="block w-full p-2 border border-gray-300 rounded-md shadow-sm bg-white"
+          className={`block w-full ${className} p-2 border border-gray-300 rounded-md shadow-sm bg-white`}
           onClick={() => setIsOpen(!isOpen)}
         >
           {new Date(selectedTime).toLocaleTimeString("en-US", {
@@ -87,7 +87,7 @@ const TimeSelector = ({ id, onChange, initialTime }) => {
         {isOpen && (
           <div
             ref={dropdownRef}
-            className="absolute w-full border border-gray-300 rounded-md shadow-sm bg-white max-h-32 overflow-auto"
+            className="absolute border w-full border-gray-300 rounded-md shadow-sm bg-white max-h-32 overflow-auto"
           >
             {options.map((isoTime, index) => (
               <div

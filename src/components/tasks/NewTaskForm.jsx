@@ -26,12 +26,9 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [error, setError] = useState("");
   const [timeConflictWarning, setTimeConflictWarning] = useState("");
   const { tasks, addTask, timeConflict } = useTasks();
-
-  const handleClickOutside = (event) => {
-    if (tooltipRef.current && !tooltipRef.current.contains(event.target)) {
-      setShowTooltip(false);
-    }
-  };
+  const timerRef = useRef(null);
+  const [startTimeSelectorOpen, setStartTimeSelectorOpen] = useState(false);
+  const [endTimeSelectorOpen, setEndTimeSelectorOpen] = useState(false);
 
   useEffect(() => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -46,11 +43,6 @@ const NewTaskForm = ({ setShowForm, date }) => {
       )
     );
   }, [date]);
-
-  useEffect(() => {
-    console.log(`Initial Start Time: ${startTime}`);
-    console.log(`Initial End Time: ${endTime}`);
-  }, [startTime, endTime]);
 
   const handleStartTimeChange = (isoTime) => {
     try {
@@ -73,7 +65,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
           )
         );
       }
-      console.log(`Changed Start Time: ${newStartTime}`);
+      hideTooltip();
     } catch (error) {
       setError("Failed to parse start time");
     }
@@ -82,6 +74,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const handleEndTimeChange = (time) => {
     setEndTime(time);
     console.log(`Changed End Time: ${time}`);
+    hideTooltip();
   };
 
   const handleSubmit = async (e) => {
@@ -101,6 +94,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
     if (endDateTime <= startDateTime) {
       setTimeConflictWarning("End time must be later than start time");
+      showTooltip();
       return;
     }
 
@@ -117,6 +111,7 @@ const NewTaskForm = ({ setShowForm, date }) => {
 
     if (timeConflict(newTask)) {
       setTimeConflictWarning("Time conflicts with another task");
+      showTooltip();
       return;
     } else {
       setTimeConflictWarning("");
@@ -176,6 +171,19 @@ const NewTaskForm = ({ setShowForm, date }) => {
     setShowRepeatOptions(isChecked);
   };
 
+  const showTooltip = () => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      setTimeConflictWarning("");
+    }, 2500);
+  };
+
+  const hideTooltip = () => {
+    console.log("Hiding tooltip");
+    clearTimeout(timerRef.current);
+    setTimeConflictWarning("");
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
@@ -229,16 +237,26 @@ const NewTaskForm = ({ setShowForm, date }) => {
                 <TimeSelector
                   id="start-time"
                   onChange={handleStartTimeChange}
+                  isOpen={startTimeSelectorOpen}
+                  setIsOpen={setStartTimeSelectorOpen}
                 />
               </div>
               <div className="flex-1 pl-2 relative">
                 <div className="text-gray-600 text-sm">End</div>
-                <Tooltip content={timeConflictWarning} placement="bottom" error={timeConflictWarning !== ""}>
-                  <TimeSelector
-                    id="end-time"
-                    onChange={handleEndTimeChange}
-                  />
-                </Tooltip>
+                <TimeSelector
+                  id="end-time"
+                  onChange={handleEndTimeChange}
+                  isOpen={endTimeSelectorOpen}
+                  setIsOpen={setEndTimeSelectorOpen}
+                />
+                <Tooltip
+                  message={timeConflictWarning}
+                  visible={
+                    !!timeConflictWarning &&
+                    !startTimeSelectorOpen &&
+                    !endTimeSelectorOpen
+                  }
+                />
               </div>
             </div>
             <div>
