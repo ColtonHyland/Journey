@@ -6,12 +6,12 @@ import RepeatOptions from "./RepeatOptions";
 import { MdClose } from "react-icons/md";
 import Tooltip from "@/components/utils/Tooltip";
 
-const NewTaskForm = ({ setShowForm, date }) => {
+const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [assignedDate, setAssignedDate] = useState(date);
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  const [startTime, setStartTime] = useState(initialTimes.startTime);
+  const [endTime, setEndTime] = useState(initialTimes.endTime);
   const [showRepeatOptions, setShowRepeatOptions] = useState(false);
   const [daysOfWeek, setDaysOfWeek] = useState({
     Sunday: false,
@@ -31,18 +31,23 @@ const NewTaskForm = ({ setShowForm, date }) => {
   const [endTimeSelectorOpen, setEndTimeSelectorOpen] = useState(false);
 
   useEffect(() => {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const now = new Date();
-    now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
-    setStartTime(formatInTimeZone(now, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
-    setEndTime(
-      formatInTimeZone(
-        new Date(now.getTime() + 15 * 60000),
-        timeZone,
-        "yyyy-MM-dd'T'HH:mm:ssXXX"
-      )
-    );
-  }, [date]);
+    if (initialTimes.startTime && initialTimes.endTime) {
+      setStartTime(initialTimes.startTime);
+      setEndTime(initialTimes.endTime);
+    } else {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const now = new Date();
+      now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15);
+      setStartTime(formatInTimeZone(now, timeZone, "yyyy-MM-dd'T'HH:mm:ssXXX"));
+      setEndTime(
+        formatInTimeZone(
+          new Date(now.getTime() + 15 * 60000),
+          timeZone,
+          "yyyy-MM-dd'T'HH:mm:ssXXX"
+        )
+      );
+    }
+  }, [date, initialTimes]);
 
   const handleStartTimeChange = (isoTime) => {
     try {
