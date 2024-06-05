@@ -10,11 +10,14 @@ const TimeSlot = forwardRef(({ hour, onTimeSlotClick }, ref) => {
     <div 
       ref={ref} 
       className="flex flex-col justify-between h-20 relative cursor-pointer"
-      onClick={() => onTimeSlotClick(hour)}
+      onClick={() => {
+        console.log(`Clicked on hour: ${hour}`); // Add console log to verify click
+        onTimeSlotClick(hour);
+      }}
     >
       <div className="absolute top-0 left-16 bottom-0 w-0.5 bg-gray-300"></div>
       {showDivider && (
-        <div className="flex justify-between items-center " style={{ marginTop: '-12px' }}>
+        <div className="flex justify-between items-center" style={{ marginTop: '-12px' }}>
           <div className="text-left font-bold text-gray-700 px-1">
             {displayHour}
           </div>
