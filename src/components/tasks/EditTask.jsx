@@ -47,7 +47,7 @@ const EditTask = ({ task, closeEdit }) => {
       end_time: endTime,
     };
 
-    if (timeConflict(updatedTask)) {
+    if (timeConflict(updatedTask, task.task_id)) {
       setTimeConflictWarning("Time conflict with another task");
       return;
     } else {
