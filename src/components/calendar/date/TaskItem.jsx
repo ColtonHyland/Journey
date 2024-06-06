@@ -5,7 +5,7 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import { useTasks } from "@/app/context/TaskContext";
 import { MdClose, MdModeEdit } from 'react-icons/md';
 
-const TaskItem = ({ task, hourHeight = 80, index }) => {
+const TaskItem = ({ task, date, hourHeight = 80, index }) => {
   const { deleteTask } = useTasks();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -92,7 +92,7 @@ const TaskItem = ({ task, hourHeight = 80, index }) => {
         </div>{" "}
         {task.description && <p className="text-xs">{task.description}</p>}
       </div>
-      {isEditing && <EditTask task={task} closeEdit={closeEdit} />}
+      {isEditing && <EditTask task={task} date={date} closeEdit={closeEdit} />}
       {showConfirm && (
         <ConfirmationDialog
           message="Are you sure?"

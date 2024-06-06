@@ -6,7 +6,7 @@ import TimeSelector from "./TimeSelector";
 import { formatInTimeZone } from "date-fns-tz";
 import { Tooltip } from "react-tooltip";
 
-const EditTask = ({ task, closeEdit }) => {
+const EditTask = ({ task, date, closeEdit }) => {
   const { editTask, timeConflict } = useTasks();
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
@@ -103,12 +103,12 @@ const EditTask = ({ task, closeEdit }) => {
               ></textarea>
             </div>
             <div>
-              <label htmlFor="assignedDate" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="assigned-date" className="block text-sm font-medium text-gray-700">
                 Assigned Date
               </label>
               <input
                 type="date"
-                id="assignedDate"
+                id="assigned-date"
                 value={assignedDate}
                 onChange={(e) => setAssignedDate(e.target.value)}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"

@@ -79,7 +79,7 @@ const TimeSlotList = ({ date }) => {
           <TimeSlot key={i} hour={i} onTimeSlotClick={handleTimeSlotClick} />
         ))}
         {tasks.map((task, index) => (
-          <TaskItem key={task.task_id} task={task} index={index} />
+          <TaskItem key={task.task_id} date={date} task={task} index={index} />
         ))}
       </div>
     </>
