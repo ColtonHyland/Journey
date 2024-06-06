@@ -10,7 +10,7 @@ const EditTask = ({ task, date, closeEdit }) => {
   const { editTask, timeConflict } = useTasks();
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
-  const [assignedDate, setAssignedDate] = useState(task.assigned_date);
+  const [assignedDate, setAssignedDate] = useState(date);
   const [startTime, setStartTime] = useState(task.start_time);
   const [endTime, setEndTime] = useState(task.end_time);
   const [error, setError] = useState("");
