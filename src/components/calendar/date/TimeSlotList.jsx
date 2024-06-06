@@ -31,7 +31,9 @@ const TimeSlotList = ({ date }) => {
       }
     };
 
-    containerRef.current.addEventListener("scroll", handleScroll);
+    if (containerRef.current) {
+      containerRef.current.addEventListener("scroll", handleScroll);
+    }
 
     return () => {
       if (containerRef.current) {
