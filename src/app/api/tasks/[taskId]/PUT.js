@@ -21,39 +21,6 @@ export async function PUT(request) {
   } = await request.json();
 
   try {
-    const conflictingTasks = await prisma.task.findMany({
-      where: {
-        userId,
-        assigned_date: new Date(assigned_date),
-        AND: [
-          {
-            start_time: {
-              lte: new Date(end_time),
-            },
-          },
-          {
-            end_time: {
-              gte: new Date(start_time),
-            },
-          },
-          {
-            task_id: {
-              not: task_id,
-            },
-          },
-        ],
-      },
-    });
-
-    if (conflictingTasks.length > 0) {
-      return new Response(
-        JSON.stringify({ error: "Time conflict with another task" }),
-        {
-          status: 400,
-        }
-      );
-    }
-
     const updatedTask = await prisma.task.update({
       where: { task_id },
       data: {
