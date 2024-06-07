@@ -10,9 +10,6 @@ export const TaskProvider = ({ children, date }) => {
   const [error, setError] = useState(null);
 
   const timeConflict = (newTask, ignoreTaskId = null) => {
-    console.log(`New task to check: ${JSON.stringify(newTask)}`);
-    console.log(`Tasks to check: ${JSON.stringify(tasks)}`);
-
     return tasks.some((task) => {
       if (ignoreTaskId && task.task_id === ignoreTaskId) {
         return false;
@@ -24,29 +21,16 @@ export const TaskProvider = ({ children, date }) => {
       if (taskAssignedDate !== newTaskAssignedDate) {
         return false;
       }
-
       // Normalize task start and end times to UTC for accurate comparison
       const taskStart = new Date(task.start_time).toISOString();
       const taskEnd = new Date(task.end_time).toISOString();
       const newTaskStart = new Date(newTask.start_time).toISOString();
       const newTaskEnd = new Date(newTask.end_time).toISOString();
-
-      console.log(`Comparing times:
-        Task: ${task.title},
-        Task Start: ${taskStart},
-        Task End: ${taskEnd},
-        New Task Start: ${newTaskStart},
-        New Task End: ${newTaskEnd}`);
-
-      // Convert back to Date objects for comparison
       const taskStartTime = new Date(taskStart).getTime();
       const taskEndTime = new Date(taskEnd).getTime();
       const newTaskStartTime = new Date(newTaskStart).getTime();
       const newTaskEndTime = new Date(newTaskEnd).getTime();
-
       const conflict = (newTaskStartTime < taskEndTime && newTaskEndTime > taskStartTime);
-
-      console.log(`Conflict detected: ${conflict}`);
       return conflict;
     });
   };
