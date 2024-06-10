@@ -29,6 +29,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
   const timerRef = useRef(null);
   const [startTimeSelectorOpen, setStartTimeSelectorOpen] = useState(false);
   const [endTimeSelectorOpen, setEndTimeSelectorOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialTimes.startTime && initialTimes.endTime) {
@@ -84,9 +85,11 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!assignedDate || !startTime || !endTime) {
       setError("Please ensure all date and time fields are filled correctly.");
+      setIsSubmitting(false);
       return;
     }
 
@@ -104,6 +107,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
     if (endDateTime <= startDateTime) {
       setTimeConflictWarning("End time must be later than start time");
       showTooltip();
+      setIsSubmitting(false);
       return;
     }
 
@@ -118,16 +122,14 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
       repeatUntil: repeatUntil || null,
     };
 
-    
-
     if (timeConflict(newTask)) {
       setTimeConflictWarning("Time conflicts with another task");
       showTooltip();
+      setIsSubmitting(false);
       return;
     } else {
       setTimeConflictWarning("");
     }
-
 
     try {
       await addTask(newTask);
@@ -135,6 +137,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
       resetForm();
     } catch (error) {
       setError("Failed to create task: " + error.message);
+      setIsSubmitting(false);
     }
   };
 
@@ -270,6 +273,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
                     !startTimeSelectorOpen &&
                     !endTimeSelectorOpen
                   }
+                  style={{ marginTop: '-18px' }}
                 />
               </div>
             </div>
@@ -285,7 +289,8 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
             {error && <div className="text-red-500">{error}</div>}
             <button
               type="submit"
-              className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
+              className={`mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isSubmitting}
             >
               Confirm
             </button>
