@@ -254,7 +254,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
                   onChange={handleStartTimeChange}
                   isOpen={startTimeSelectorOpen}
                   setIsOpen={setStartTimeSelectorOpen}
-                  initialTime={startTime} // Pass initialTime to TimeSelector
+                  initialTime={startTime}
                 />
               </div>
               <div className="flex-1 pl-2 relative">
@@ -264,7 +264,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
                   onChange={handleEndTimeChange}
                   isOpen={endTimeSelectorOpen}
                   setIsOpen={setEndTimeSelectorOpen}
-                  initialTime={endTime} // Pass initialTime to TimeSelector
+                  initialTime={endTime}
                 />
                 <Tooltip
                   message={timeConflictWarning}
@@ -273,7 +273,6 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
                     !startTimeSelectorOpen &&
                     !endTimeSelectorOpen
                   }
-                  style={{ marginTop: '-18px' }}
                 />
               </div>
             </div>
