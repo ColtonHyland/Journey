@@ -6,7 +6,7 @@ const Tooltip = ({ message, visible }) => {
 
   return (
     <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full">
-      <div className="relative bg-black text-white text-sm p-2 rounded shadow-lg mt-8">
+      <div className="relative bg-black text-white text-sm p-2 rounded shadow-lg mt-2">
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-black"></div>
         {message}
       </div>
