@@ -6,6 +6,7 @@ import TaskItem from "./TaskItem";
 import NewTaskForm from "@/components/tasks/NewTaskForm";
 import { useTasks } from "@/app/context/TaskContext";
 import { MdAdd } from "react-icons/md";
+import CurrentTimeIndicator from "./CurrentTimeIndicator"; // Import the new component
 
 const TimeSlotList = ({ date }) => {
   const { tasks } = useTasks();
@@ -81,6 +82,7 @@ const TimeSlotList = ({ date }) => {
         {tasks.map((task, index) => (
           <TaskItem key={task.task_id} date={date} task={task} index={index} />
         ))}
+        <CurrentTimeIndicator />
       </div>
     </>
   );

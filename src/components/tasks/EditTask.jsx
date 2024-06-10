@@ -59,11 +59,6 @@ const EditTask = ({ task, date, closeEdit }) => {
       return;
     }
 
-    console.log(` ${title}
-      Start Time: ${startTime}
-      End Time: ${endTime}
-      `);
-      
     try {
       await editTask(updatedTask);
       closeEdit();

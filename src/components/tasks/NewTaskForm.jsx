@@ -97,6 +97,10 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
       `${assignedDate}T${endTime.substring(11, 19)}`
     );
 
+    console.log(`${title}
+      Start Time: ${startTime}
+      End Time: ${endTime}`)
+
     if (endDateTime <= startDateTime) {
       setTimeConflictWarning("End time must be later than start time");
       showTooltip();
@@ -114,6 +118,8 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
       repeatUntil: repeatUntil || null,
     };
 
+    
+
     if (timeConflict(newTask)) {
       setTimeConflictWarning("Time conflicts with another task");
       showTooltip();
@@ -121,6 +127,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
     } else {
       setTimeConflictWarning("");
     }
+
 
     try {
       await addTask(newTask);
