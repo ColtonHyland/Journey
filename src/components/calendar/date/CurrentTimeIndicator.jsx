@@ -10,13 +10,12 @@ const CurrentTimeIndicator = ({ hourHeight = 80 }) => {
       const hours = now.getHours();
       const minutes = now.getMinutes();
       const totalMinutes = hours * 60 + minutes;
-      const position = (totalMinutes / (24 * 60)) * (24 * hourHeight); // Calculates position in pixels
+      const position = (totalMinutes / (24 * 60)) * (24 * hourHeight);
       setCurrentPosition(position);
-      console.log(`now: ${now}, position: ${position}`); // Add console log to verify position
     };
 
     updateTimePosition();
-    const intervalId = setInterval(updateTimePosition, 60000); // Update every minute
+    const intervalId = setInterval(updateTimePosition, 60000);
 
     return () => clearInterval(intervalId);
   }, [hourHeight]);
