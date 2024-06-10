@@ -15,20 +15,30 @@ const TimeSlotList = ({ date }) => {
   const [initialTimes, setInitialTimes] = useState({ startTime: "", endTime: "" });
 
   useEffect(() => {
+    const updateTimePosition = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const totalMinutes = hours * 60 + minutes;
+      const position = (totalMinutes / (24 * 60)) * (24 * 80); // Calculates position in pixels based on 80px per hour
+
+      if (containerRef.current) {
+        const containerHeight = containerRef.current.clientHeight;
+        const scrollPosition = position - containerHeight / 2;
+        containerRef.current.scrollTop = scrollPosition;
+      }
+    };
+
+    updateTimePosition();
+
     const savedScrollPosition = sessionStorage.getItem("scrollPosition");
-    const initialScrollPosition = savedScrollPosition
-      ? parseInt(savedScrollPosition, 10)
-      : 0;
-    if (containerRef.current) {
-      containerRef.current.scrollTop = initialScrollPosition;
+    if (savedScrollPosition && containerRef.current) {
+      containerRef.current.scrollTop = parseInt(savedScrollPosition, 10);
     }
 
     const handleScroll = () => {
       if (containerRef.current) {
-        sessionStorage.setItem(
-          "scrollPosition",
-          containerRef.current.scrollTop
-        );
+        sessionStorage.setItem("scrollPosition", containerRef.current.scrollTop);
       }
     };
 
