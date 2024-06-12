@@ -58,22 +58,23 @@ const JournalEntryField = ({ date }) => {
 
     return (
         <div className="flex flex-col h-full relative">
-        <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
-        <textarea
-            value={journalEntry}
-            onChange={(e) => {
-                setJournalEntry(e.target.value);
-                setIsTyping(true);
-            }}
-            className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto relative"
-            style={{ minHeight: '2rem' }}
-        />
-        {showSavedMessage && (
-            <div className="absolute bottom-5 left-0 right-0 mb-2 text-center pointer-events-none">
-                <span className="text-gray-500 italic bg-white px-2">Saved!</span>
-            </div>
-        )}
-    </div>
+            <h2 className="text-2xl font-bold text-center">Journal Entry</h2>
+            <textarea
+                value={journalEntry}
+                onChange={(e) => {
+                    setJournalEntry(e.target.value);
+                    setIsTyping(true);
+                }}
+                //change focus colour to black instead of blue and make it thicker
+                className="flex-1 border border-gray-300 p-2 w-full resize-none overflow-auto relative focus:border-black focus:ring-2 focus:ring-black focus:outline-none"
+                style={{ minHeight: '2rem' }}
+            />
+            {showSavedMessage && (
+                <div className="absolute bottom-5 left-0 right-0 mb-2 text-center pointer-events-none">
+                    <span className="text-gray-500 italic bg-white px-2">Saved!</span>
+                </div>
+            )}
+        </div>
     );
 }
 
