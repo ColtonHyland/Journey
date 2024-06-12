@@ -60,7 +60,7 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
   return (
     <>
       <div
-        className={`absolute left-24 right-8 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300`}
+        className={`absolute left-24 right-8 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300 overflow-hidden`}
         style={{
           top: `${top}px`,
           height: `${height}px`,
@@ -71,14 +71,14 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
           onClick={confirmDelete}
           disabled={isDeleting}
           className="absolute top-0 right-0 text-black focus:outline-none"
-          style={{ padding: "4px" }}
+          style={{ padding: "4px", zIndex: 15 }}
         >
           {isDeleting ? "Deleting..." : <MdClose />}
         </button>
         <button
           onClick={handleEdit}
           className="absolute top-0 right-5 text-black focus:outline-none"
-          style={{ padding: "4px" }}
+          style={{ padding: "4px", zIndex: 15 }}
         >
           <MdModeEdit />
         </button>
@@ -90,7 +90,7 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
             {amPm}
           </span>
         </div>{" "}
-        {task.description && <p className="text-xs">{task.description}</p>}
+        {task.description && <p className="text-xs truncate">{task.description}</p>}
       </div>
       {isEditing && <EditTask task={task} date={date} closeEdit={closeEdit} />}
       {showConfirm && (
