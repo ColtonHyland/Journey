@@ -24,7 +24,7 @@ const Goals = ({ goals }) => {
   return (
     <div>
       <div
-        className="flex flex-col"
+        className="flex flex-col overflow-hidden"
         style={{ height: `calc(100vh - var(--appbar-height, 70px))`}}
       >
         <NewGoalForm />
