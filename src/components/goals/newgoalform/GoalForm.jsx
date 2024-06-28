@@ -155,7 +155,7 @@ const GoalForm = ({ goalId }) => {
           className="space-y-4 flex flex-col justify-center"
         >
           <div className="flex">
-            <div className="w-1/12 flex items-center justify-center">
+            <div className="w-1/12 flex items-start justify-center mt-36">
               {currentStep > 0 && (
                 <button
                   onClick={handlePrev}
@@ -179,7 +179,7 @@ const GoalForm = ({ goalId }) => {
                 )}
               </div>
             </div>
-            <div className="w-1/12 flex items-center justify-center">
+            <div className="w-1/12 flex items-start justify-center mt-36">
               {currentStep < steps.length - 1 && (
                 <button
                   onClick={handleNext}
