@@ -112,10 +112,8 @@ const GoalForm = ({ goalId }) => {
 
       const result = await response.json();
       console.log("Goal saved successfully:", result);
-      // Handle success (e.g., display a success message or redirect)
     } catch (error) {
       console.error("Error saving goal:", error);
-      // Handle error (e.g., display an error message)
     }
   };
 
@@ -143,10 +141,6 @@ const GoalForm = ({ goalId }) => {
     <TimeBoundComponent timeBound={timeBound} setTimeBound={setTimeBound} />,
   ];
 
-  // <div className="flex justify-center">
-  // <div className="flex items-stretch">
-  //   <div className="flex flex-col justify-center">
-
   return (
     <div className="flex">
       <div className="flex-1">
@@ -171,11 +165,11 @@ const GoalForm = ({ goalId }) => {
                 {steps[currentStep]}
                 {currentStep === steps.length - 1 && (
                   <button
-                    type="submit"
-                    className="mt-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    Save Goal
-                  </button>
+                  type="submit"
+                  className="mt-4 inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Save Goal
+                </button>
                 )}
               </div>
             </div>

@@ -20,8 +20,8 @@ const TimeSlotList = ({ date }) => {
       const hours = now.getHours();
       const minutes = now.getMinutes();
       const totalMinutes = hours * 60 + minutes;
-      const position = (totalMinutes / (24 * 60)) * (24 * 80); // Calculates position in pixels based on 80px per hour
-
+      const position = (totalMinutes / (24 * 60)) * (24 * 80);
+      
       if (containerRef.current) {
         const containerHeight = containerRef.current.clientHeight;
         const scrollPosition = position - containerHeight / 2;
