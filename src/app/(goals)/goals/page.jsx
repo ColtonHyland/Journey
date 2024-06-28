@@ -27,7 +27,7 @@ const Goals = ({ goals }) => {
         className="flex flex-col"
         style={{ height: `calc(100vh - var(--appbar-height, 70px))`}}
       >
-        <NewTaskForm />
+        <NewGoalForm />
       </div>
     </div>
   );
