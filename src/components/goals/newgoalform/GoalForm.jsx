@@ -142,7 +142,7 @@ const GoalForm = ({ goalId }) => {
   ];
 
   return (
-    <div className="flex">
+    <div className="flex my-4">
       <div className="flex-1">
         <form
           onSubmit={handleSubmit}

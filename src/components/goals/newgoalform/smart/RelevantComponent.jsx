@@ -3,7 +3,7 @@ import React from 'react';
 const RelevantComponent = ({ relevant, setRelevant }) => {
   return (
     <div>
-      <h3 className="text-lg font-medium text-gray-700">Relevant</h3>
+      <h3 className="my-2 text-lg font-medium text-gray-700">Relevant</h3>
       <label htmlFor="relevantWorthwhile" className="block text-sm font-medium text-gray-700">Does this seem worthwhile?</label>
       <textarea id="relevantWorthwhile" value={relevant.worthwhile} onChange={(e) => setRelevant({ ...relevant, worthwhile: e.target.value })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 resize-none" rows="2" required></textarea>
       <label htmlFor="relevantRightTime" className="block text-sm font-medium text-gray-700">Is this the right time?</label>

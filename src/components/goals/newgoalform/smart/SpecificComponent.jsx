@@ -3,7 +3,7 @@ import React from 'react';
 const SpecificComponent = ({ specific, setSpecific }) => {
   return (
     <div>
-      <h3 className="text-lg font-medium text-gray-700">Specific</h3>
+      <h3 className="my-2 text-lg font-medium text-gray-700">Specific</h3>
       <label htmlFor="specificWhat" className="block text-sm font-medium text-gray-700">What do I want to achieve?</label>
       <textarea id="specificWhat" value={specific.what} onChange={(e) => setSpecific({ ...specific, what: e.target.value })} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 resize-none" rows="2" required></textarea>
       <label htmlFor="specificWhy" className="block text-sm font-medium text-gray-700">Why is this goal important?</label>
