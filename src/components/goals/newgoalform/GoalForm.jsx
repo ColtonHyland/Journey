@@ -1,11 +1,13 @@
 "use client";
 import React, { useState } from "react";
+import Link from 'next/link';
 import SpecificComponent from "./smart/SpecificComponent";
 import MeasurableComponent from "./smart/MeasurableComponent";
 import AchievableComponent from "./smart/AchievableComponent";
 import RelevantComponent from "./smart/RelevantComponent";
 import TimeBoundComponent from "./smart/TimeBoundComponent";
 import ConfirmationDialog from "../../utils/ConfirmationDialog.jsx";
+import { TbArrowBackUp } from "react-icons/tb";
 
 const GoalForm = ({ goalId }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -43,6 +45,7 @@ const GoalForm = ({ goalId }) => {
   const [actionPlan, setActionPlan] = useState("");
   const [status, setStatus] = useState("active");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [navigateAway, setNavigateAway] = useState(false);
 
   const handleNext = () => {
     setCurrentStep((prevStep) => prevStep + 1);
@@ -123,7 +126,7 @@ const GoalForm = ({ goalId }) => {
 
   const confirmCancel = () => {
     setShowConfirm(false);
-    // Implement the logic for canceling the goal creation, e.g., navigating away from the form
+    setNavigateAway(true); // Trigger the navigation after confirming
   };
 
   const cancelCancel = () => {
@@ -153,7 +156,15 @@ const GoalForm = ({ goalId }) => {
         >
           <div className="flex">
             <div className="w-1/12 flex items-start justify-center mt-36">
-              {currentStep > 0 && (
+              {currentStep === 0 ? (
+                <button
+                  onClick={handleCancel}
+                  type="button"
+                  className="text-xl font-semibold hover:text-blue-500 transition-colors"
+                >
+                  <TbArrowBackUp />
+                </button>
+              ) : (
                 <button
                   onClick={handlePrev}
                   type="button"
@@ -177,7 +188,7 @@ const GoalForm = ({ goalId }) => {
                     <button
                       type="button"
                       onClick={handleCancel}
-                       className="py-2 px-4 border-2 border-black shadow-sm text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100"
+                      className="py-2 px-4 border-2 border-black shadow-sm text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100"
                     >
                       Cancel
                     </button>
@@ -205,6 +216,9 @@ const GoalForm = ({ goalId }) => {
           onConfirm={confirmCancel}
           onCancel={cancelCancel}
         />
+      )}
+      {navigateAway && (
+        <Link href="/goals" />
       )}
     </div>
   );
