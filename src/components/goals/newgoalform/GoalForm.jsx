@@ -5,6 +5,7 @@ import MeasurableComponent from "./smart/MeasurableComponent";
 import AchievableComponent from "./smart/AchievableComponent";
 import RelevantComponent from "./smart/RelevantComponent";
 import TimeBoundComponent from "./smart/TimeBoundComponent";
+import ConfirmationDialog from "../../utils/ConfirmationDialog.jsx";
 
 const GoalForm = ({ goalId }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -41,6 +42,7 @@ const GoalForm = ({ goalId }) => {
   });
   const [actionPlan, setActionPlan] = useState("");
   const [status, setStatus] = useState("active");
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleNext = () => {
     setCurrentStep((prevStep) => prevStep + 1);
@@ -73,7 +75,12 @@ const GoalForm = ({ goalId }) => {
       where: "",
       resources: "",
     });
-    setMeasurable({ howMuch: "", howMany: "", accomplishment: "", quantifiers: [] });
+    setMeasurable({
+      howMuch: "",
+      howMany: "",
+      accomplishment: "",
+      quantifiers: [],
+    });
     setAchievable({ how: "", realistic: "", quantifiers: [] });
     setRelevant({
       worthwhile: "",
@@ -110,10 +117,29 @@ const GoalForm = ({ goalId }) => {
     }
   };
 
+  const handleCancel = () => {
+    setShowConfirm(true);
+  };
+
+  const confirmCancel = () => {
+    setShowConfirm(false);
+    // Implement the logic for canceling the goal creation, e.g., navigating away from the form
+  };
+
+  const cancelCancel = () => {
+    setShowConfirm(false);
+  };
+
   const steps = [
     <SpecificComponent specific={specific} setSpecific={setSpecific} />,
-    <MeasurableComponent measurable={measurable} setMeasurable={setMeasurable} />,
-    <AchievableComponent achievable={achievable} setAchievable={setAchievable} />,
+    <MeasurableComponent
+      measurable={measurable}
+      setMeasurable={setMeasurable}
+    />,
+    <AchievableComponent
+      achievable={achievable}
+      setAchievable={setAchievable}
+    />,
     <RelevantComponent relevant={relevant} setRelevant={setRelevant} />,
     <TimeBoundComponent timeBound={timeBound} setTimeBound={setTimeBound} />,
   ];
@@ -121,11 +147,18 @@ const GoalForm = ({ goalId }) => {
   return (
     <div className="flex my-4">
       <div className="flex-1">
-        <form onSubmit={handleSubmit} className="space-y-4 flex flex-col justify-center">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 flex flex-col justify-center"
+        >
           <div className="flex">
             <div className="w-1/12 flex items-start justify-center mt-36">
               {currentStep > 0 && (
-                <button onClick={handlePrev} type="button" className="text-xl font-semibold hover:text-blue-500 transition-colors">
+                <button
+                  onClick={handlePrev}
+                  type="button"
+                  className="text-xl font-semibold hover:text-blue-500 transition-colors"
+                >
                   &#9664;
                 </button>
               )}
@@ -134,15 +167,31 @@ const GoalForm = ({ goalId }) => {
               <div className="h-full">
                 {steps[currentStep]}
                 {currentStep === steps.length - 1 && (
-                  <button type="submit" className="mt-4 inline-flex items-center justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                    Save Goal
-                  </button>
+                  <div className="flex justify-start space-x-4 mt-4">
+                    <button
+                      type="submit"
+                      className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
+                    >
+                      Save Goal
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleCancel}
+                       className="py-2 px-4 border-2 border-black shadow-sm text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
             <div className="w-1/12 flex items-start justify-center mt-36">
               {currentStep < steps.length - 1 && (
-                <button onClick={handleNext} type="button" className="text-xl font-semibold hover:text-blue-500 transition-colors">
+                <button
+                  onClick={handleNext}
+                  type="button"
+                  className="text-xl font-semibold hover:text-blue-500 transition-colors"
+                >
                   &#9654;
                 </button>
               )}
@@ -150,6 +199,13 @@ const GoalForm = ({ goalId }) => {
           </div>
         </form>
       </div>
+      {showConfirm && (
+        <ConfirmationDialog
+          message="Are you sure you want to cancel? All unsaved changes will be lost."
+          onConfirm={confirmCancel}
+          onCancel={cancelCancel}
+        />
+      )}
     </div>
   );
 };

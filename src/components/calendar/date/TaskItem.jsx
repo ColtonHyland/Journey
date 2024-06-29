@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import EditTask from "@/components/tasks/EditTask";
-import ConfirmationDialog from "./ConfirmationDialog";
+import ConfirmationDialog from "../../utils/ConfirmationDialog";
 import { useTasks } from "@/app/context/TaskContext";
 import { MdClose, MdModeEdit } from 'react-icons/md';
 
