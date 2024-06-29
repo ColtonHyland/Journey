@@ -160,7 +160,7 @@ const GoalForm = ({ goalId }) => {
                 <button
                   onClick={handleCancel}
                   type="button"
-                  className="text-xl font-semibold hover:text-blue-500 transition-colors"
+                  className="text-xl font-semibold hover:text-black transition-colors"
                 >
                   <TbArrowBackUp />
                 </button>
@@ -168,7 +168,7 @@ const GoalForm = ({ goalId }) => {
                 <button
                   onClick={handlePrev}
                   type="button"
-                  className="text-xl font-semibold hover:text-blue-500 transition-colors"
+                  className="text-xl font-semibold hover:text-black transition-colors"
                 >
                   &#9664;
                 </button>
@@ -201,7 +201,7 @@ const GoalForm = ({ goalId }) => {
                 <button
                   onClick={handleNext}
                   type="button"
-                  className="text-xl font-semibold hover:text-blue-500 transition-colors"
+                  className="text-xl font-semibold hover:text-black transition-colors"
                 >
                   &#9654;
                 </button>
