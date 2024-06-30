@@ -1,7 +1,7 @@
-"use client";
 import React from "react";
+import Link from 'next/link';
 
-const ConfirmationDialog = ({ message, onConfirm, onCancel }) => {
+const ConfirmationDialog = ({ message, onConfirm, onCancel, navigateTo }) => {
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 relative">
@@ -13,12 +13,14 @@ const ConfirmationDialog = ({ message, onConfirm, onCancel }) => {
           >
             Cancel
           </button>
-          <button
-            onClick={onConfirm}
-            className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
-          >
-            Confirm
-          </button>
+          <Link href={navigateTo}>
+            <button
+              onClick={onConfirm}
+              className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
+            >
+              Confirm
+            </button>
+          </Link>
         </div>
       </div>
     </div>

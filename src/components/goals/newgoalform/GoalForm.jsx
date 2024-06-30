@@ -46,7 +46,6 @@ const GoalForm = ({ goalId }) => {
   const [actionPlan, setActionPlan] = useState("");
   const [status, setStatus] = useState("active");
   const [showConfirm, setShowConfirm] = useState(false);
-  const [navigateAway, setNavigateAway] = useState(false);
 
   const handleNext = () => {
     setCurrentStep((prevStep) => prevStep + 1);
@@ -106,7 +105,6 @@ const GoalForm = ({ goalId }) => {
 
   const confirmCancel = () => {
     setShowConfirm(false);
-    setNavigateAway(true); // Trigger the navigation after confirming
   };
 
   const cancelCancel = () => {
@@ -195,10 +193,8 @@ const GoalForm = ({ goalId }) => {
           message="Are you sure you want to cancel? All unsaved changes will be lost."
           onConfirm={confirmCancel}
           onCancel={cancelCancel}
+          navigateTo="/goals"
         />
-      )}
-      {navigateAway && (
-        <Link href="/goals" />
       )}
     </div>
   );
