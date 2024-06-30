@@ -1,4 +1,3 @@
-
 import prisma from '@/lib/prisma';
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth/next";
@@ -11,9 +10,8 @@ export async function GET(request) {
   const userId = session.user.id;
 
   try {
-
     const goals = await prisma.goal.findMany({
-      where: { userId, status: 'active'},
+      where: { userId, status: 'active' },
     });
 
     if (!goals) {
