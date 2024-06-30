@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from 'next/link';
+import { addGoal } from "@/app/context/GoalContext";
 import SpecificComponent from "./smart/SpecificComponent";
 import MeasurableComponent from "./smart/MeasurableComponent";
 import AchievableComponent from "./smart/AchievableComponent";
@@ -66,7 +67,7 @@ const GoalForm = ({ goalId }) => {
       timeBound,
       actionPlan,
     };
-    onSave(goal);
+    addGoal(goal);
 
     setStatus("active");
     setSpecific({
@@ -97,27 +98,6 @@ const GoalForm = ({ goalId }) => {
       milestones: [],
     });
     setActionPlan("");
-  };
-
-  const onSave = async (goal) => {
-    try {
-      const response = await fetch(`/api/goals`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(goal),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save goal");
-      }
-
-      const result = await response.json();
-      console.log("Goal saved successfully:", result);
-    } catch (error) {
-      console.error("Error saving goal:", error);
-    }
   };
 
   const handleCancel = () => {
