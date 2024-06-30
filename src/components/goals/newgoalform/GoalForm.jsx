@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from 'next/link';
-import { addGoal } from "@/app/context/GoalContext";
+import { useGoals } from "@/app/context/GoalContext";
 import SpecificComponent from "./smart/SpecificComponent";
 import MeasurableComponent from "./smart/MeasurableComponent";
 import AchievableComponent from "./smart/AchievableComponent";
@@ -11,6 +11,7 @@ import ConfirmationDialog from "../../utils/ConfirmationDialog.jsx";
 import { TbArrowBackUp } from "react-icons/tb";
 
 const GoalForm = ({ goalId }) => {
+  const { addGoal } = useGoals();
   const [currentStep, setCurrentStep] = useState(0);
   const [specific, setSpecific] = useState({
     title: "",

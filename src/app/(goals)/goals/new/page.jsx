@@ -6,7 +6,7 @@ const NewGoal = () => {
     <div>
       <div
         className="flex flex-col overflow-hidden"
-        style={{ height: `calc(100vh - var(--appbar-height, 70px))`}}
+        style={{ height: `calc(100vh - var(--appbar-height, 70px))` }}
       >
         <NewGoalForm />
       </div>

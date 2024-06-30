@@ -8,6 +8,8 @@ export async function POST(request) {
   const userId = session.user.id;
   const { status, specific, measurable, achievable, relevant, timeBound, actionPlan } = await request.json();
 
+  console.log('POST route message: Creating goal:', { status, specific, measurable, achievable, relevant, timeBound, actionPlan });
+
   try {
     const goal = await prisma.goal.create({
       data: {

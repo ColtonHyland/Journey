@@ -29,6 +29,7 @@ export const GoalProvider = ({ children }) => {
   };
 
   const addGoal = async (newGoalDetails) => {
+    console.log(`Adding new goal asynchronously:`, newGoalDetails);
     try {
       const response = await fetch("/api/goals", {
         method: "POST",
