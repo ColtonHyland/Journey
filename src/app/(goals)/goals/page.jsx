@@ -32,12 +32,6 @@ const Goals = () => {
   //   </div>
   // );
 
-  //get goals from api and set to state
-  const [goals, setGoals] = useState([]);
-  //get goals from api and set to state
-
-
-  //list goals and link to new goal form
   return (
     <div>
       <div
@@ -46,17 +40,8 @@ const Goals = () => {
       >
         <NewGoalForm />
         <h1 className="text-2xl font-semibold mb-4">Goals</h1>
-        <ul>
-          {goals.map((goal) => (
-            <li key={goal.id} className="mb-4">
-              <h2 className="text-xl font-semibold">{goal.title}</h2>
-              <p>{goal.description}</p>
-              <Link href={`/goals/${goal.id}`} className="text-blue-500 hover:underline">
-                View Details
-              </Link>
-            </li>
-          ))}
-        </ul>
+        
+        <GoalDisplay />
       </div>
     </div>
   );
