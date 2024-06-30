@@ -13,3 +13,5 @@ const NewGoal = () => {
     </div>
   );
 }
+
+export default NewGoal;
