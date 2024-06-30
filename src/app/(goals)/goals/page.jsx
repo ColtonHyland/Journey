@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import GoalDisplay from "@/components/goals/GoalDisplay";
 import NewGoalForm from "@/components/goals/newgoalform/GoalForm";
+import { GoalProvider } from "@/app/context/GoalContext";
 
 const Goals = () => {
 
@@ -33,6 +34,7 @@ const Goals = () => {
   // );
 
   return (
+    <GoalProvider>
     <div>
       <div
         className="flex flex-col overflow-hidden"
@@ -44,6 +46,7 @@ const Goals = () => {
         <GoalDisplay />
       </div>
     </div>
+    </GoalProvider>
   );
 
 
