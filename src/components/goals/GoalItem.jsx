@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MdClose } from 'react-icons/md';
-import ConfirmationDialog from './ConfirmationDialog';
+import ConfirmationDialog from '../utils/ConfirmationDialog';
 import Link from 'next/link';
 import { useGoals } from '@/app/context/GoalContext';
 
