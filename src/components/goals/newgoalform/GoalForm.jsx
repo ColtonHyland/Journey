@@ -1,6 +1,6 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from 'next/navigation';
+'use client';
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useGoals } from "@/app/context/GoalContext";
 import SpecificComponent from "./smart/SpecificComponent";
 import MeasurableComponent from "./smart/MeasurableComponent";
@@ -13,9 +13,11 @@ import { TbArrowBackUp } from "react-icons/tb";
 const GoalForm = ({ goalId }) => {
   const { addGoal } = useGoals();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const titleParam = searchParams.get('title');
   const [currentStep, setCurrentStep] = useState(0);
   const [specific, setSpecific] = useState({
-    title: "",
+    title: titleParam || "",
     description: "",
     what: "",
     why: "",
@@ -137,8 +139,9 @@ const GoalForm = ({ goalId }) => {
       <div className="flex-1">
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 flex flex-col justify-center"
+          className="space-y-1 flex flex-col justify-center"
         >
+          <h1 className="text-center text-2xl font-semibold mb-4">{specific.title}</h1>
           <div className="flex">
             <div className="w-1/12 flex items-start justify-center mt-36">
               {currentStep === 0 ? (
