@@ -1,15 +1,12 @@
-'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { GoalProvider } from '@/app/context/GoalContext';
 
-const GoalsLayout = ({ children }) => {
+export default function GoalsLayout({ children }) {
   return (
     <GoalProvider>
-      <div className="layout-container">
+      <Suspense fallback={<p>Loading...</p>}>
         {children}
-      </div>
+      </Suspense>
     </GoalProvider>
   );
-};
-
-export default GoalsLayout;
+}
