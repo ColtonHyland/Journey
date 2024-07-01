@@ -28,10 +28,12 @@ const Goals = () => {
         className="flex flex-col overflow-hidden"
         style={{ height: `calc(100vh - var(--appbar-height, 70px))`}}
       >
+        <div className="flex justify-start space-x-4 m-4">
         <button onClick={handleNewGoalClick} className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900">
           New Goal
         </button>
-        <h1 className="text-2xl font-semibold mb-4">Goals</h1>
+        </div>
+        <h1 className="text-2xl font-semibold ml-4 mb-2">Goals</h1>
         <GoalDisplay />
       </div>
       {showTitleDialog && (
