@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const GoalContext = createContext();
@@ -10,6 +11,7 @@ export const GoalProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const fetchGoals = async () => {
+    console.log("Fetching goals asynchronously");
     setLoading(true);
     try {
       const response = await fetch(`/api/goals`, {
