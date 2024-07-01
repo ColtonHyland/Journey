@@ -34,6 +34,7 @@ const Goals = () => {
         </button>
         </div>
         <h1 className="text-2xl font-semibold ml-4 mb-2">Goals</h1>
+        <hr className="border-gray-300 my-1" />
         <GoalDisplay />
       </div>
       {showTitleDialog && (
