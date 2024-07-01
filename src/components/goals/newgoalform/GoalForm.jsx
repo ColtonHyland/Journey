@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useGoals } from "@/app/context/GoalContext";
 import SpecificComponent from "./smart/SpecificComponent";
 import MeasurableComponent from "./smart/MeasurableComponent";
@@ -12,6 +12,7 @@ import { TbArrowBackUp } from "react-icons/tb";
 
 const GoalForm = ({ goalId }) => {
   const { addGoal } = useGoals();
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [specific, setSpecific] = useState({
     title: "",
@@ -67,7 +68,12 @@ const GoalForm = ({ goalId }) => {
       timeBound,
       actionPlan,
     };
-    addGoal(goal);
+    try {
+      await addGoal(goal);
+      router.push('/goals?message=success');
+    } catch (error) {
+      router.push('/goals?message=error');
+    }
 
     setStatus("active");
     setSpecific({
