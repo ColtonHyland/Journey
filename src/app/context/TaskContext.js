@@ -1,5 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { validateAndFormatDate } from "../utils/validateDate";
 
 const TaskContext = createContext();
 
@@ -9,6 +10,8 @@ export const TaskProvider = ({ children, date }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const formattedDate = date ? validateAndFormatDate(date) : new Date().toISOString().split('T')[0];
 
   const timeConflict = (newTask, ignoreTaskId = null) => {
     return tasks.some((task) => {
@@ -39,13 +42,12 @@ export const TaskProvider = ({ children, date }) => {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/tasks/dailyTasks/${date}`, {
+      const response = await fetch(`/api/tasks/dailyTasks/${formattedDate}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) throw new Error("Failed to fetch tasks");
       const data = await response.json();
-      console.log(data.dailyTasks)
       setTasks(data.dailyTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -71,7 +73,6 @@ export const TaskProvider = ({ children, date }) => {
         console.error("Failed to add task:", errorData);
         throw new Error("Failed to add task");
       }
-      const addedTask = await response.json(); // Assuming the response includes the added task data
       fetchTasks(); // Refresh the tasks list
     } catch (error) {
       console.error("Error adding task:", error);
@@ -111,7 +112,6 @@ export const TaskProvider = ({ children, date }) => {
         console.error("Failed to update task:", errorData);
         throw new Error("Failed to update task");
       }
-      const editedTask = await response.json();
       fetchTasks();
     } catch (error) {
       console.error("Error updating task:", error);
@@ -121,7 +121,7 @@ export const TaskProvider = ({ children, date }) => {
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [formattedDate]);
 
   return (
     <TaskContext.Provider
