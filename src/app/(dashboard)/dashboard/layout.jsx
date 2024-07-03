@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { GoalProvider } from "@/app/context/GoalContext";
 import { TaskProvider } from "@/app/context/TaskContext";
 
-export default function GoalsLayout({ children }) {
+export default function DashboardLayout({ children }) {
   return (
     <TaskProvider>
       <GoalProvider>

@@ -45,7 +45,7 @@ export const TaskProvider = ({ children, date }) => {
       });
       if (!response.ok) throw new Error("Failed to fetch tasks");
       const data = await response.json();
-
+      console.log(data.dailyTasks)
       setTasks(data.dailyTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
