@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import TimeSelector from "./TimeSelector";
+import TimeSelector from "../TimeSelector";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
-import RepeatOptions from "./RepeatOptions";
+import RepeatOptions from "../RepeatOptions";
 import { MdClose } from "react-icons/md";
 import Tooltip from "@/components/utils/Tooltip";
 

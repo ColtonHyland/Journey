@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import NewTaskForm from './NewTaskForm';
+import NewTaskForm from './newtaskform/NewTaskForm';
 
 const TaskDisplay = ({ goalId }) => {
   const [tasks, setTasks] = useState([]);

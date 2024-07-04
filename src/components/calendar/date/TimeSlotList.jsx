@@ -3,7 +3,7 @@ import "@/app/globals.css";
 import React, { useRef, useEffect, useState } from "react";
 import TimeSlot from "./TimeSlot";
 import TaskItem from "./TaskItem";
-import NewTaskForm from "@/components/tasks/NewTaskForm";
+import NewTaskForm from "@/components/tasks/newtaskform/NewTaskForm";
 import { useTasks } from "@/app/context/TaskContext";
 import { MdAdd } from "react-icons/md";
 import CurrentTimeIndicator from "./CurrentTimeIndicator";

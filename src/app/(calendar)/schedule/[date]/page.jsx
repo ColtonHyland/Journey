@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import NewTaskForm from '@/components/tasks/NewTaskForm';
+import NewTaskForm from '@/components/tasks/newtaskform/NewTaskForm';
 import DailyTasksContainer from '@/components/tasks/DailyTasksContainer';
 import TimeSlotList from '@/components/calendar/date/TimeSlotList';
 import DayScheduleNavigation from '@/components/calendar/date/DayScheduleNavigation';
