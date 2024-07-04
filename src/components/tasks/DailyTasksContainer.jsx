@@ -1,13 +1,15 @@
 'use client';
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 import { useTasks } from '@/app/context/TaskContext';
 import DailyTaskItem from './DailyTaskItem';
 
-const DailyTasksContainer = () => {
+const DailyTasksContainer = ({ date }) => {
   const { tasks, loading, error, deleteTask } = useTasks();
 
   useEffect(() => {
     console.log("Tasks in DailyTasksContainer:", tasks);
+    console.log("Current Date in DailyTasksContainer:", date)
   }, [tasks]);
 
   if (loading) return <div>Loading...</div>;
@@ -16,6 +18,7 @@ const DailyTasksContainer = () => {
   const sortedTasks = [...tasks].sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
 
   return (
+    <Link href={`/schedule/${date}`}>
     <div className="border border-black p-4">
       <h2 className="text-lg font-bold">Daily Tasks</h2>
       <ul>
@@ -30,6 +33,7 @@ const DailyTasksContainer = () => {
         )}
       </ul>
     </div>
+    </Link>
   );
 };
 

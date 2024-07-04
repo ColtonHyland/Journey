@@ -6,9 +6,9 @@ import CurrentGoalItem from './CurrentGoalItem';
 const CurrentGoalsContainer = () => {
   const { goals, loading, error } = useGoals();
 
-  useEffect(() => {
-    console.log("Goals in CurrentGoalsContainer:", goals);
-  }, [goals]);
+  // useEffect(() => {
+  //   console.log("Goals in CurrentGoalsContainer:", goals);
+  // }, [goals]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

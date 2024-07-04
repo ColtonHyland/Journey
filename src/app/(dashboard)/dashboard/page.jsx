@@ -20,7 +20,7 @@ const Dashboard = () => {
             <CurrentGoalsContainer />
           </div>
           <div className="col-span-1 bg-white p-4 rounded shadow">
-            <DailyTasksContainer />
+            <DailyTasksContainer date={currentDate}/>
           </div>
           <div className="col-span-1 bg-white p-4 rounded shadow">
             {/* Placeholder for the third container */}
