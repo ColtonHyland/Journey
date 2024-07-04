@@ -8,8 +8,8 @@ const TaskType = ({ taskType, setTaskType }) => {
         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
       >
         <option value="work">Work</option>
-        <option value="errand">Home</option>
-        <option value="Activity">Activity</option>
+        <option value="home">Home</option>
+        <option value="activity">Activity</option>
         <option value="other">Other</option>
       </select>
     </div>

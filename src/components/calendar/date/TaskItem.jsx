@@ -66,36 +66,40 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
   return (
     <>
       <div
-        className={`absolute left-24 right-8 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-300 overflow-hidden`}
+        className={`absolute left-24 right-8 rounded-lg ${backgroundColor} text-black text-sm p-1 border border-gray-500 overflow-hidden`}
         style={{
           top: `${top}px`,
           height: `${height}px`,
           zIndex: 10,
         }}
       >
-        <button
-          onClick={confirmDelete}
-          disabled={isDeleting}
-          className="absolute top-0 right-0 text-black focus:outline-none"
-          style={{ padding: "4px", zIndex: 15 }}
-        >
-          {isDeleting ? "Deleting..." : <MdClose />}
-        </button>
-        <button
-          onClick={handleEdit}
-          className="absolute top-0 right-5 text-black focus:outline-none"
-          style={{ padding: "4px", zIndex: 15 }}
-        >
-          <MdModeEdit />
-        </button>
-        <div>
-          <span className="font-bold">{task.title}</span>
-          <span className="text-xs">
-            {" "}
-            • {formattedStartTime} - {formattedEndTime}
-            {amPm}
-          </span>
-        </div>{" "}
+        <div className="flex justify-between items-center">
+          <div>
+            <span className="font-bold">{task.title}</span>
+            <span className="text-xs">
+              {" "}
+              • {formattedStartTime} - {formattedEndTime}
+              {amPm}
+            </span>
+          </div>
+          <div className="flex">
+            <button
+              onClick={handleEdit}
+              className="text-black focus:outline-none"
+              style={{ padding: "4px", zIndex: 15 }}
+            >
+              <MdModeEdit />
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="text-black focus:outline-none"
+              style={{ padding: "4px", zIndex: 15 }}
+            >
+              {isDeleting ? "Deleting..." : <MdClose />}
+            </button>
+          </div>
+        </div>
         {task.description && <p className="text-xs truncate">{task.description}</p>}
       </div>
       {isEditing && <EditTask task={task} date={date} closeEdit={closeEdit} />}

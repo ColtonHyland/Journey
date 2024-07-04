@@ -18,6 +18,7 @@ export async function PUT(request) {
     assigned_date,
     start_time,
     end_time,
+    type,
   } = await request.json();
 
   try {
@@ -29,6 +30,7 @@ export async function PUT(request) {
         assigned_date: new Date(assigned_date),
         start_time: new Date(start_time),
         end_time: new Date(end_time),
+        type, 
       },
     });
 

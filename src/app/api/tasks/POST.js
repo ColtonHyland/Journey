@@ -57,7 +57,7 @@ export async function POST(request) {
             assigned_date: currentDate,
             start_time: startTimeComplete,
             end_time: endTimeComplete,
-            type, // Include type in task data
+            type,
           };
           console.log("Creating single task:", taskData);
           const task = await prisma.task.create({ data: taskData });
@@ -74,7 +74,7 @@ export async function POST(request) {
         assigned_date: new Date(assigned_date),
         start_time: new Date(start_time),
         end_time: new Date(end_time),
-        type, // Include type in task data
+        type,
       };
       console.log("Creating single task:", taskData);
       const task = await prisma.task.create({ data: taskData });
