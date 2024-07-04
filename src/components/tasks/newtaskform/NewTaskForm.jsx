@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import FormHeader from "./FormHeader";
-import TitleDescription from "./TitleDescription";
+import Title from "./Title";
 import DateTime from "./DateTimeSelector";
 import TaskType from "./TaskType";
 import RepeatOptions from "./RepeatOptions";
@@ -28,7 +28,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
   const [repeatUntil, setRepeatUntil] = useState("");
   const [error, setError] = useState("");
   const [timeConflictWarning, setTimeConflictWarning] = useState("");
-  const { tasks, addTask, timeConflict } = useTasks();
+  const { addTask, timeConflict } = useTasks();
   const timerRef = useRef(null);
   const [startTimeSelectorOpen, setStartTimeSelectorOpen] = useState(false);
   const [endTimeSelectorOpen, setEndTimeSelectorOpen] = useState(false);
@@ -206,31 +206,10 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             <div className="flex space-x-4">
               <div className="w-2/3">
-                <input
-                  type="text"
-                  id="title"
-                  placeholder="Task name"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                  required
-                />
-              </div>
+                <Title title={title} setTitle={setTitle} />
+              </div>   
               <div className="w-1/3">
-                <label htmlFor="task-type" className="block text-sm font-medium text-gray-700">
-                  Task Type
-                </label>
-                <select
-                  id="task-type"
-                  value={taskType}
-                  onChange={(e) => setTaskType(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                >
-                  <option value="work">Work</option>
-                  <option value="errand">Errand</option>
-                  <option value="chore">Chore</option>
-                  <option value="other">Other</option>
-                </select>
+                <TaskType taskType={taskType} setTaskType={setTaskType} />
               </div>
             </div>
             <textarea
