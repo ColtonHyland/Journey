@@ -60,6 +60,7 @@ model Task {
   title         String    @db.VarChar(100)
   description   String?
   status        String?   @db.VarChar(20)
+  type          String    @db.VarChar(20) @default("other")
   assigned_date DateTime  @default(now())
   start_time    DateTime  @db.Timestamp(6)  @default(now())
   end_time      DateTime  @db.Timestamp(6)  @default(now())
