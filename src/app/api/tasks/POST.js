@@ -20,6 +20,7 @@ export async function POST(request) {
     end_time,
     repeatUntil,
     daysOfWeek,
+    type, // Include type in the request body
   } = await request.json();
 
   // Map days of the week from names to indices
@@ -56,28 +57,31 @@ export async function POST(request) {
             assigned_date: currentDate,
             start_time: startTimeComplete,
             end_time: endTimeComplete,
+            type, // Include type in task data
           };
-          console.log("Creating single task:", title, description, userId, goalId, assigned_date, start_time, end_time);
+          console.log("Creating single task:", taskData);
           const task = await prisma.task.create({ data: taskData });
           tasks.push(task);
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
     } else {
-      console.log("Creating single task:", title, description, userId, goalId, assigned_date, start_time, end_time);
-      const task = await prisma.task.create({
-        data: {
-          title,
-          description,
-          userId,
-          goalId,
-          assigned_date: new Date(assigned_date),
-          start_time: new Date(start_time),
-          end_time: new Date(end_time),
-        },
-      });
+      const taskData = {
+        title,
+        description,
+        userId,
+        goalId,
+        assigned_date: new Date(assigned_date),
+        start_time: new Date(start_time),
+        end_time: new Date(end_time),
+        type, // Include type in task data
+      };
+      console.log("Creating single task:", taskData);
+      const task = await prisma.task.create({ data: taskData });
       tasks.push(task);
     }
+
+    console.log("Created task(s):", tasks);
 
     return new NextResponse(JSON.stringify({ tasks }), {
       status: 201,
