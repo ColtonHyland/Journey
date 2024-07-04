@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import { useTasks } from '@/app/context/TaskContext';
+import DailyTaskItem from './DailyTaskItem';
 
 const DailyTasksContainer = () => {
   const { tasks, loading, error, deleteTask } = useTasks();
@@ -18,12 +19,12 @@ const DailyTasksContainer = () => {
       <ul>
         {tasks.map((task) => (
           <li key={task.task_id} className="flex justify-between items-center">
-            {task.title}
-            <button 
+            <DailyTaskItem task={task} />
+            {/* <button 
               onClick={() => deleteTask(task.task_id)} 
               className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
               x
-            </button>
+            </button> */}
           </li>
         ))}
       </ul>
