@@ -3,7 +3,7 @@ import FormHeader from "./FormHeader";
 import TitleDescription from "./TitleDescription";
 import DateTime from "./DateTimeSelector";
 import TaskType from "./TaskType";
-import RepeatOption from "./RepeatOption";
+import RepeatOptions from "./RepeatOptions";
 import FormFooter from "./FormFooter";
 import { useTasks } from "@/app/context/TaskContext";
 import { formatInTimeZone } from "date-fns-tz";
@@ -82,7 +82,6 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
 
   const handleEndTimeChange = (time) => {
     setEndTime(time);
-    console.log(`Changed End Time: ${time}`);
     hideTooltip();
   };
 
@@ -205,11 +204,43 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
         <FormHeader setShowForm={setShowForm} />
         {!showRepeatOptions ? (
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
-            <TitleDescription
-              title={title}
-              setTitle={setTitle}
-              description={description}
-              setDescription={setDescription}
+            <div className="flex space-x-4">
+              <div className="w-2/3">
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="Task name"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+              <div className="w-1/3">
+                <label htmlFor="task-type" className="block text-sm font-medium text-gray-700">
+                  Task Type
+                </label>
+                <select
+                  id="task-type"
+                  value={taskType}
+                  onChange={(e) => setTaskType(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                >
+                  <option value="work">Work</option>
+                  <option value="errand">Errand</option>
+                  <option value="chore">Chore</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <textarea
+              id="description"
+              placeholder="Task details"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              rows="3"
+              style={{ resize: "none" }}
             />
             <DateTime
               assignedDate={assignedDate}
@@ -224,16 +255,15 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
               endTimeSelectorOpen={endTimeSelectorOpen}
               setEndTimeSelectorOpen={setEndTimeSelectorOpen}
             />
-            <TaskType taskType={taskType} setTaskType={setTaskType} />
-            <RepeatOption
-              showRepeatOptions={showRepeatOptions}
+            <RepeatOptions
               daysOfWeek={daysOfWeek}
               setDaysOfWeek={setDaysOfWeek}
+              onConfirm={handleConfirmRepeat}
+              onCancel={handleCancelRepeat}
               repeatUntil={repeatUntil}
               setRepeatUntil={setRepeatUntil}
               handleRepeatChange={handleRepeatChange}
-              handleCancelRepeat={handleCancelRepeat}
-              handleConfirmRepeat={handleConfirmRepeat}
+              showRepeatOptions={showRepeatOptions}
             />
             <FormFooter error={error} isSubmitting={isSubmitting} />
           </form>
@@ -245,6 +275,7 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
             onCancel={handleCancelRepeat}
             repeatUntil={repeatUntil}
             setRepeatUntil={setRepeatUntil}
+            handleRepeatChange={handleRepeatChange}
           />
         )}
       </div>
