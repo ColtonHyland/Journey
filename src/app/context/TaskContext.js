@@ -13,31 +13,10 @@ export const TaskProvider = ({ children, date }) => {
 
   const formattedDate = date ? validateAndFormatDate(date) : new Date().toISOString().split('T')[0];
 
-  const timeConflict = (newTask, ignoreTaskId = null) => {
-    return tasks.some((task) => {
-      if (ignoreTaskId && task.task_id === ignoreTaskId) {
-        return false;
-      }
-
-      const taskAssignedDate = new Date(task.assigned_date).toISOString().split('T')[0];
-      const newTaskAssignedDate = new Date(newTask.assigned_date).toISOString().split('T')[0];
-
-      if (taskAssignedDate !== newTaskAssignedDate) {
-        return false;
-      }
-      // Normalize task start and end times to UTC for accurate comparison
-      const taskStart = new Date(task.start_time).toISOString();
-      const taskEnd = new Date(task.end_time).toISOString();
-      const newTaskStart = new Date(newTask.start_time).toISOString();
-      const newTaskEnd = new Date(newTask.end_time).toISOString();
-      const taskStartTime = new Date(taskStart).getTime();
-      const taskEndTime = new Date(taskEnd).getTime();
-      const newTaskStartTime = new Date(newTaskStart).getTime();
-      const newTaskEndTime = new Date(newTaskEnd).getTime();
-      const conflict = (newTaskStartTime < taskEndTime && newTaskEndTime > taskStartTime);
-      return conflict;
-    });
-  };
+  useEffect(() => {
+    console.log(`Formatted Date: ${formattedDate}`);
+    fetchTasks();
+  }, [formattedDate]);
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -48,6 +27,7 @@ export const TaskProvider = ({ children, date }) => {
       });
       if (!response.ok) throw new Error("Failed to fetch tasks");
       const data = await response.json();
+      console.log(`Fetched Tasks: ${JSON.stringify(data.dailyTasks)}`);
       setTasks(data.dailyTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
@@ -55,6 +35,24 @@ export const TaskProvider = ({ children, date }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const timeConflict = (newTask, ignoreTaskId = null) => {
+    return tasks.some((task) => {
+      if (ignoreTaskId && task.task_id === ignoreTaskId) {
+        return false;
+      }
+      const taskAssignedDate = new Date(task.assigned_date).toISOString().split('T')[0];
+      const newTaskAssignedDate = new Date(newTask.assigned_date).toISOString().split('T')[0];
+      if (taskAssignedDate !== newTaskAssignedDate) {
+        return false;
+      }
+      const taskStartTime = new Date(task.start_time).getTime();
+      const taskEndTime = new Date(task.end_time).getTime();
+      const newTaskStartTime = new Date(newTask.start_time).getTime();
+      const newTaskEndTime = new Date(newTask.end_time).getTime();
+      return (newTaskStartTime < taskEndTime && newTaskEndTime > taskStartTime);
+    });
   };
 
   const addTask = async (newTaskDetails) => {
@@ -83,7 +81,6 @@ export const TaskProvider = ({ children, date }) => {
   const deleteTask = async (taskId) => {
     const newTasks = tasks.filter((task) => task.task_id !== taskId);
     setTasks(newTasks);
-
     try {
       const response = await fetch(`/api/tasks/${taskId}`, {
         method: "DELETE",
@@ -118,10 +115,6 @@ export const TaskProvider = ({ children, date }) => {
       setError(error.message);
     }
   };
-
-  useEffect(() => {
-    fetchTasks();
-  }, [formattedDate]);
 
   return (
     <TaskContext.Provider

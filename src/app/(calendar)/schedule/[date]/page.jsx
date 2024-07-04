@@ -9,7 +9,7 @@ import { TaskProvider } from '@/app/context/TaskContext';
 
 const DaySchedulePage = ({ params }) => {
   const { date } = params;
-
+  
   return (
     <TaskProvider date={date}>
       <div className="flex flex-col" style={{ height: `calc(100vh - var(--appbar-height, 70px))` }}>

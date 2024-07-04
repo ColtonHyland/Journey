@@ -6,14 +6,16 @@ import CurrentGoalsContainer from '@/components/goals/CurrentGoalsContainer';
 import { TaskProvider } from '@/app/context/TaskContext';
 
 const Dashboard = () => {
-  const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+  const currentDate = new Date().toLocaleDateString('en-CA'); // Get current local date in YYYY-MM-DD format
+
+  console.log(`Dashboard currentDate: ${currentDate}`);
 
   return (
     <TaskProvider date={currentDate}>
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="col-span-1 bg-white p-4 rounded shadow">
-            {/* <CurrentGoalsContainer /> */}
+            <CurrentGoalsContainer />
           </div>
           <div className="col-span-1 bg-white p-4 rounded shadow">
             <DailyTasksContainer />

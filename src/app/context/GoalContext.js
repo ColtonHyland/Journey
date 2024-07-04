@@ -11,7 +11,6 @@ export const GoalProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const fetchGoals = async () => {
-    console.log("Fetching goals asynchronously");
     setLoading(true);
     try {
       const response = await fetch(`/api/goals`, {
@@ -43,7 +42,7 @@ export const GoalProvider = ({ children }) => {
         console.error("Failed to add goal:", errorData);
         throw new Error("Failed to add goal");
       }
-      const addedGoal = await response.json(); // Assuming the response includes the added goal data
+      const addedGoal = await response.json(); 
       setGoals((prevGoals) => [...prevGoals, addedGoal]);
     } catch (error) {
       console.error("Error adding goal:", error);
