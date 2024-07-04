@@ -7,10 +7,9 @@ const DailyTaskItem = ({ task }) => {
 
   const formatTime = (date) => {
     const options = { hour: "numeric", minute: "2-digit", hour12: true };
-    return date.toLocaleTimeString([], options).replace(" AM", "").replace(" PM", "");
+    return date.toLocaleTimeString([], options);
   };
 
-  const amPm = endTime.getHours() >= 12 ? " PM" : " AM";
   const formattedStartTime = formatTime(startTime);
   const formattedEndTime = formatTime(endTime);
 
@@ -19,7 +18,7 @@ const DailyTaskItem = ({ task }) => {
       <span className="font-bold">{task.title}</span>
       <span className="mx-2">•</span>
       <span className="text-sm">
-        {formattedStartTime} - {formattedEndTime}{amPm}
+        {formattedStartTime} - {formattedEndTime}
       </span>
     </div>
   );

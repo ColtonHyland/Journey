@@ -13,20 +13,21 @@ const DailyTasksContainer = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const sortedTasks = [...tasks].sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+
   return (
-    <div>
+    <div className="border border-black p-4">
       <h2 className="text-lg font-bold">Daily Tasks</h2>
       <ul>
-        {tasks.map((task) => (
-          <li key={task.task_id} className="flex justify-between items-center">
-            <DailyTaskItem task={task} />
-            {/* <button 
-              onClick={() => deleteTask(task.task_id)} 
-              className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
-              x
-            </button> */}
-          </li>
-        ))}
+      {sortedTasks.length > 0 ? (
+          sortedTasks.map((task) => (
+            <li key={task.task_id} className="flex justify-between items-center">
+              <DailyTaskItem task={task} />
+            </li>
+          ))
+        ) : (
+          <li>No tasks for today</li>
+        )}
       </ul>
     </div>
   );
