@@ -4,6 +4,7 @@ import Link from 'next/link';
 import DailyTasksContainer from '@/components/tasks/DailyTasksContainer';
 import CurrentGoalsContainer from '@/components/goals/CurrentGoalsContainer';
 import { TaskProvider } from '@/app/context/TaskContext';
+import { GoalProvider } from '@/app/context/GoalContext';
 
 const Dashboard = () => {
   const currentDate = new Date().toLocaleDateString('en-CA'); // Get current local date in YYYY-MM-DD format
@@ -12,6 +13,7 @@ const Dashboard = () => {
 
   return (
     <TaskProvider date={currentDate}>
+      <GoalProvider>
       <div className="container mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="col-span-1 bg-white p-4 rounded shadow">
@@ -42,7 +44,9 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      </GoalProvider>
     </TaskProvider>
+
   );
 };
 
