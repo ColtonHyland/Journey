@@ -13,14 +13,23 @@ const ConfirmationDialog = ({ message, onConfirm, onCancel, navigateTo }) => {
           >
             Cancel
           </button>
-          <Link href={navigateTo}>
+          {navigateTo ? (
+            <Link href={navigateTo}>
+              <button
+                onClick={onConfirm}
+                className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
+              >
+                Confirm
+              </button>
+            </Link>
+          ) : (
             <button
               onClick={onConfirm}
               className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-gray-900"
             >
               Confirm
             </button>
-          </Link>
+          )}
         </div>
       </div>
     </div>
