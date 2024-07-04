@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { MdClose } from 'react-icons/md';
 import { useTasks } from "@/app/context/TaskContext";
-import TimeSelector from "./TimeSelector";
+import TimeSelector from "./newtaskform/TimeSelector";
 import { formatInTimeZone } from "date-fns-tz";
 import { Tooltip } from "react-tooltip";
 
