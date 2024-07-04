@@ -42,8 +42,14 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
     setShowConfirm(false);
   };
 
-  const colors = ["bg-blue-200", "bg-green-200", "bg-red-200"]; // Faint shades for each color
-  const backgroundColor = colors[index % colors.length];
+  const colorMapping = {
+    work: "bg-red-200",
+    home: "bg-blue-200",
+    activity: "bg-green-200",
+    other: "bg-yellow-200"
+  };
+
+  const backgroundColor = colorMapping[task.type] || "bg-gray-200";
 
   const formatTime = (date) => {
     const options = { hour: "numeric", minute: "2-digit", hour12: true };
