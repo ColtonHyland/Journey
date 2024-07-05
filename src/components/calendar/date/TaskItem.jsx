@@ -74,36 +74,42 @@ const TaskItem = ({ task, date, hourHeight = 96, index }) => {
           height: `${height}px`,
           zIndex: 10,
           display: 'flex',
-          alignItems: isShortTask ? 'center' : 'flex-start',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
         }}
       >
-        <div className="flex items-center truncate" style={{ width: '70%' }}>
-          <span className="font-bold truncate">{task.title}</span>
-          <span className="text-xs ml-1 truncate">
-            {" "}
-            • {formattedStartTime} - {formattedEndTime}
-            {amPm}
-          </span>
+        <div className="flex justify-between items-center w-full">
+          <div className="flex items-center truncate" style={{ width: '70%' }}>
+            <span className="font-bold truncate">{task.title}</span>
+            <span className="text-xs ml-1 truncate">
+              {" "}
+              • {formattedStartTime} - {formattedEndTime}
+              {amPm}
+            </span>
+          </div>
+          <div className="flex space-x-1" style={{ width: '30%', justifyContent: 'flex-end' }}>
+            <button
+              onClick={handleEdit}
+              className="text-black focus:outline-none"
+              style={{ padding: "2px", zIndex: 15 }}
+            >
+              <MdModeEdit />
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="text-black focus:outline-none"
+              style={{ padding: "2px", zIndex: 15 }}
+            >
+              {isDeleting ? "Deleting..." : <MdClose />}
+            </button>
+          </div>
         </div>
-        <div className="flex space-x-1" style={{ width: '30%', justifyContent: 'flex-end' }}>
-          <button
-            onClick={handleEdit}
-            className="text-black focus:outline-none"
-            style={{ padding: "2px", zIndex: 15 }}
-          >
-            <MdModeEdit />
-          </button>
-          <button
-            onClick={confirmDelete}
-            disabled={isDeleting}
-            className="text-black focus:outline-none"
-            style={{ padding: "2px", zIndex: 15 }}
-          >
-            {isDeleting ? "Deleting..." : <MdClose />}
-          </button>
-        </div>
-        {task.description && !isShortTask && <p className="text-xs truncate">{task.description}</p>}
+        {task.description && (
+          <div className="truncate mt-1" style={{ width: '100%' }}>
+            <p className="text-xs truncate">{task.description}</p>
+          </div>
+        )}
       </div>
       {isEditing && <EditTask task={task} date={date} closeEdit={closeEdit} />}
       {showConfirm && (
