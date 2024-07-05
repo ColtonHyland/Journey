@@ -5,18 +5,16 @@ const TimeSelector = ({ id, onChange, initialTime, className = "" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // useMemo to avoid recalculating time options unnecessarily
   const options = useMemo(() => {
     const times = [];
     let currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
     for (let i = 0; i < 4 * 24; i++) {
-      // generates 15-minute increments for 24 hours
       times.push(new Date(currentDate).toISOString());
       currentDate.setMinutes(currentDate.getMinutes() + 15);
     }
     return times;
-  }, []); // Dependencies array is empty, so this only runs once on mount
+  }, []);
 
   useEffect(() => {
     if (initialTime) {
@@ -38,6 +36,7 @@ const TimeSelector = ({ id, onChange, initialTime, className = "" }) => {
       currentTime.setSeconds(0, 0);
       setSelectedTime(currentTime.toISOString());
     }
+    console.log(`Initial ${id} time set to:`, initialTime);
   }, [id, initialTime]);
 
   useEffect(() => {

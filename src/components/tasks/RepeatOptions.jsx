@@ -22,7 +22,7 @@ const RepeatOptions = ({ daysOfWeek, setDaysOfWeek, onConfirm, onCancel, repeatU
             onChange={(e) =>
               setDaysOfWeek({ ...daysOfWeek, [day]: e.target.checked })
             }
-            className="mr-2"
+            className="mr-2"z
           />
           <label htmlFor={day}>{day}</label>
         </div>

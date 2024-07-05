@@ -11,7 +11,6 @@ const TimeSlot = forwardRef(({ hour, onTimeSlotClick }, ref) => {
       ref={ref} 
       className="flex flex-col justify-between h-24 relative cursor-pointer"
       onClick={() => {
-        console.log(`Clicked on hour: ${hour}`); 
         onTimeSlotClick(hour);
       }}
     >
