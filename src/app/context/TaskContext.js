@@ -14,7 +14,6 @@ export const TaskProvider = ({ children, date }) => {
   const formattedDate = date ? validateAndFormatDate(date) : new Date().toISOString().split('T')[0];
 
   useEffect(() => {
-    console.log(`Formatted Date: ${formattedDate}`);
     fetchTasks();
   }, [formattedDate]);
 

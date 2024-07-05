@@ -36,7 +36,6 @@ const TimeSelector = ({ id, onChange, initialTime, className = "" }) => {
       currentTime.setSeconds(0, 0);
       setSelectedTime(currentTime.toISOString());
     }
-    console.log(`Initial ${id} time set to:`, initialTime);
   }, [id, initialTime]);
 
   useEffect(() => {
@@ -61,7 +60,6 @@ const TimeSelector = ({ id, onChange, initialTime, className = "" }) => {
     )
       .toISOString()
       .replace("Z", "");
-    console.log(`Selected Time for ${id}: ${localDateTimeString}`);
     setSelectedTime(localDateTimeString);
     setIsOpen(false);
     if (onChange) {

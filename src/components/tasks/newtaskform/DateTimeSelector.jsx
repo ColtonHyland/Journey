@@ -28,7 +28,6 @@ const DateTime = ({
           id="assigned-date"
           value={assignedDate}
           onChange={(e) => {
-            console.log("Assigned date changed:", e.target.value);
             setAssignedDate(e.target.value);
           }}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"

@@ -35,8 +35,6 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    console.log("Initial startTime:", initialTimes.startTime);
-    console.log("Initial endTime:", initialTimes.endTime);
     if (initialTimes.startTime && initialTimes.endTime) {
       setStartTime(initialTimes.startTime);
       setEndTime(initialTimes.endTime);
@@ -56,7 +54,6 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
   }, [initialTimes]);
 
   const handleStartTimeChange = (isoTime) => {
-    console.log("handleStartTimeChange called with:", isoTime);
     try {
       const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       const parsedTime = new Date(isoTime);
@@ -68,7 +65,6 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
       setStartTime(newStartTime);
 
       const parsedEndTime = new Date(endTime);
-      console.log("Current endTime before adjustment:", parsedEndTime);
       if (parsedEndTime <= parsedTime) {
         const adjustedEndTime = formatInTimeZone(
           new Date(parsedTime.getTime() + 15 * 60000),
@@ -76,27 +72,21 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
           "yyyy-MM-dd'T'HH:mm:ssXXX"
         );
         setEndTime(adjustedEndTime);
-        console.log("Adjusted endTime set to:", adjustedEndTime);
       }
-      console.log("New startTime set to:", newStartTime);
     } catch (error) {
       setError("Failed to parse start time");
     }
   };
 
   const handleEndTimeChange = (time) => {
-    console.log("handleEndTimeChange called with:", time);
     setEndTime(time);
     hideTooltip();
-    console.log("New endTime set to:", time);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("Final startTime:", startTime);
-    console.log("Final endTime:", endTime);
 
     if (!assignedDate || !startTime || !endTime) {
       setError("Please ensure all date and time fields are filled correctly.");
@@ -106,9 +96,6 @@ const NewTaskForm = ({ setShowForm, date, initialTimes }) => {
 
     const startDateTime = new Date(startTime);
     const endDateTime = new Date(endTime);
-
-    console.log("Converted startDateTime:", startDateTime);
-    console.log("Converted endDateTime:", endDateTime);
 
     if (endDateTime <= startDateTime) {
       setTimeConflictWarning("End time must be later than start time");
