@@ -20,7 +20,7 @@ const TimeSlotList = ({ date }) => {
       const hours = now.getHours();
       const minutes = now.getMinutes();
       const totalMinutes = hours * 60 + minutes;
-      const position = (totalMinutes / (24 * 60)) * (24 * 80);
+      const position = (totalMinutes / (24 * 60)) * (24 * 100); // Adjusted height
       
       if (containerRef.current) {
         const containerHeight = containerRef.current.clientHeight;
@@ -92,7 +92,7 @@ const TimeSlotList = ({ date }) => {
         {tasks.map((task, index) => (
           <TaskItem key={task.task_id} date={date} task={task} index={index} />
         ))}
-        <CurrentTimeIndicator hourHeight={80} />
+        <CurrentTimeIndicator hourHeight={96} />
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import ConfirmationDialog from "../../utils/ConfirmationDialog";
 import { useTasks } from "@/app/context/TaskContext";
 import { MdClose, MdModeEdit } from 'react-icons/md';
 
-const TaskItem = ({ task, date, hourHeight = 80, index }) => {
+const TaskItem = ({ task, date, hourHeight = 96, index }) => {
   const { deleteTask } = useTasks();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -63,6 +63,8 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
   const formattedStartTime = formatTime(startTime);
   const formattedEndTime = formatTime(endTime);
 
+  const isShortTask = height <= 20;
+
   return (
     <>
       <div
@@ -71,36 +73,37 @@ const TaskItem = ({ task, date, hourHeight = 80, index }) => {
           top: `${top}px`,
           height: `${height}px`,
           zIndex: 10,
+          display: 'flex',
+          alignItems: isShortTask ? 'center' : 'flex-start',
+          justifyContent: 'space-between',
         }}
       >
-        <div className="flex justify-between items-center">
-          <div>
-            <span className="font-bold">{task.title}</span>
-            <span className="text-xs">
-              {" "}
-              • {formattedStartTime} - {formattedEndTime}
-              {amPm}
-            </span>
-          </div>
-          <div className="flex">
-            <button
-              onClick={handleEdit}
-              className="text-black focus:outline-none"
-              style={{ padding: "4px", zIndex: 15 }}
-            >
-              <MdModeEdit />
-            </button>
-            <button
-              onClick={confirmDelete}
-              disabled={isDeleting}
-              className="text-black focus:outline-none"
-              style={{ padding: "4px", zIndex: 15 }}
-            >
-              {isDeleting ? "Deleting..." : <MdClose />}
-            </button>
-          </div>
+        <div className="flex items-center truncate" style={{ width: '70%' }}>
+          <span className="font-bold truncate">{task.title}</span>
+          <span className="text-xs ml-1 truncate">
+            {" "}
+            • {formattedStartTime} - {formattedEndTime}
+            {amPm}
+          </span>
         </div>
-        {task.description && <p className="text-xs truncate">{task.description}</p>}
+        <div className="flex space-x-1" style={{ width: '30%', justifyContent: 'flex-end' }}>
+          <button
+            onClick={handleEdit}
+            className="text-black focus:outline-none"
+            style={{ padding: "2px", zIndex: 15 }}
+          >
+            <MdModeEdit />
+          </button>
+          <button
+            onClick={confirmDelete}
+            disabled={isDeleting}
+            className="text-black focus:outline-none"
+            style={{ padding: "2px", zIndex: 15 }}
+          >
+            {isDeleting ? "Deleting..." : <MdClose />}
+          </button>
+        </div>
+        {task.description && !isShortTask && <p className="text-xs truncate">{task.description}</p>}
       </div>
       {isEditing && <EditTask task={task} date={date} closeEdit={closeEdit} />}
       {showConfirm && (
