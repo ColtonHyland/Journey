@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { format, addDays, subDays, parseISO } from 'date-fns';
 
 const DayScheduleNavigation = ({ date }) => {
-  const formattedDate = format(parseISO(date), 'MMMM do, yyyy');
+  const formattedDate = format(parseISO(date), 'EEEE, MMMM do, yyyy');
   const prevDate = format(subDays(parseISO(date), 1), 'yyyy-MM-dd');
   const nextDate = format(addDays(parseISO(date), 1), 'yyyy-MM-dd');
 
@@ -17,7 +17,7 @@ const DayScheduleNavigation = ({ date }) => {
 
         {/* Center section for the date */}
         <div>
-          <h1 className="text-2xl font-bold">Schedule for {formattedDate}</h1>
+          <h1 className="text-2xl font-bold">{formattedDate}</h1>
         </div>
 
         {/* Next button with right chevron */}
